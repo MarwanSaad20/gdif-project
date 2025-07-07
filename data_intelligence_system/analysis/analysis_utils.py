@@ -16,7 +16,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # تحديد جذر المشروع بناءً على المسار الثابت
-BASE_DIR = Path(__file__).resolve().parents[1].parent  # جذر مشروع data_intelligence_system
+BASE_DIR = Path(__file__).resolve().parents[2]  # جذر مشروع data_intelligence_system
 OUTPUT_DIR = BASE_DIR / "analysis" / "analysis_output"
 
 
