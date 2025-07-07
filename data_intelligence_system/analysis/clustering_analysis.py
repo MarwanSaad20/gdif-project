@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import logging
 import pandas as pd
 import numpy as np
@@ -10,17 +10,13 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 
-from pathlib import Path
-
-# ================= إعداد المسارات =================
-
-BASE_DIR = Path(__file__).resolve().parents[2]  # جذر مشروع data_intelligence_system
+# مسارات المشروع
+BASE_DIR = Path(__file__).resolve().parents[1]  # data_intelligence_system
 DATA_DIR = BASE_DIR / "data" / "processed"
 OUTPUT_DIR = BASE_DIR / "analysis" / "analysis_output"
 CLUSTERING_RESULTS_DIR = OUTPUT_DIR / "clustering"
 
-# ================= استيراد وحدات مساعدة من الجذر =================
-
+# الاستيرادات من جذر المشروع
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
     get_numerical_columns,
@@ -30,12 +26,9 @@ from data_intelligence_system.analysis.analysis_utils import (
 )
 from data_intelligence_system.utils.data_loader import load_data
 
-# ================= إعداد التسجيل =================
-
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
 
-# إنشاء مجلد الإخراج إن لم يكن موجودًا
 ensure_output_dir(CLUSTERING_RESULTS_DIR)
 
 # ================= دوال التجميع =================
