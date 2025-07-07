@@ -6,8 +6,8 @@ from typing import Optional
 
 import pandas as pd
 
-# ✅ استيراد دالة الحفظ من المصدر الموحد
-from data_intelligence_system.etl.load import save_uploaded_data
+# ✅ تحديث الاستيراد لدالة الحفظ من utils.file_manager وليس etl.load
+from data_intelligence_system.utils.file_manager import save_file
 
 logger = logging.getLogger(__name__)
 
