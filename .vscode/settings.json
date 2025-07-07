@@ -40,7 +40,8 @@
   "editor.suggestOnTriggerCharacters": false,
   "editor.minimap.enabled": false,
 
-  "files.autoSave": "off",
+  "files.autoSave": "onFocusChange",    // حفظ التعديلات تلقائياً عند ترك الملف
+
   "files.maxMemoryForLargeFilesMB": 64,
 
   "files.exclude": {
@@ -72,5 +73,15 @@
   "editor.formatOnType": false,
 
   "python.languageServer": "Pylance",
-  "python.analysis.typeCheckingMode": "off"
+  "python.analysis.typeCheckingMode": "off",
+
+  // إعدادات إضافة Run on Save لتشغيل السكربت تلقائياً بعد الحفظ
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": ".*",                            // يطبق على كل الملفات
+        "cmd": "cd ${workspaceFolder} && .\\.vscode\\auto_push.bat"
+      }
+    ]
+  }
 }
