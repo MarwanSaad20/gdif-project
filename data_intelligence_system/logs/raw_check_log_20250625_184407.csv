@@ -1,4 +1,0 @@
-filename,status,message,rows,columns,num_missing_values,checked_at
-20250625_051246_sample_data.csv,OK,Loaded successfully,6,6,2,2025-06-25T18:44:07.446053
-20250625_051246_sample_data.metadata.csv,OK,Loaded successfully,1,18,0,2025-06-25T18:44:07.449054
-20250625_051246_sample_data.metadata.json,OK,Loaded successfully,1,18,0,2025-06-25T18:44:07.454063
