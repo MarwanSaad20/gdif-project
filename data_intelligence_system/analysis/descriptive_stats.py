@@ -15,7 +15,7 @@ OUTPUT_DIR = BASE_DIR / "data_intelligence_system" / "analysis" / "analysis_outp
 
 # === استيراد الأدوات المساعدة ===
 from data_intelligence_system.analysis.analysis_utils import ensure_output_dir, save_plot
-from data_intelligence_system.utils.data_loader import load_data  # ✅ جديد
+from data_intelligence_system.utils.data_loader import load_data  # ✅ تحديث التحميل إلى الدالة الموحدة
 
 # === إعداد اللوجر ===
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
@@ -101,7 +101,7 @@ def save_categorical_value_counts(df: pd.DataFrame, filename_prefix: str, output
 def generate_descriptive_stats(df_or_path: Union[pd.DataFrame, str, Path], filename_prefix: str = "output",
                                output_dir: Path = OUTPUT_DIR, save_outputs: bool = True) -> Dict[str, Any]:
     if isinstance(df_or_path, (str, Path)):
-        df = load_data(str(df_or_path))  # ✅ استبدال التحميل اليدوي
+        df = load_data(str(df_or_path))  # ✅ استخدام الدالة الموحدة للتحميل
         filename_prefix = Path(df_or_path).stem
         logger.info(f"✅ تم تحميل البيانات من: {df_or_path}")
     else:
