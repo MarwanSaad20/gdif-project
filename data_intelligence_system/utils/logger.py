@@ -1,7 +1,7 @@
 import logging
-import os
 from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
+from pathlib import Path
 
 
 def get_logger(
@@ -14,36 +14,32 @@ def get_logger(
 ) -> logging.Logger:
     """
     إعداد لوجر موحد لتسجيل الأحداث في المشروع.
-    - يستخدم TimedRotatingFileHandler لتدوير السجلات يوميًا والاحتفاظ بعدد محدد من الملفات.
-    - يمكن إعادة تعيين الـlogger (reset) عند الحاجة.
-    
-    Args:
-        name (str): اسم اللوجر.
-        log_dir (str): مجلد حفظ ملفات اللوج.
-        level (int): مستوى تسجيل الأحداث.
-        reset (bool): إعادة تهيئة اللوجر بإزالة handlers الحاليين.
-        rotation_when (str): فترة تدوير السجل (مثلاً 'midnight' يوميًا).
-        backup_count (int): عدد النسخ الاحتياطية التي يتم الاحتفاظ بها.
+    - يستخدم TimedRotatingFileHandler لتدوير السجلات يوميًا.
+    - يسمح بعرض الرسائل في الكونسول أيضًا.
+    - يدعم إعادة تهيئة اللوجر لمنع التكرار عند إعادة الاستيراد.
 
     Returns:
-        logging.Logger: كائن اللوجر المعدّ.
+        logging.Logger: كائن اللوجر المهيأ.
     """
+    log_path = Path(log_dir).resolve()
     try:
-        os.makedirs(log_dir, exist_ok=True)
+        log_path.mkdir(parents=True, exist_ok=True)
     except Exception as e:
-        raise OSError(f"فشل إنشاء مجلد السجلات '{log_dir}': {e}") from e
+        raise OSError(f"❌ فشل إنشاء مجلد السجلات '{log_path}': {e}") from e
 
-    log_file = os.path.join(log_dir, f"{name}.log")
+    log_file = log_path / f"{name}.log"
     logger = logging.getLogger(name)
 
     if reset:
         logger.handlers.clear()
 
     logger.setLevel(level)
+    logger.propagate = False  # ⛔️ لمنع التكرار في اللوجات
 
     if not logger.hasHandlers():
+        # 📁 File Handler
         file_handler = TimedRotatingFileHandler(
-            log_file,
+            filename=log_file,
             when=rotation_when,
             backupCount=backup_count,
             encoding='utf-8'
@@ -53,11 +49,15 @@ def get_logger(
             datefmt='%Y-%m-%d %H:%M:%S'
         )
         file_handler.setFormatter(file_formatter)
+        file_handler.setLevel(level)
 
+        # 🖥 Console Handler
         console_handler = logging.StreamHandler()
         console_formatter = logging.Formatter('[%(levelname)s] %(message)s')
         console_handler.setFormatter(console_formatter)
+        console_handler.setLevel(level)
 
+        # 🧩 إضافة الـ Handlers
         logger.addHandler(file_handler)
         logger.addHandler(console_handler)
 
