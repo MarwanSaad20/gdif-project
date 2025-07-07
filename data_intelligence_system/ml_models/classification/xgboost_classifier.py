@@ -10,7 +10,8 @@ from xgboost import XGBClassifier
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.model_evaluation import ClassificationMetrics
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ تكامل مباشر
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تم التحديث
+from data_intelligence_system.utils.data_loader import load_data  # يمكن استخدامه لاحقًا
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -28,14 +29,14 @@ class XGBoostClassifierModel(BaseModel):
         self.is_fitted = False
 
     def _prepare_features(self, X, categorical_cols=None):
-        X = fill_missing(X)  # ✅ تنظيف القيم المفقودة
+        X = fill_missing_values(X)  # ✅ استبدال الدالة
         if categorical_cols:
             X = self.preprocessor.encode_labels(X.copy(), categorical_cols)
         return self.preprocessor.transform_scaler(X)
 
     def fit(self, X, y, categorical_cols=None):
         assert len(X) == len(y), "❌ عدد العينات غير متطابق"
-        X = fill_missing(X)  # ✅ تنظيف القيم المفقودة
+        X = fill_missing_values(X)  # ✅ استبدال الدالة
 
         if categorical_cols:
             df = X.assign(target=y)
@@ -67,7 +68,7 @@ class XGBoostClassifierModel(BaseModel):
     def evaluate(self, X, y, categorical_cols=None):
         if not self.is_fitted:
             raise ValueError("❌ النموذج غير مدرب بعد.")
-        X = fill_missing(X)  # ✅ تنظيف القيم المفقودة
+        X = fill_missing_values(X)  # ✅ استبدال الدالة
         y_pred = self.predict(X, categorical_cols)
         return ClassificationMetrics.all_metrics(y, y_pred, average="binary")
 
