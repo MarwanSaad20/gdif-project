@@ -5,6 +5,10 @@ from typing import List, Tuple, Optional, Union
 import pandas as pd
 import os
 
+from data_intelligence_system.utils.file_manager import save_file
+from data_intelligence_system.utils.file_manager import extract_file_name
+from data_intelligence_system.config.paths_config import SUPPORTED_EXTENSIONS
+
 try:
     from data_intelligence_system.data.raw.archive_raw_file import archive_file  # type: ignore
 except ImportError:
@@ -77,19 +81,7 @@ def save_dataframe(
 
     try:
         logger.info(f"💾 بدء حفظ {base_name} بصيغة {ext}")
-        if ext == 'csv':
-            df.to_csv(file_path, index=False)
-        elif ext == 'xlsx':
-            df.to_excel(file_path, index=False)
-        elif ext == 'parquet':
-            try:
-                df.to_parquet(file_path, index=False)
-            except ImportError as ie:
-                logger.error(f"❌ مكتبة pyarrow أو fastparquet غير مثبتة، لا يمكن حفظ بصيغة parquet: {ie}")
-                return None
-        else:
-            logger.error(f"❌ صيغة الملف غير مدعومة: {ext}")
-            return None
+        save_file(df, str(file_path))  # ← استخدمنا file_manager.py هنا
 
         logger.info(f"✅ تم حفظ الملف: {file_path}")
 
