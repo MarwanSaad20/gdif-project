@@ -8,7 +8,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ إضافة
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تم تحديث الاستيراد
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -35,7 +35,7 @@ class ARIMAForecastingModel(BaseModel):
         if not isinstance(series, (list, np.ndarray)) or np.array(series).ndim != 1:
             raise ValueError("❌ يجب أن تكون البيانات الزمنية أحادية البعد (1D).")
 
-        series = fill_missing(np.array(series))  # ✅ معالجة القيم المفقودة
+        series = fill_missing_values(np.array(series))  # ✅ تحديث استخدام الدالة
         self.series_ = np.array(series)
         if self.preprocessor:
             self.series_scaled_ = self.preprocessor.transform_scaler(self.series_.reshape(-1, 1)).flatten()
