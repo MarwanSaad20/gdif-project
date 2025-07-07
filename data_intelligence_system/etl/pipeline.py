@@ -4,6 +4,7 @@ from typing import Optional, Union, List, Tuple
 from datetime import datetime
 import pandas as pd
 
+# ✅ استيرادات من جذر المشروع بعد التعديلات
 from data_intelligence_system.etl.transform import transform_datasets
 from data_intelligence_system.analysis.descriptive_stats import (
     analyze_numerical_columns,
@@ -11,7 +12,7 @@ from data_intelligence_system.analysis.descriptive_stats import (
     analyze_datetime_columns
 )
 from data_intelligence_system.etl.extract import extract_file, extract_all_data
-from data_intelligence_system.core.data_bindings import save_uploaded_data
+from data_intelligence_system.utils.file_manager import save_uploaded_data
 
 # 🛠️ إعداد نظام التسجيل
 LOG_FORMAT = "%(asctime)s — %(levelname)s — %(name)s — %(message)s"
