@@ -1,7 +1,11 @@
-import logging
 from pathlib import Path
 from functools import wraps
 from typing import List, Optional, Union
+
+# ✅ استخدام اللوجر المركزي للنظام
+from data_intelligence_system.utils.logger import get_logger
+
+logger = get_logger("ETLUtils")
 
 
 def log_step(func):
@@ -10,13 +14,13 @@ def log_step(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        logging.info(f"↪️ تشغيل: {func.__name__}")
+        logger.info(f"↪️ تشغيل: {func.__name__}")
         try:
             result = func(*args, **kwargs)
         except Exception as e:
-            logging.error(f"❌ خطأ في {func.__name__}: {e}")
+            logger.error(f"❌ خطأ في {func.__name__}: {e}", exc_info=True)
             raise
-        logging.info(f"✅ انتهى: {func.__name__}")
+        logger.info(f"✅ انتهى: {func.__name__}")
         return result
     return wrapper
 
@@ -33,7 +37,7 @@ def get_all_files(directory: Union[str, Path], extensions: Optional[List[str]] =
         if path.is_file() and (not normalized_exts or path.suffix.lower() in normalized_exts):
             files.append(str(path.resolve()))
 
-    logging.info(f"📂 تم العثور على {len(files)} ملفات في {directory}")
+    logger.info(f"📂 تم العثور على {len(files)} ملفات في {directory}")
     return files
 
 
@@ -66,5 +70,5 @@ def ensure_directory_exists(path: Union[str, Path]) -> Path:
     path = Path(path)
     if not path.exists():
         path.mkdir(parents=True, exist_ok=True)
-        logging.info(f"📁 تم إنشاء المجلد: {path}")
+        logger.info(f"📁 تم إنشاء المجلد: {path}")
     return path
