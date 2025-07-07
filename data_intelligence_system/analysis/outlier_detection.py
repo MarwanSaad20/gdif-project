@@ -13,7 +13,7 @@ from data_intelligence_system.analysis.analysis_utils import (
     log_basic_info
 )
 from data_intelligence_system.utils.data_loader import load_data  # ✅ التحميل الموحد
-from data_intelligence_system.utils.preprocessing import fill_missing  # ✅ تم نقل الدالة هنا
+from data_intelligence_system.utils.preprocessing import fill_missing_values # ✅ تم نقل الدالة هنا
 
 # ===================== إعداد المسارات =====================
 BASE_DIR = Path(__file__).resolve().parents[2]
