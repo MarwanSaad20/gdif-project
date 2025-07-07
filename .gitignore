@@ -1,57 +1,39 @@
-@@ -0,0 +1,54 @@
-# ======================
-# 🐍 Python
-# ======================
+# 🔒 ملفات الإخراج المؤقت والرسوم
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.pdf
+*.html
+*.xlsx
+*.parquet
+*.txt
+*.log
+
+# 📦 مجلدات الإخراج والمخرجات المؤقتة
 __pycache__/
 *.py[cod]
-*.so
-*.pyd
-*.pyo
+*.ipynb_checkpoints/
+*.egg-info/
+data_intelligence_system/**/analysis_output/
+data_intelligence_system/**/eda_output/
+data_intelligence_system/**/output/
+data_intelligence_system/**/reports/output/
 
-# 🧪 بيئة افتراضية
-.venv/
-env/
-venv/
-
-# ======================
-# 📓 Jupyter Notebooks
-# ======================
-.ipynb_checkpoints/
-
-# ======================
-# 📂 مجلدات البيانات
-# ======================
-data/raw/
-data/processed/
-data/external/
-
-# ======================
-# 🧪 ملفات النماذج أو المخرجات
-# ======================
+# 🧪 بيانات أو نماذج أو ملفات تدريب غير ضرورية
 *.pkl
-*.h5
 *.joblib
 
-# ======================
-# 📈 ملفات تقارير أو رسومات أو نتائج
-# ======================
-logs/
-*.log
-reports/
-*.pdf
-*.xlsx
-*.csv
+# 🧪 Notebooks غير نهائية
+data_intelligence_system/notebooks/*.ipynb_checkpoints/
 
-# ======================
-# ⚙️ نظام / بيئة
-# ======================
-.DS_Store
-Thumbs.db
+# 🐳 Docker وبيئة التطوير
+.env
+.venv/
+*.env
+Dockerfile*
 
-# ======================
-# 💻 محررات الأكواد
-# ======================
-.vscode/
-.idea/
-# تحليل - مخرجات الصور والنصوص
-data_intelligence_system/analysis/analysis_output/
+# 🧪 ملفات مؤقتة
+*.bak
+*.tmp
+*.swp

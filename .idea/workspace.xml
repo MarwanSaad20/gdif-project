@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b8aa8001-132d-4c4a-8f28-9965cfc900f0" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Jupyter Notebook" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/data_intelligence_system/dashboard/app.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks/charts_callbacks.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks/upload_callbacks.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/data_intelligence_system/dashboard/components/upload_component.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/data_intelligence_system/dashboard/layouts/main_layout.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2yYmQWIplT6yI6ieIattHECVTQt" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JavaScript Debug.base_report.html.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.theme.js.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_analysis.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_auth.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_callbacks.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_components.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_config.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_dashboard.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_etl.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_reports.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_etl.test_etl_pipeline.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Run project 10.executor&quot;: &quot;Run&quot;,
+    &quot;Python.__init__.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_router.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_schemas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_service.executor&quot;: &quot;Run&quot;,
+    &quot;Python.analysis_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.archive_raw_file.executor&quot;: &quot;Run&quot;,
+    &quot;Python.arima_model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.auth.executor&quot;: &quot;Run&quot;,
+    &quot;Python.base_model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.callbacks.executor&quot;: &quot;Run&quot;,
+    &quot;Python.charts.executor&quot;: &quot;Run&quot;,
+    &quot;Python.charts_callbacks.executor&quot;: &quot;Run&quot;,
+    &quot;Python.charts_placeholders.executor&quot;: &quot;Run&quot;,
+    &quot;Python.check_raw_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.clean_preview.executor&quot;: &quot;Run&quot;,
+    &quot;Python.clustering_analysis.executor&quot;: &quot;Run&quot;,
+    &quot;Python.config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.config_handler.executor&quot;: &quot;Run&quot;,
+    &quot;Python.config_loader.executor&quot;: &quot;Run&quot;,
+    &quot;Python.conftest.executor&quot;: &quot;Run&quot;,
+    &quot;Python.convert_format.executor&quot;: &quot;Run&quot;,
+    &quot;Python.correlation_analysis.executor&quot;: &quot;Run&quot;,
+    &quot;Python.create_api_structure.executor&quot;: &quot;Run&quot;,
+    &quot;Python.create_structure.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dashboard_config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dashboard_router.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dashboard_schemas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dashboard_service.executor&quot;: &quot;Run&quot;,
+    &quot;Python.data_bindings.executor&quot;: &quot;Run&quot;,
+    &quot;Python.data_loader.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dbscan.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dependencies.executor&quot;: &quot;Run&quot;,
+    &quot;Python.descriptive_stats.executor&quot;: &quot;Run&quot;,
+    &quot;Python.eda_sweetviz.executor&quot;: &quot;Run&quot;,
+    &quot;Python.eda_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.eda_ydata.executor&quot;: &quot;Run&quot;,
+    &quot;Python.encode_categoricals.executor&quot;: &quot;Run&quot;,
+    &quot;Python.env_config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.etl_router.executor&quot;: &quot;Run&quot;,
+    &quot;Python.etl_schemas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.etl_service.executor&quot;: &quot;Run&quot;,
+    &quot;Python.etl_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.excel_report_generator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.exceptions.executor&quot;: &quot;Run&quot;,
+    &quot;Python.export_callbacks.executor&quot;: &quot;Run&quot;,
+    &quot;Python.export_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.external_data_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.extract.executor&quot;: &quot;Run&quot;,
+    &quot;Python.feature_utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.fetch_api_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.file_manager.executor&quot;: &quot;Run&quot;,
+    &quot;Python.fill_missing.executor&quot;: &quot;Run&quot;,
+    &quot;Python.filters.executor&quot;: &quot;Run&quot;,
+    &quot;Python.filters_callbacks.executor&quot;: &quot;Run&quot;,
+    &quot;Python.footer_banner.png.executor&quot;: &quot;Run&quot;,
+    &quot;Python.generate_metadata.executor&quot;: &quot;Run&quot;,
+    &quot;Python.html_report_generator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.indicators.executor&quot;: &quot;Run&quot;,
+    &quot;Python.kmeans.executor&quot;: &quot;Run&quot;,
+    &quot;Python.kpi_callbacks.executor&quot;: &quot;Run&quot;,
+    &quot;Python.kpi_cards.executor&quot;: &quot;Run&quot;,
+    &quot;Python.lasso_regression.executor&quot;: &quot;Run&quot;,
+    &quot;Python.layout_callbacks.executor&quot;: &quot;Run&quot;,
+    &quot;Python.layouts.executor&quot;: &quot;Run&quot;,
+    &quot;Python.linear_regression.executor&quot;: &quot;Run&quot;,
+    &quot;Python.load.executor&quot;: &quot;Run&quot;,
+    &quot;Python.load_external_files.executor&quot;: &quot;Run&quot;,
+    &quot;Python.logger.executor&quot;: &quot;Run&quot;,
+    &quot;Python.logistic_regression.executor&quot;: &quot;Run&quot;,
+    &quot;Python.logo.png.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main_layout.executor&quot;: &quot;Run&quot;,
+    &quot;Python.matrix.executor&quot;: &quot;Run&quot;,
+    &quot;Python.metrics.executor&quot;: &quot;Run&quot;,
+    &quot;Python.model_config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.model_evaluation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.model_factory.executor&quot;: &quot;Run&quot;,
+    &quot;Python.normalize_columns.executor&quot;: &quot;Run&quot;,
+    &quot;Python.outlier_detection.executor&quot;: &quot;Run&quot;,
+    &quot;Python.paths_config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pdf_report_generator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.pipeline.executor&quot;: &quot;Run&quot;,
+    &quot;Python.preprocessing.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prophet_model.executor&quot;: &quot;Run&quot;,
+    &quot;Python.random_forest.executor&quot;: &quot;Run&quot;,
+    &quot;Python.register_sources.executor&quot;: &quot;Run&quot;,
+    &quot;Python.registry.executor&quot;: &quot;Run&quot;,
+    &quot;Python.report_config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.report_data_loader.executor&quot;: &quot;Run&quot;,
+    &quot;Python.report_dispatcher.executor&quot;: &quot;Run&quot;,
+    &quot;Python.reports_router.executor&quot;: &quot;Run&quot;,
+    &quot;Python.reports_schemas.executor&quot;: &quot;Run&quot;,
+    &quot;Python.reports_service.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ridge_regression.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sample_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scale_numericals.executor&quot;: &quot;Run&quot;,
+    &quot;Python.session.executor&quot;: &quot;Run&quot;,
+    &quot;Python.shared_notebook_tools.executor&quot;: &quot;Run&quot;,
+    &quot;Python.stats_summary.executor&quot;: &quot;Run&quot;,
+    &quot;Python.tables.executor&quot;: &quot;Run&quot;,
+    &quot;Python.target_relation_analysis.executor&quot;: &quot;Run&quot;,
+    &quot;Python.theme.executor&quot;: &quot;Run&quot;,
+    &quot;Python.timer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.transform.executor&quot;: &quot;Run&quot;,
+    &quot;Python.update_external_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.upload_callbacks.executor&quot;: &quot;Run&quot;,
+    &quot;Python.upload_component.executor&quot;: &quot;Run&quot;,
+    &quot;Python.utils.executor&quot;: &quot;Run&quot;,
+    &quot;Python.validate_clean_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python.validate_structure.executor&quot;: &quot;Run&quot;,
+    &quot;Python.visualization.executor&quot;: &quot;Run&quot;,
+    &quot;Python.xgboost_classifier.executor&quot;: &quot;Run&quot;,
+    &quot;Python.yaml_config_handler.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration default="true" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-b26f3e71634d-JavaScript-PY-251.26094.141" />
+        <option value="bundled-python-sdk-9f8e2b94138c-36ea0e71a18c-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.26094.141" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b8aa8001-132d-4c4a-8f28-9965cfc900f0" name="Changes" comment="" />
+      <created>1750019864975</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750019864975</updated>
+      <workItem from="1750019866052" duration="2402000" />
+      <workItem from="1750026884495" duration="659000" />
+      <workItem from="1750027574568" duration="18000" />
+      <workItem from="1750027603274" duration="303000" />
+      <workItem from="1750027920576" duration="196000" />
+      <workItem from="1750028170205" duration="8687000" />
+      <workItem from="1750085817807" duration="2239000" />
+      <workItem from="1750091914135" duration="6452000" />
+      <workItem from="1750159092544" duration="8636000" />
+      <workItem from="1750198794101" duration="661000" />
+      <workItem from="1750199510415" duration="2014000" />
+      <workItem from="1750201555057" duration="1578000" />
+      <workItem from="1750244411900" duration="5003000" />
+      <workItem from="1750259327880" duration="1560000" />
+      <workItem from="1750260925505" duration="10074000" />
+      <workItem from="1750285221138" duration="1223000" />
+      <workItem from="1750336450001" duration="1277000" />
+      <workItem from="1750337842109" duration="305000" />
+      <workItem from="1750338303009" duration="9925000" />
+      <workItem from="1750418045575" duration="15902000" />
+      <workItem from="1750450457561" duration="6165000" />
+      <workItem from="1750501907602" duration="4844000" />
+      <workItem from="1750510112385" duration="4734000" />
+      <workItem from="1750523463957" duration="8017000" />
+      <workItem from="1750594825368" duration="5354000" />
+      <workItem from="1750610719739" duration="75000" />
+      <workItem from="1750610806259" duration="418000" />
+      <workItem from="1750613497953" duration="391000" />
+      <workItem from="1750613906449" duration="539000" />
+      <workItem from="1750614460689" duration="78000" />
+      <workItem from="1750614571623" duration="487000" />
+      <workItem from="1750615075229" duration="6373000" />
+      <workItem from="1750631735719" duration="1560000" />
+      <workItem from="1750633331129" duration="261000" />
+      <workItem from="1750633610033" duration="9171000" />
+      <workItem from="1750690760065" duration="1693000" />
+      <workItem from="1750698492544" duration="11182000" />
+      <workItem from="1750719399014" duration="20519000" />
+      <workItem from="1750888076186" duration="580000" />
+      <workItem from="1750888801371" duration="5719000" />
+      <workItem from="1750942033138" duration="177000" />
+      <workItem from="1750946204267" duration="9849000" />
+      <workItem from="1751021415107" duration="4316000" />
+      <workItem from="1751032629449" duration="10951000" />
+      <workItem from="1751048146776" duration="1703000" />
+      <workItem from="1751049883605" duration="529000" />
+      <workItem from="1751050434541" duration="7917000" />
+      <workItem from="1751061921898" duration="9073000" />
+      <workItem from="1751116804817" duration="5579000" />
+      <workItem from="1751125940243" duration="24534000" />
+      <workItem from="1751203773057" duration="1720000" />
+      <workItem from="1751205789946" duration="3264000" />
+      <workItem from="1751213386003" duration="7277000" />
+      <workItem from="1751223992773" duration="1588000" />
+      <workItem from="1751225696225" duration="540000" />
+      <workItem from="1751228205946" duration="4808000" />
+      <workItem from="1751233174770" duration="654000" />
+      <workItem from="1751234520629" duration="123000" />
+      <workItem from="1751236818987" duration="3924000" />
+      <workItem from="1751240842327" duration="1817000" />
+      <workItem from="1751284664036" duration="12495000" />
+      <workItem from="1751305636796" duration="2078000" />
+      <workItem from="1751309508959" duration="858000" />
+      <workItem from="1751310546227" duration="3736000" />
+      <workItem from="1751317433763" duration="7833000" />
+      <workItem from="1751326889984" duration="2409000" />
+      <workItem from="1751375668409" duration="3567000" />
+      <workItem from="1751383424507" duration="428000" />
+      <workItem from="1751459631750" duration="2000" />
+      <workItem from="1751544655953" duration="17000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/data_intelligence_system/data/raw/archive_raw_file.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/PythonProject10$create_structure.coverage" NAME="create_structure Coverage Results" MODIFIED="1750028375036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PythonProject10$ridge_regression.coverage" NAME="ridge_regression Coverage Results" MODIFIED="1750893361014" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/regression" />
+    <SUITE FILE_PATH="coverage/PythonProject10$transform.coverage" NAME="transform Coverage Results" MODIFIED="1751060981839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/etl" />
+    <SUITE FILE_PATH="coverage/PythonProject10$html_report_generator.coverage" NAME="html_report_generator Coverage Results" MODIFIED="1751024729599" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports/generators" />
+    <SUITE FILE_PATH="coverage/PythonProject10$file_manager.coverage" NAME="file_manager Coverage Results" MODIFIED="1751149505954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$generate_metadata.coverage" NAME="generate_metadata Coverage Results" MODIFIED="1750815341405" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/raw" />
+    <SUITE FILE_PATH="coverage/PythonProject10$load.coverage" NAME="load Coverage Results" MODIFIED="1751061132158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/etl" />
+    <SUITE FILE_PATH="coverage/PythonProject10$Run_project_10.coverage" NAME="Run project 10 Coverage Results" MODIFIED="1750634389280" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:\Users\PC\PycharmProjects\PythonProject10" />
+    <SUITE FILE_PATH="coverage/PythonProject10$etl_utils.coverage" NAME="etl_utils Coverage Results" MODIFIED="1750889498057" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/etl" />
+    <SUITE FILE_PATH="coverage/PythonProject10$reports_schemas.coverage" NAME="reports_schemas Coverage Results" MODIFIED="1751040222525" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/schemas" />
+    <SUITE FILE_PATH="coverage/PythonProject10$arima_model.coverage" NAME="arima_model Coverage Results" MODIFIED="1750894020914" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/forecasting" />
+    <SUITE FILE_PATH="coverage/PythonProject10$sample_data.coverage" NAME="sample_data Coverage Results" MODIFIED="1750505227625" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/tests/ helpers" />
+    <SUITE FILE_PATH="coverage/PythonProject10$model_factory.coverage" NAME="model_factory Coverage Results" MODIFIED="1750894955292" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models" />
+    <SUITE FILE_PATH="coverage/PythonProject10$dashboard_router.coverage" NAME="dashboard_router Coverage Results" MODIFIED="1751039786509" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/routers" />
+    <SUITE FILE_PATH="coverage/PythonProject10$analysis_schemas.coverage" NAME="analysis_schemas Coverage Results" MODIFIED="1751040108203" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/schemas" />
+    <SUITE FILE_PATH="coverage/PythonProject10$kpi_callbacks.coverage" NAME="kpi_callbacks Coverage Results" MODIFIED="1751328916658" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks" />
+    <SUITE FILE_PATH="coverage/PythonProject10$footer_banner_png.coverage" NAME="footer_banner.png Coverage Results" MODIFIED="1751026373347" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports/static_assets" />
+    <SUITE FILE_PATH="coverage/PythonProject10$upload_callbacks.coverage" NAME="upload_callbacks Coverage Results" MODIFIED="1751379657193" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks" />
+    <SUITE FILE_PATH="coverage/PythonProject10$upload_component.coverage" NAME="upload_component Coverage Results" MODIFIED="1751324696780" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/components" />
+    <SUITE FILE_PATH="coverage/PythonProject10$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1751286788099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks" />
+    <SUITE FILE_PATH="coverage/PythonProject10$indicators.coverage" NAME="indicators Coverage Results" MODIFIED="1751327934062" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/components" />
+    <SUITE FILE_PATH="coverage/PythonProject10$paths_config.coverage" NAME="paths_config Coverage Results" MODIFIED="1751324337446" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/config" />
+    <SUITE FILE_PATH="coverage/PythonProject10$kmeans.coverage" NAME="kmeans Coverage Results" MODIFIED="1750893843938" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/clustering" />
+    <SUITE FILE_PATH="coverage/PythonProject10$validate_structure.coverage" NAME="validate_structure Coverage Results" MODIFIED="1750817280710" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/raw" />
+    <SUITE FILE_PATH="coverage/PythonProject10$matrix.coverage" NAME="matrix Coverage Results" MODIFIED="1750358806818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/.venv/Lib/site-packages/seaborn" />
+    <SUITE FILE_PATH="coverage/PythonProject10$dashboard_config.coverage" NAME="dashboard_config Coverage Results" MODIFIED="1751023878702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/config" />
+    <SUITE FILE_PATH="coverage/PythonProject10$eda_sweetviz.coverage" NAME="eda_sweetviz Coverage Results" MODIFIED="1750795097385" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data_profiles" />
+    <SUITE FILE_PATH="coverage/PythonProject10$stats_summary.coverage" NAME="stats_summary Coverage Results" MODIFIED="1751239392600" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/layouts" />
+    <SUITE FILE_PATH="coverage/PythonProject10$normalize_columns.coverage" NAME="normalize_columns Coverage Results" MODIFIED="1750721552496" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/processed" />
+    <SUITE FILE_PATH="coverage/PythonProject10$tables.coverage" NAME="tables Coverage Results" MODIFIED="1751241011856" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/components" />
+    <SUITE FILE_PATH="coverage/PythonProject10$yaml_config_handler.coverage" NAME="yaml_config_handler Coverage Results" MODIFIED="1751023961437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/config" />
+    <SUITE FILE_PATH="coverage/PythonProject10$config.coverage" NAME="config Coverage Results" MODIFIED="1751321919171" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard" />
+    <SUITE FILE_PATH="coverage/PythonProject10$visualization.coverage" NAME="visualization Coverage Results" MODIFIED="1750947813792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$logger.coverage" NAME="logger Coverage Results" MODIFIED="1751046558136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$create_api_structure.coverage" NAME="create_api_structure Coverage Results" MODIFIED="1750275317522" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system" />
+    <SUITE FILE_PATH="coverage/PythonProject10$app.coverage" NAME="app Coverage Results" MODIFIED="1751328982933" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard" />
+    <SUITE FILE_PATH="coverage/PythonProject10$encode_categoricals.coverage" NAME="encode_categoricals Coverage Results" MODIFIED="1750722292516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/processed" />
+    <SUITE FILE_PATH="coverage/PythonProject10$config_handler.coverage" NAME="config_handler Coverage Results" MODIFIED="1751383457609" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$preprocessing.coverage" NAME="preprocessing Coverage Results" MODIFIED="1750947242868" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$clustering_analysis.coverage" NAME="clustering_analysis Coverage Results" MODIFIED="1751062611579" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/analysis" />
+    <SUITE FILE_PATH="coverage/PythonProject10$dashboard_service.coverage" NAME="dashboard_service Coverage Results" MODIFIED="1751043304147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/services" />
+    <SUITE FILE_PATH="coverage/PythonProject10$descriptive_stats.coverage" NAME="descriptive_stats Coverage Results" MODIFIED="1751306638823" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/analysis" />
+    <SUITE FILE_PATH="coverage/PythonProject10$export_callbacks.coverage" NAME="export_callbacks Coverage Results" MODIFIED="1751295172696" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks" />
+    <SUITE FILE_PATH="coverage/PythonProject10$excel_report_generator.coverage" NAME="excel_report_generator Coverage Results" MODIFIED="1751024620487" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports/generators" />
+    <SUITE FILE_PATH="coverage/PythonProject10$filters.coverage" NAME="filters Coverage Results" MODIFIED="1751239578208" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/components" />
+    <SUITE FILE_PATH="coverage/PythonProject10$etl_schemas.coverage" NAME="etl_schemas Coverage Results" MODIFIED="1751039984219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/schemas" />
+    <SUITE FILE_PATH="coverage/PythonProject10$conftest.coverage" NAME="conftest Coverage Results" MODIFIED="1750510652513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/tests" />
+    <SUITE FILE_PATH="coverage/PythonProject10$update_external_data.coverage" NAME="update_external_data Coverage Results" MODIFIED="1750771350174" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/external" />
+    <SUITE FILE_PATH="coverage/PythonProject10$report_data_loader.coverage" NAME="report_data_loader Coverage Results" MODIFIED="1751026147865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports" />
+    <SUITE FILE_PATH="coverage/PythonProject10$clean_preview.coverage" NAME="clean_preview Coverage Results" MODIFIED="1750721368041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/processed" />
+    <SUITE FILE_PATH="coverage/PythonProject10$fill_missing.coverage" NAME="fill_missing Coverage Results" MODIFIED="1750722025658" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/processed" />
+    <SUITE FILE_PATH="coverage/PythonProject10$validate_clean_data.coverage" NAME="validate_clean_data Coverage Results" MODIFIED="1750722470823" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/processed" />
+    <SUITE FILE_PATH="coverage/PythonProject10$data_loader.coverage" NAME="data_loader Coverage Results" MODIFIED="1751379301927" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$load_external_files.coverage" NAME="load_external_files Coverage Results" MODIFIED="1750794117568" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/external" />
+    <SUITE FILE_PATH="coverage/PythonProject10$model_config.coverage" NAME="model_config Coverage Results" MODIFIED="1751023705764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/config" />
+    <SUITE FILE_PATH="coverage/PythonProject10$logistic_regression.coverage" NAME="logistic_regression Coverage Results" MODIFIED="1750893556805" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/classification" />
+    <SUITE FILE_PATH="coverage/PythonProject10$check_raw_data.coverage" NAME="check_raw_data Coverage Results" MODIFIED="1751125891067" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/raw" />
+    <SUITE FILE_PATH="coverage/PythonProject10$correlation_analysis.coverage" NAME="correlation_analysis Coverage Results" MODIFIED="1751062904580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/analysis" />
+    <SUITE FILE_PATH="coverage/PythonProject10$charts_placeholders.coverage" NAME="charts_placeholders Coverage Results" MODIFIED="1751218481695" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/layouts" />
+    <SUITE FILE_PATH="coverage/PythonProject10$pdf_report_generator.coverage" NAME="pdf_report_generator Coverage Results" MODIFIED="1751024517343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports/generators" />
+    <SUITE FILE_PATH="coverage/PythonProject10$feature_utils.coverage" NAME="feature_utils Coverage Results" MODIFIED="1750948223420" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$export_utils.coverage" NAME="export_utils Coverage Results" MODIFIED="1751025543362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports" />
+    <SUITE FILE_PATH="coverage/PythonProject10$session.coverage" NAME="session Coverage Results" MODIFIED="1751054775049" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/database" />
+    <SUITE FILE_PATH="coverage/PythonProject10$random_forest.coverage" NAME="random_forest Coverage Results" MODIFIED="1750893647075" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/classification" />
+    <SUITE FILE_PATH="coverage/PythonProject10$theme.coverage" NAME="theme Coverage Results" MODIFIED="1750977561702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/layouts" />
+    <SUITE FILE_PATH="coverage/PythonProject10$utils.coverage" NAME="utils Coverage Results" MODIFIED="1750978632745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard" />
+    <SUITE FILE_PATH="coverage/PythonProject10$db_config.coverage" NAME="db_config Coverage Results" MODIFIED="1751024222208" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/config" />
+    <SUITE FILE_PATH="coverage/PythonProject10$analysis_router.coverage" NAME="analysis_router Coverage Results" MODIFIED="1751039290151" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/routers" />
+    <SUITE FILE_PATH="coverage/PythonProject10$metrics.coverage" NAME="metrics Coverage Results" MODIFIED="1750948004463" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$external_data_utils.coverage" NAME="external_data_utils Coverage Results" MODIFIED="1750794214936" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/external" />
+    <SUITE FILE_PATH="coverage/PythonProject10$outlier_detection.coverage" NAME="outlier_detection Coverage Results" MODIFIED="1751062424976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/analysis" />
+    <SUITE FILE_PATH="coverage/PythonProject10$data_bindings.coverage" NAME="data_bindings Coverage Results" MODIFIED="1751296872814" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/core" />
+    <SUITE FILE_PATH="coverage/PythonProject10$filters_callbacks.coverage" NAME="filters_callbacks Coverage Results" MODIFIED="1751294717197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks" />
+    <SUITE FILE_PATH="coverage/PythonProject10$callbacks.coverage" NAME="callbacks Coverage Results" MODIFIED="1750608158169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard" />
+    <SUITE FILE_PATH="coverage/PythonProject10$pytest_for_test_etl_test_etl_pipeline.coverage" NAME="pytest for test_etl.test_etl_pipeline Coverage Results" MODIFIED="1751052010817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/tests" />
+    <SUITE FILE_PATH="coverage/PythonProject10$timer.coverage" NAME="timer Coverage Results" MODIFIED="1750948954748" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$prophet_model.coverage" NAME="prophet_model Coverage Results" MODIFIED="1750894164728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/forecasting" />
+    <SUITE FILE_PATH="coverage/PythonProject10$report_dispatcher.coverage" NAME="report_dispatcher Coverage Results" MODIFIED="1751310311791" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports" />
+    <SUITE FILE_PATH="coverage/PythonProject10$scale_numericals.coverage" NAME="scale_numericals Coverage Results" MODIFIED="1750722386509" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/processed" />
+    <SUITE FILE_PATH="coverage/PythonProject10$fetch_api_data.coverage" NAME="fetch_api_data Coverage Results" MODIFIED="1750763704918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/external" />
+    <SUITE FILE_PATH="coverage/PythonProject10$reports_router.coverage" NAME="reports_router Coverage Results" MODIFIED="1751063592427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/routers" />
+    <SUITE FILE_PATH="coverage/PythonProject10$reports_service.coverage" NAME="reports_service Coverage Results" MODIFIED="1751064096784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/services" />
+    <SUITE FILE_PATH="coverage/PythonProject10$layout_callbacks.coverage" NAME="layout_callbacks Coverage Results" MODIFIED="1751311896182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks" />
+    <SUITE FILE_PATH="coverage/PythonProject10$xgboost_classifier.coverage" NAME="xgboost_classifier Coverage Results" MODIFIED="1750893735026" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/classification" />
+    <SUITE FILE_PATH="coverage/PythonProject10$report_config.coverage" NAME="report_config Coverage Results" MODIFIED="1751025681882" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports" />
+    <SUITE FILE_PATH="coverage/PythonProject10$etl_router.coverage" NAME="etl_router Coverage Results" MODIFIED="1751038573901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/routers" />
+    <SUITE FILE_PATH="coverage/PythonProject10$env_config.coverage" NAME="env_config Coverage Results" MODIFIED="1751056003528" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/config" />
+    <SUITE FILE_PATH="coverage/PythonProject10$analysis_utils.coverage" NAME="analysis_utils Coverage Results" MODIFIED="1750890491896" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/analysis" />
+    <SUITE FILE_PATH="coverage/PythonProject10$lasso_regression.coverage" NAME="lasso_regression Coverage Results" MODIFIED="1750893273150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/regression" />
+    <SUITE FILE_PATH="coverage/PythonProject10$linear_regression.coverage" NAME="linear_regression Coverage Results" MODIFIED="1750893183014" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/regression" />
+    <SUITE FILE_PATH="coverage/PythonProject10$analysis_service.coverage" NAME="analysis_service Coverage Results" MODIFIED="1751041814005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/services" />
+    <SUITE FILE_PATH="coverage/PythonProject10$.coverage" NAME=" Coverage Results" MODIFIED="1751120672272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/tests" />
+    <SUITE FILE_PATH="coverage/PythonProject10$register_sources.coverage" NAME="register_sources Coverage Results" MODIFIED="1750815519462" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/raw" />
+    <SUITE FILE_PATH="coverage/PythonProject10$base_model.coverage" NAME="base_model Coverage Results" MODIFIED="1750894881893" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models" />
+    <SUITE FILE_PATH="coverage/PythonProject10$shared_notebook_tools.coverage" NAME="shared_notebook_tools Coverage Results" MODIFIED="1751034636217" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/notebooks/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$dependencies.coverage" NAME="dependencies Coverage Results" MODIFIED="1751043528965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$main.coverage" NAME="main Coverage Results" MODIFIED="1751329008531" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system" />
+    <SUITE FILE_PATH="coverage/PythonProject10$convert_format.coverage" NAME="convert_format Coverage Results" MODIFIED="1750817122937" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/raw" />
+    <SUITE FILE_PATH="coverage/PythonProject10$auth.coverage" NAME="auth Coverage Results" MODIFIED="1751120754586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$dbscan.coverage" NAME="dbscan Coverage Results" MODIFIED="1750893927891" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/clustering" />
+    <SUITE FILE_PATH="coverage/PythonProject10$exceptions.coverage" NAME="exceptions Coverage Results" MODIFIED="1751043639122" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$charts_callbacks.coverage" NAME="charts_callbacks Coverage Results" MODIFIED="1751379290376" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks" />
+    <SUITE FILE_PATH="coverage/PythonProject10$layouts.coverage" NAME="layouts Coverage Results" MODIFIED="1750590643181" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard" />
+    <SUITE FILE_PATH="coverage/PythonProject10$charts.coverage" NAME="charts Coverage Results" MODIFIED="1751327375848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/components" />
+    <SUITE FILE_PATH="coverage/PythonProject10$logo_png.coverage" NAME="logo.png Coverage Results" MODIFIED="1751026281065" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/reports/static_assets" />
+    <SUITE FILE_PATH="coverage/PythonProject10$registry.coverage" NAME="registry Coverage Results" MODIFIED="1751208012539" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/callbacks" />
+    <SUITE FILE_PATH="coverage/PythonProject10$etl_service.coverage" NAME="etl_service Coverage Results" MODIFIED="1751053127699" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/services" />
+    <SUITE FILE_PATH="coverage/PythonProject10$model_evaluation.coverage" NAME="model_evaluation Coverage Results" MODIFIED="1750894415952" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/ml_models/utils" />
+    <SUITE FILE_PATH="coverage/PythonProject10$config_loader.coverage" NAME="config_loader Coverage Results" MODIFIED="1751056321689" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/config" />
+    <SUITE FILE_PATH="coverage/PythonProject10$dashboard_schemas.coverage" NAME="dashboard_schemas Coverage Results" MODIFIED="1751040370419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/api/schemas" />
+    <SUITE FILE_PATH="coverage/PythonProject10$extract.coverage" NAME="extract Coverage Results" MODIFIED="1751307478839" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/etl" />
+    <SUITE FILE_PATH="coverage/PythonProject10$archive_raw_file.coverage" NAME="archive_raw_file Coverage Results" MODIFIED="1750866210530" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data/raw" />
+    <SUITE FILE_PATH="coverage/PythonProject10$target_relation_analysis.coverage" NAME="target_relation_analysis Coverage Results" MODIFIED="1751063154518" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/analysis" />
+    <SUITE FILE_PATH="coverage/PythonProject10$eda_ydata.coverage" NAME="eda_ydata Coverage Results" MODIFIED="1750795946479" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data_profiles" />
+    <SUITE FILE_PATH="coverage/PythonProject10$kpi_cards.coverage" NAME="kpi_cards Coverage Results" MODIFIED="1751241949937" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/layouts" />
+    <SUITE FILE_PATH="coverage/PythonProject10$main_layout.coverage" NAME="main_layout Coverage Results" MODIFIED="1751328520005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/dashboard/layouts" />
+    <SUITE FILE_PATH="coverage/PythonProject10$eda_utils.coverage" NAME="eda_utils Coverage Results" MODIFIED="1750796069688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/data_profiles" />
+    <SUITE FILE_PATH="coverage/PythonProject10$pipeline.coverage" NAME="pipeline Coverage Results" MODIFIED="1751307580880" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data_intelligence_system/etl" />
+  </component>
+</project>
