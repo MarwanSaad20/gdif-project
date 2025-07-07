@@ -131,3 +131,20 @@ def get_latest_processed_file(directory: str = "data/processed") -> str | None:
     except Exception as e:
         logger.exception(f"❌ Failed to find latest processed file: {e}")
         raise RuntimeError(f"❌ Failed to find latest processed file: {e}")
+def save_uploaded_data(df: pd.DataFrame, filename: str = "uploaded.csv") -> str:
+    """
+    حفظ DataFrame في مجلد processed بصيغة CSV
+    """
+    base_dir = Path(__file__).resolve().parents[1]
+    processed_dir = base_dir / "data" / "processed"
+    processed_dir.mkdir(parents=True, exist_ok=True)
+
+    path = processed_dir / filename
+
+    try:
+        df.to_csv(path, index=False, encoding='utf-8')
+        logger.info(f"✅ تم حفظ البيانات في: {path}")
+        return str(path)
+    except Exception as e:
+        logger.error(f"❌ فشل في حفظ البيانات: {e}", exc_info=True)
+        raise RuntimeError(f"❌ فشل في حفظ البيانات: {e}")
