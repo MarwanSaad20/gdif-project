@@ -1,8 +1,6 @@
 import importlib
 from typing import Any
 
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ إضافة استيراد fill_missing لدعم التكامل
-
 # خريطة النماذج المتوفرة حسب النوع
 MODEL_REGISTRY = {
     "regression": {
