@@ -9,7 +9,7 @@ from sklearn.preprocessing import (
 )
 import logging
 
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ دمج معالجة القيم المفقودة
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ محدث
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -118,11 +118,10 @@ class DataPreprocessor:
     def preprocess(self, df, target_col=None, categorical_cols=None, scale=True):
         df = df.copy()
 
-        # معالجة القيم المفقودة باستخدام الدالة من الملف fill_missing.py
-        df = fill_missing(df)
+        # ✅ معالجة القيم المفقودة باستخدام الدالة الموحدة
+        df = fill_missing_values(df)
 
         initial_shape = df.shape
-        # من الأفضل عدم حذف الصفوف مباشرة بعد ملء القيم المفقودة، لكن لو لازال هناك قيم ناقصة نحذفها:
         df.dropna(axis=0, how='any', inplace=True)
         dropped_rows = initial_shape[0] - df.shape[0]
         if dropped_rows > 0:
