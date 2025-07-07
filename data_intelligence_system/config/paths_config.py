@@ -14,6 +14,10 @@ DATA_DIR = SYSTEM_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 EXTERNAL_DATA_DIR = DATA_DIR / "external"
+print("PROJECT_ROOT:", PROJECT_ROOT)
+print("SYSTEM_ROOT:", SYSTEM_ROOT)
+print("RAW DATA PATH:", SYSTEM_ROOT / "data" / "raw")
+print("PROCESSED DATA PATH:", SYSTEM_ROOT / "data" / "processed")
 
 # إضافة مجلد التنزيلات ضمن البيانات الخارجية (إن وجد)
 EXTERNAL_DOWNLOADED_DIR = EXTERNAL_DATA_DIR / "downloaded"
