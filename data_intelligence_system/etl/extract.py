@@ -51,7 +51,7 @@ def extract_all_data(validate: bool = True) -> List[Tuple[str, pd.DataFrame]]:
                 if validate:
                     try_validate(file_path, validate_file_structure)
 
-                df = read_file(file_path)
+                df = read_file(str(file_path))
                 if not isinstance(df, pd.DataFrame):
                     logger.warning(f"⚠️ لم يتم استخراج DataFrame صالح من: {file_path.name}")
                     continue
@@ -76,11 +76,11 @@ def extract_file(source_path: Union[str, Path], validate: bool = True) -> Dict[s
         if validate:
             try_validate(file_path, validate_file_structure)
 
-        df = read_file(file_path)
+        df = read_file(str(file_path))
         if not isinstance(df, pd.DataFrame):
             raise ValueError(f"⚠️ الملف {file_path.name} لم يتم تحويله إلى DataFrame بشكل صحيح")
 
-        file_key = extract_file_name(file_path)
+        file_key = extract_file_name(str(file_path))
         logger.info(f"📄 تم استخراج ملف: {file_path.name} → {df.shape}")
         return {file_key: df}
 
