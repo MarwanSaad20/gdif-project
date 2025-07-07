@@ -9,7 +9,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تحديث الاستيراد
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -44,7 +44,7 @@ class ProphetForecastingModel(BaseModel):
         df['ds'] = pd.to_datetime(df['ds'])
 
         # ✅ معالجة القيم المفقودة في العمود y
-        df['y'] = fill_missing(df['y'])
+        df['y'] = fill_missing_values(df['y'])
 
         if self.preprocessor:
             df['y'] = self.preprocessor.transform_scaler(df[['y']]).flatten()
