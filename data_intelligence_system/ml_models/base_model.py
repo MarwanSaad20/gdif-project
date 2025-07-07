@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 import logging
 
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ استيراد fill_missing لدعم التكامل مع تحديثات معالجة القيم الناقصة
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تحديث الاستيراد
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -13,6 +13,7 @@ if not logger.hasHandlers():
     handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter('%(asctime)s | %(levelname)s | %(message)s'))
     logger.addHandler(handler)
+
 
 class BaseModel(ABC):
     """
@@ -38,16 +39,16 @@ class BaseModel(ABC):
     @abstractmethod
     def fit(self, X, y=None):
         """تدريب النموذج. يجب تنفيذه في الفئات الفرعية."""
-        # قبل التدريب: معالجة القيم المفقودة باستخدام fill_missing إذا كان X أو y من نوع مناسب
-        if hasattr(fill_missing, "__call__"):
+        # ✅ معالجة القيم المفقودة باستخدام fill_missing_values
+        if hasattr(fill_missing_values, "__call__"):
             if X is not None:
                 try:
-                    X = fill_missing(X)
+                    X = fill_missing_values(X)
                 except Exception:
                     pass
             if y is not None:
                 try:
-                    y = fill_missing(y)
+                    y = fill_missing_values(y)
                 except Exception:
                     pass
         raise NotImplementedError
