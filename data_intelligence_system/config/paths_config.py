@@ -1,23 +1,27 @@
 from pathlib import Path
 
 # ===================== الجذر الرئيسي للمشروع =====================
+# يفترض أن هذا الملف داخل data_intelligence_system/config/
+# إذن PROJECT_ROOT هو مجلد data_intelligence_system مباشرة
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 # 📄 ملف البيئة (.env)
 ENV_FILE = PROJECT_ROOT / ".env"
 
 # ===================== مجلد النظام الداخلي =====================
-SYSTEM_ROOT = PROJECT_ROOT / "data_intelligence_system"
+# SYSTEM_ROOT يساوي PROJECT_ROOT لأنه يمثل مجلد data_intelligence_system
+SYSTEM_ROOT = PROJECT_ROOT
 
 # ===================== مسارات البيانات =====================
 DATA_DIR = SYSTEM_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 EXTERNAL_DATA_DIR = DATA_DIR / "external"
+
 print("PROJECT_ROOT:", PROJECT_ROOT)
 print("SYSTEM_ROOT:", SYSTEM_ROOT)
-print("RAW DATA PATH:", SYSTEM_ROOT / "data" / "raw")
-print("PROCESSED DATA PATH:", SYSTEM_ROOT / "data" / "processed")
+print("RAW DATA PATH:", RAW_DATA_DIR)
+print("PROCESSED DATA PATH:", PROCESSED_DATA_DIR)
 
 # إضافة مجلد التنزيلات ضمن البيانات الخارجية (إن وجد)
 EXTERNAL_DOWNLOADED_DIR = EXTERNAL_DATA_DIR / "downloaded"
@@ -70,9 +74,8 @@ TESTS_DIR = SYSTEM_ROOT / "tests"
 # ===================== ملفات مهمة =====================
 CLEAN_DATA_FILE = PROCESSED_DATA_DIR / "clean_data.csv"
 MAIN_SCRIPT = SYSTEM_ROOT / "main.py"
-REQUIREMENTS_FILE = PROJECT_ROOT / "requirements.txt"
-DOCKERFILE = PROJECT_ROOT / "Dockerfile"
-
+REQUIREMENTS_FILE = PROJECT_ROOT.parent / "requirements.txt"  # إذا كان requirements خارج data_intelligence_system
+DOCKERFILE = PROJECT_ROOT.parent / "Dockerfile"              # كذلك
 
 def ensure_directories_exist():
     """
