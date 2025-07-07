@@ -5,15 +5,14 @@ from sklearn.ensemble import IsolationForest
 from scipy import stats
 from pathlib import Path
 
-# استيراد من جذر المشروع
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
     get_numerical_columns,
     save_dataframe,
     log_basic_info
 )
-from data_intelligence_system.utils.data_loader import load_data  # ✅ التحميل الموحد
-from data_intelligence_system.utils.preprocessing import fill_missing_values # ✅ تم نقل الدالة هنا
+from data_intelligence_system.utils.data_loader import load_data
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ التصحيح هنا
 
 # ===================== إعداد المسارات =====================
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -30,11 +29,11 @@ logger = logging.getLogger(__name__)
 
 def detect_outliers_zscore(df: pd.DataFrame, threshold=3) -> pd.Series:
     logger.info("🧮 اكتشاف القيم الشاذة باستخدام Z-Score")
-    df = fill_missing(df)
+    df = fill_missing_values(df)  # ✅ التصحيح هنا
     numeric_cols = get_numerical_columns(df)
     if not numeric_cols:
         logger.warning("⚠️ لا توجد أعمدة رقمية لاكتشاف القيم الشاذة باستخدام Z-Score.")
-        return pd.Series([False] * len(df), index=df.index)
+        return pd.Series([False]*len(df), index=df.index)
 
     z_scores = np.abs(stats.zscore(df[numeric_cols]))
     return (z_scores > threshold).any(axis=1)
@@ -42,11 +41,11 @@ def detect_outliers_zscore(df: pd.DataFrame, threshold=3) -> pd.Series:
 
 def detect_outliers_iqr(df: pd.DataFrame, factor=1.5) -> pd.Series:
     logger.info("🧮 اكتشاف القيم الشاذة باستخدام IQR")
-    df = fill_missing(df)
+    df = fill_missing_values(df)  # ✅ التصحيح هنا
     numeric_cols = get_numerical_columns(df)
     if not numeric_cols:
         logger.warning("⚠️ لا توجد أعمدة رقمية لاكتشاف القيم الشاذة باستخدام IQR.")
-        return pd.Series([False] * len(df), index=df.index)
+        return pd.Series([False]*len(df), index=df.index)
 
     Q1 = df[numeric_cols].quantile(0.25)
     Q3 = df[numeric_cols].quantile(0.75)
@@ -56,11 +55,11 @@ def detect_outliers_iqr(df: pd.DataFrame, factor=1.5) -> pd.Series:
 
 def detect_outliers_isolation_forest(df: pd.DataFrame, contamination=0.05) -> pd.Series:
     logger.info("🌲 اكتشاف القيم الشاذة باستخدام Isolation Forest")
-    df = fill_missing(df)
+    df = fill_missing_values(df)  # ✅ التصحيح هنا
     numeric_cols = get_numerical_columns(df)
     if not numeric_cols:
         logger.warning("⚠️ لا توجد أعمدة رقمية لاكتشاف القيم الشاذة باستخدام Isolation Forest.")
-        return pd.Series([False] * len(df), index=df.index)
+        return pd.Series([False]*len(df), index=df.index)
 
     model = IsolationForest(contamination=contamination, random_state=42)
     X = df[numeric_cols]
@@ -109,7 +108,7 @@ def run_batch_detection():
     report = []
     for file_path in DATA_DIR.glob("*.csv"):
         try:
-            df = load_data(str(file_path))  # ✅ تم استخدام الدالة الموحدة
+            df = load_data(str(file_path))
         except Exception as e:
             logger.error(f"⚠️ فشل في قراءة الملف {file_path.name}: {e}")
             continue
