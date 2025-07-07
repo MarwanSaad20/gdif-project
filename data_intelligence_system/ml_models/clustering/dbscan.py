@@ -6,8 +6,7 @@ import pandas as pd
 from sklearn.cluster import DBSCAN
 
 from data_intelligence_system.ml_models.base_model import BaseModel
-from data_intelligence_system.data.processed.fill_missing import fill_missing
-from data_intelligence_system.data.processed.scale_numericals import scale_numericals  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values, scale_numericals  # ✅ تحديث موحد
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -25,7 +24,7 @@ class DBSCANClusteringModel(BaseModel):
         super().__init__(model_name="dbscan_clustering", model_dir="ml_models/saved_models")
         self.model_params = model_params if model_params else {}
         self.model = DBSCAN(**self.model_params)
-        self.scaler_type = scaler_type  # احتفظنا به لو احتاج لاحقًا
+        self.scaler_type = scaler_type
         self.is_fitted = False
 
     def fit(self, X: pd.DataFrame):
@@ -35,7 +34,7 @@ class DBSCANClusteringModel(BaseModel):
         Args:
             X: بيانات التدريب (pd.DataFrame)
         """
-        X = fill_missing(X)
+        X = fill_missing_values(X)  # ✅ استبدال الدالة
         X_scaled = scale_numericals(X)
         self.model.fit(X_scaled)
         self.is_fitted = True
@@ -53,7 +52,7 @@ class DBSCANClusteringModel(BaseModel):
         """
         if not self.is_fitted:
             raise ValueError("❌ النموذج غير مدرب بعد.")
-        X = fill_missing(X)
+        X = fill_missing_values(X)  # ✅ استبدال الدالة
         X_scaled = scale_numericals(X)
         return self.model.fit_predict(X_scaled)
 
