@@ -4,7 +4,6 @@ from typing import Optional, Union, List, Tuple
 from datetime import datetime
 import pandas as pd
 
-# ✅ استيرادات محدثة من الجذر
 from data_intelligence_system.etl.transform import transform_datasets
 from data_intelligence_system.analysis.descriptive_stats import (
     analyze_numerical_columns,
@@ -13,7 +12,6 @@ from data_intelligence_system.analysis.descriptive_stats import (
 )
 from data_intelligence_system.etl.extract import extract_file, extract_all_data
 from data_intelligence_system.core.data_bindings import save_uploaded_data
-from data_intelligence_system.config.paths_config import RAW_DATA_DIR, PROCESSED_DATA_DIR
 
 # 🛠️ إعداد نظام التسجيل
 LOG_FORMAT = "%(asctime)s — %(levelname)s — %(name)s — %(message)s"
@@ -23,6 +21,9 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger = logging.getLogger("etl.pipeline")
+
+RAW_DIR = Path(__file__).resolve().parents[1] / "data" / "raw"
+PROCESSED_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
 
 
 def analyze_columns(df: pd.DataFrame, name: str):
@@ -51,7 +52,7 @@ def analyze_columns(df: pd.DataFrame, name: str):
 
 def run_full_pipeline(
     filepath: Optional[Union[str, Path]] = None,
-    output_dir: Union[str, Path] = PROCESSED_DATA_DIR,
+    output_dir: Union[str, Path] = PROCESSED_DIR,
     encode_type: str = 'label',
     scale_type: str = 'standard',
 ) -> bool:
@@ -73,7 +74,7 @@ def run_full_pipeline(
             df_dict = extract_file(filepath)
             datasets = list(df_dict.items())  # extract_file returns Dict[str, DataFrame]
         else:
-            logger.info(f"📥 استخراج جميع الملفات من المسارات المحددة")
+            logger.info(f"📥 استخراج جميع الملفات من مجلد: {RAW_DIR}")
             datasets = extract_all_data()
 
         if not datasets:
@@ -109,7 +110,7 @@ def run_full_pipeline(
 
 if __name__ == "__main__":
     success = run_full_pipeline(
-        output_dir=PROCESSED_DATA_DIR,
+        output_dir=PROCESSED_DIR,
         encode_type='onehot',
         scale_type='minmax',
     )
@@ -117,3 +118,5 @@ if __name__ == "__main__":
         logger.info("✅ ETL pipeline انتهت بنجاح 🚀")
     else:
         logger.error("❌ فشل تنفيذ ETL pipeline، راجع التفاصيل.")
+
+
