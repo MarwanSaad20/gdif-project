@@ -50,9 +50,23 @@ def encode_categorical_columns(df: pd.DataFrame, encode_type: str = 'label') -> 
                 logger.error(f"❌ خطأ في ترميز {col}: {e}")
 
     elif encode_type == 'onehot':
+        one_hot_cols = []
+        skipped_cols = []
+
+        for col in cat_cols:
+            unique_vals = df[col].nunique()
+            if unique_vals <= 1000:
+                one_hot_cols.append(col)
+            else:
+                skipped_cols.append((col, unique_vals))
+                logger.warning(f"⛔ تجاهل العمود '{col}' لاحتوائه على {unique_vals} قيمة فريدة (تجاوز الحد 1000)")
+
         try:
-            df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
-            logger.info(f"✅ تم تطبيق One-Hot Encoding على الأعمدة: {cat_cols}")
+            if one_hot_cols:
+                df = pd.get_dummies(df, columns=one_hot_cols, drop_first=True)
+                logger.info(f"✅ تم تطبيق One-Hot Encoding على الأعمدة: {one_hot_cols}")
+            else:
+                logger.info("ℹ️ لا يوجد أعمدة مؤهلة لتطبيق One-Hot Encoding.")
         except Exception as e:
             logger.error(f"❌ فشل في تطبيق One-Hot Encoding: {e}")
             raise
