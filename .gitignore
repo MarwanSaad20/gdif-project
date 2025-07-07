@@ -53,3 +53,5 @@ Thumbs.db
 # ======================
 .vscode/
 .idea/
+# تحليل - مخرجات الصور والنصوص
+data_intelligence_system/analysis/analysis_output/
