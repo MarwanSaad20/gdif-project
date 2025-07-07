@@ -1,19 +1,19 @@
 from pathlib import Path
 import pandas as pd
-import logging
 from typing import List, Tuple, Union, Dict, Optional
 
+# ✅ استيرادات من جذر المشروع بعد التعديلات
 from data_intelligence_system.etl.etl_utils import log_step, get_all_files, detect_file_type
 from data_intelligence_system.utils.file_manager import extract_file_name, read_file
 from data_intelligence_system.config.paths_config import RAW_DATA_PATHS, SUPPORTED_EXTENSIONS
+from data_intelligence_system.utils.logger import get_logger
 
 try:
     from data_intelligence_system.data.raw.validate_structure import validate_file_structure  # type: ignore
 except ImportError:
     validate_file_structure = None
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = get_logger("ETL.Extract")
 
 
 def is_valid_file(file_path: Path) -> bool:
