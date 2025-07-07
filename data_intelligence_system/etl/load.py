@@ -1,9 +1,11 @@
 from pathlib import Path
 from datetime import datetime
-import logging
 from typing import List, Tuple, Optional, Union
 import pandas as pd
 import os
+
+# ✅ استيراد اللوجر الموحد
+from data_intelligence_system.utils.logger import get_logger
 
 try:
     from data_intelligence_system.data.raw.archive_raw_file import archive_file  # type: ignore
@@ -15,7 +17,7 @@ try:
 except ImportError:
     validate = None
 
-logger = logging.getLogger(__name__)
+logger = get_logger("ETL.Load")
 
 
 def create_output_dir(base_path: Path) -> Path:
