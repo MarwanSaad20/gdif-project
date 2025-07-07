@@ -15,7 +15,7 @@ from sklearn.metrics import (
 )
 
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ مضاف
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ محدث
 
 
 class RegressionMetrics:
@@ -43,15 +43,15 @@ class RegressionMetrics:
                     preprocessor: DataPreprocessor = None) -> dict:
         if isinstance(y_true, np.ndarray):
             y_true = pd.DataFrame(y_true)
-            y_true = fill_missing(y_true).values.flatten()
+            y_true = fill_missing_values(y_true).values.flatten()
         else:
-            y_true = fill_missing(y_true)
+            y_true = fill_missing_values(y_true)
 
         if isinstance(y_pred, np.ndarray):
             y_pred = pd.DataFrame(y_pred)
-            y_pred = fill_missing(y_pred).values.flatten()
+            y_pred = fill_missing_values(y_pred).values.flatten()
         else:
-            y_pred = fill_missing(y_pred)
+            y_pred = fill_missing_values(y_pred)
 
         if inverse_transform and preprocessor:
             y_true = preprocessor.inverse_transform_scaler(y_true.reshape(-1, 1)).flatten()
@@ -90,15 +90,15 @@ class ClassificationMetrics:
     def all_metrics(y_true: np.ndarray, y_pred: np.ndarray, average="binary") -> dict:
         if isinstance(y_true, np.ndarray):
             y_true = pd.DataFrame(y_true)
-            y_true = fill_missing(y_true).values.flatten()
+            y_true = fill_missing_values(y_true).values.flatten()
         else:
-            y_true = fill_missing(y_true)
+            y_true = fill_missing_values(y_true)
 
         if isinstance(y_pred, np.ndarray):
             y_pred = pd.DataFrame(y_pred)
-            y_pred = fill_missing(y_pred).values.flatten()
+            y_pred = fill_missing_values(y_pred).values.flatten()
         else:
-            y_pred = fill_missing(y_pred)
+            y_pred = fill_missing_values(y_pred)
 
         return {
             "Accuracy": ClassificationMetrics.accuracy(y_true, y_pred),
@@ -115,15 +115,15 @@ class ClusteringMetrics:
         try:
             if isinstance(X, np.ndarray):
                 X = pd.DataFrame(X)
-                X = fill_missing(X).values
+                X = fill_missing_values(X).values
             else:
-                X = fill_missing(X)
+                X = fill_missing_values(X)
 
             if isinstance(labels, np.ndarray):
                 labels = pd.DataFrame(labels)
-                labels = fill_missing(labels).values.flatten()
+                labels = fill_missing_values(labels).values.flatten()
             else:
-                labels = fill_missing(labels)
+                labels = fill_missing_values(labels)
 
             score = silhouette_score(X, labels)
         except ValueError:
@@ -134,15 +134,15 @@ class ClusteringMetrics:
     def adjusted_rand(y_true: np.ndarray, y_pred: np.ndarray) -> float:
         if isinstance(y_true, np.ndarray):
             y_true = pd.DataFrame(y_true)
-            y_true = fill_missing(y_true).values.flatten()
+            y_true = fill_missing_values(y_true).values.flatten()
         else:
-            y_true = fill_missing(y_true)
+            y_true = fill_missing_values(y_true)
 
         if isinstance(y_pred, np.ndarray):
             y_pred = pd.DataFrame(y_pred)
-            y_pred = fill_missing(y_pred).values.flatten()
+            y_pred = fill_missing_values(y_pred).values.flatten()
         else:
-            y_pred = fill_missing(y_pred)
+            y_pred = fill_missing_values(y_pred)
 
         return adjusted_rand_score(y_true, y_pred)
 
