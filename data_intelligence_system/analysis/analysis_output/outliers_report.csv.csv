@@ -1,0 +1,6 @@
+filename,total_rows,numeric_columns,zscore_outliers,iqr_outliers,isolationforest_outliers
+clean_data.csv,1000,4,0,0,50
+clean_data_encoded.csv,1000,5,0,0,50
+clean_data_filled.csv,1000,4,0,0,50
+clean_data_normalized.csv,1000,4,0,0,50
+clean_data_scaled.csv,1000,5,0,0,50

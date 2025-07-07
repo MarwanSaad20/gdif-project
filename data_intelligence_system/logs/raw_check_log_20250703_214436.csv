@@ -1,0 +1,6 @@
+filename,status,message,rows,columns,num_missing_values,checked_at
+20250628_201905_150d00d2.csv,OK,Loaded successfully,1000,7,0,2025-07-03T21:44:36.076383
+oil_production_synthetic.csv,OK,Loaded successfully,1095,7,0,2025-07-03T21:44:36.079709
+20250625_051246_sample_data.csv,OK,Loaded successfully,6,6,2,2025-07-03T21:44:36.083916
+20250625_051246_sample_data.metadata.csv,OK,Loaded successfully,1,18,0,2025-07-03T21:44:36.085825
+20250625_051246_sample_data.metadata.json,OK,Loaded successfully,1,18,0,2025-07-03T21:44:36.088152

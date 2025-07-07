@@ -1,0 +1,41 @@
+# إعدادات المشروع
+project:
+  name: General Data Intelligence Framework
+  version: 1.0.0
+  author: Marwan Al_Jubouri
+  language: ar
+  env_mode: development
+
+paths:
+  raw_data: data_intelligence_system/data/raw/
+  processed_data: data_intelligence_system/data/processed/
+  reports: data_intelligence_system/reports/output/
+  models: data_intelligence_system/ml_models/
+  logs: logs/
+
+dashboard:
+  theme: dark
+  max_records: 500
+  refresh_interval: 60
+
+kpis:
+  - name: revenue
+    label: "الإيرادات"
+    unit: "$"
+    color: "#27AE60"
+    icon: "💰"
+  - name: growth
+    label: "معدل النمو"
+    unit: "%"
+    color: "#2980B9"
+    icon: "📈"
+  - name: churn_rate
+    label: "معدل التسرب"
+    unit: "%"
+    color: "#E74C3C"
+    icon: "⚠️"
+  - name: customer_count
+    label: "عدد العملاء"
+    unit: ""
+    color: "#8E44AD"
+    icon: "👥"

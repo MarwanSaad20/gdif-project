@@ -1,0 +1,2 @@
+filename,status,message,rows,columns,num_missing_values,checked_at
+sample_data.csv,OK,Loaded successfully,6,6,2,2025-06-25T04:29:38.360291

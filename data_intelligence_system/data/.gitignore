@@ -1,0 +1,28 @@
+# ⛔ تجاهل مجلد البيئة الافتراضية
+.venv/
+
+# ⛔ تجاهل ملفات بايثون المؤقتة
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ⛔ تجاهل ملفات اللوج العامة
+*.log
+
+# ⛔ تجاهل ملفات الأنظمة
+Thumbs.db
+.DS_Store
+
+# ⛔ تجاهل مجلدات وأدوات بيئة التطوير
+.vscode/
+.idea/
+
+# ⛔ تجاهل ملفات ومجلدات مرتبطة بـ Data Sources
+/dataSources/
+/dataSources.local.xml
+
+# ✅ تجاهل محتوى مجلد data لكن السماح بظهوره كمجلد
+data/*
+!data/
+!data/**/
+!data/**/.gitkeep

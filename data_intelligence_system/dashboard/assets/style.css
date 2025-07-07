@@ -1,0 +1,210 @@
+/* ------------------------------------------
+   متغيرات الألوان للثيم (Theme CSS Variables)
+------------------------------------------- */
+:root {
+    --primary-color: #1E90FF;
+    --primary-color-light: #4fc3f7; /* لون فاتح مستعمل في الروابط */
+    --primary-color-dark: #005BBB; /* لون داكن مستعمل في الأزرار */
+    --secondary-color: #FF4500;
+    --background-color: #0A0F1A;
+    --text-color: #e0e0e0;
+    --text-muted-color: #A0A0A0;
+    --border-color: #222E3D;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+}
+
+/* --- Reset أساسي للأناقة والثبات عبر المتصفحات --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- خلفية عامة للوحة التحكم --- */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- رؤوس الصفحات --- */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    /* استبدال شفافية HEX غير المدعومة بـ rgba */
+    text-shadow: 0 0 5px rgba(30, 144, 255, 0.67);
+}
+
+/* --- الروابط --- */
+a {
+    color: var(--primary-color-light);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+a:hover, a:focus {
+    /* استخدام متغير للون hover لتوحيد الألوان */
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* --- أزرار عامة --- */
+button, .btn {
+    background: linear-gradient(145deg, var(--primary-color), var(--primary-color-dark));
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1.3rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow:
+        0 0 8px rgba(30, 144, 255, 0.53),
+        inset 0 -3px 6px rgba(0, 91, 187, 0.53);
+    transition: all 0.3s ease;
+    user-select: none;
+}
+button:hover, .btn:hover, button:focus, .btn:focus {
+    background: linear-gradient(145deg, var(--primary-color-light), #0080FF);
+    box-shadow:
+        0 0 12px rgba(79, 195, 247, 0.8),
+        inset 0 -4px 8px rgba(0, 128, 255, 0.8);
+    outline: none;
+    transform: translateY(-2px);
+}
+button:active, .btn:active {
+    transform: translateY(0);
+    box-shadow:
+        0 0 6px rgba(30, 144, 255, 0.53),
+        inset 0 2px 4px rgba(0, 91, 187, 0.53);
+}
+
+/* زر رفع البيانات (مخصص) */
+.upload-btn {
+    background: linear-gradient(145deg, #00FFC3, #00A17D);
+    color: var(--background-color);
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow:
+        0 0 10px rgba(0, 255, 195, 0.8),
+        inset 0 -3px 5px #007B5E;
+    border-radius: 10px;
+    padding: 0.8rem 1.5rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.upload-btn:hover, .upload-btn:focus {
+    background: linear-gradient(145deg, #00FFD5, #00CCAA);
+    box-shadow:
+        0 0 15px rgba(0, 255, 213, 1),
+        inset 0 -4px 7px #009E80;
+    outline: none;
+}
+
+/* --- جداول --- */
+table {
+    width: 100%;
+    border-collapse: separate; /* لتفعيل border-radius */
+    border-spacing: 0;
+    margin-bottom: 1.5rem;
+    background-color: var(--background-color); /* تم توحيد الخلفية */
+    color: var(--text-color);
+    box-shadow: 0 0 8px rgba(30, 144, 255, 0.27);
+    border-radius: 6px;
+    overflow: hidden;
+}
+th, td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+th {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    font-weight: 700;
+    text-align: left;
+    text-shadow: none;
+}
+tr:nth-child(even) {
+    background-color: #16203B;
+}
+tr:hover {
+    background-color: rgba(30, 144, 255, 0.2);
+}
+
+/* --- الفلاتر والاختيارات --- */
+select, input[type="text"], input[type="number"], input[type="date"], input[type="file"] {
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--primary-color);
+    background-color: #122240;
+    color: var(--text-color);
+    font-weight: 600;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+select:focus, input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(30, 144, 255, 0.67);
+    outline: none;
+}
+
+/* --- الحاويات والمربعات --- */
+.container, .dash-container {
+    padding: 1.2rem 1.5rem;
+    background-color: #0E1525;
+    border-radius: 12px;
+    box-shadow: 0 0 18px rgba(30, 144, 255, 0.4);
+    margin-bottom: 1.8rem;
+}
+
+/* --- الرسومات البيانية --- */
+.chart-container {
+    background-color: #0F1B33;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.53);
+}
+
+/* --- مؤشرات الأداء (KPI Cards) --- */
+.indicator, .kpi-card {
+    background-color: #1B2A4A;
+    border-radius: 15px;
+    padding: 1rem 1.2rem;
+    color: #80deea;
+    font-weight: 700;
+    box-shadow: 0 0 12px rgba(30, 144, 255, 0.67);
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.indicator:hover, .kpi-card:hover {
+    background-color: rgba(30, 144, 255, 0.27);
+    cursor: pointer;
+}
+
+/* --- استجابة شاشات صغيرة --- */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+    .container, .dash-container, .chart-container {
+        padding: 1rem;
+    }
+    table, th, td {
+        font-size: 0.85rem;
+    }
+    button, .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem;
+    }
+    .upload-btn {
+        font-size: 1rem;
+        padding: 0.65rem 1.2rem;
+    }
+}

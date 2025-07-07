@@ -1,0 +1,7 @@
+id,name,age,salary,department,join_date
+1,Ahmed,30,5000,Sales,2020-01-15
+2,Sara,28,6000,Marketing,2019-11-23
+3,Khaled,35,,IT,2018-05-10
+4,Laila,40,7000,HR,2017-08-07
+5,Mohammed,NaN,6500,Sales,2021-03-30
+6,Nora,29,6200,Marketing,2020-12-01

@@ -1,0 +1,7 @@
+feature,f_statistic,p_value,test_type,chi2_statistic,file
+id,0.11421325365743308,0.735468540235109,ANOVA,,clean_data.csv
+petal_length_cm,0.38814898218547855,0.5334163221983304,ANOVA,,clean_data.csv
+petal_width_cm,1.238306562641955,0.26606563214955686,ANOVA,,clean_data.csv
+freshness_days,0.42297539471790935,0.5156057866765974,ANOVA,,clean_data.csv
+species,,0.8975569926063247,Chi-Square,1.079207427224182,clean_data.csv
+color,,0.20306753258032867,Chi-Square,7.244713182629555,clean_data.csv
