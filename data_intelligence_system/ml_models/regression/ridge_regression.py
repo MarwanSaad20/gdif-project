@@ -9,8 +9,8 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.data.processed.fill_missing import fill_missing
-from data_intelligence_system.data.processed.scale_numericals import scale_numericals  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ محدث
+from data_intelligence_system.data.processed.scale_numericals import scale_numericals
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -46,8 +46,8 @@ class RidgeRegressionModel(BaseModel):
         else:
             y = pd.Series(y)
 
-        X = fill_missing(X)
-        y = fill_missing(y)
+        X = fill_missing_values(X)  # ✅ تحديث
+        y = fill_missing_values(y)  # ✅ تحديث
 
         assert X.shape[0] == y.shape[0], "❌ عدد العينات غير متطابق بين X و y"
         assert not np.isnan(X).any().any(), "❌ توجد قيم مفقودة في X"
@@ -68,7 +68,7 @@ class RidgeRegressionModel(BaseModel):
         else:
             X = pd.DataFrame(X)
 
-        X = fill_missing(X)
+        X = fill_missing_values(X)  # ✅ تحديث
         X = scale_numericals(X)
 
         predictions = self.model.predict(X)
@@ -90,8 +90,8 @@ class RidgeRegressionModel(BaseModel):
         else:
             y = pd.Series(y)
 
-        X = fill_missing(X)
-        y = fill_missing(y)
+        X = fill_missing_values(X)  # ✅ تحديث
+        y = fill_missing_values(y)  # ✅ تحديث
 
         self._check_is_fitted()
         predictions = self.predict(X, inverse_transform=inverse_transform)
