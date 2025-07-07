@@ -1,5 +1,4 @@
 import os
-import sys
 import logging
 import pandas as pd
 import numpy as np
@@ -11,12 +10,14 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 
+from pathlib import Path
+
 # ================= إعداد المسارات =================
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-DATA_DIR = os.path.join(BASE_DIR, "data_intelligence_system", "data", "processed")
-OUTPUT_DIR = os.path.join(BASE_DIR, "data_intelligence_system", "analysis", "analysis_output")
-CLUSTERING_RESULTS_DIR = os.path.join(OUTPUT_DIR, "clustering")
+BASE_DIR = Path(__file__).resolve().parents[2]  # جذر مشروع data_intelligence_system
+DATA_DIR = BASE_DIR / "data" / "processed"
+OUTPUT_DIR = BASE_DIR / "analysis" / "analysis_output"
+CLUSTERING_RESULTS_DIR = OUTPUT_DIR / "clustering"
 
 # ================= استيراد وحدات مساعدة من الجذر =================
 
@@ -110,10 +111,10 @@ def run_clustering(df: pd.DataFrame,
             raise ValueError(f"❌ الخوارزمية غير مدعومة: {algorithm}")
 
         plot_name = f"{output_filename.replace('.csv', '')}_{algo_desc}.png"
-        plot_path = os.path.join(CLUSTERING_RESULTS_DIR, plot_name)
+        plot_path = CLUSTERING_RESULTS_DIR / plot_name
         plot_clusters(df_2d, labels, plot_title, plot_path)
 
-        result_path = os.path.join(CLUSTERING_RESULTS_DIR, output_filename)
+        result_path = CLUSTERING_RESULTS_DIR / output_filename
         save_dataframe(df, result_path)
 
         logger.info(f"✅ تم حفظ نتائج التجميع: {result_path}")
@@ -121,8 +122,8 @@ def run_clustering(df: pd.DataFrame,
             "algorithm": algorithm,
             "n_clusters": n_clusters if algorithm.lower() == "kmeans" else None,
             "cluster_counts": pd.Series(labels).value_counts().to_dict(),
-            "clustered_file": result_path,
-            "plot_file": plot_path,
+            "clustered_file": str(result_path),
+            "plot_file": str(plot_path),
             "inertia": inertia,
             "silhouette_score": silhouette
         }
@@ -134,25 +135,23 @@ def run_clustering(df: pd.DataFrame,
 
 def run_batch_clustering():
     summary = []
-    if not os.path.exists(DATA_DIR):
+    if not DATA_DIR.exists():
         logger.error(f"❌ مجلد البيانات غير موجود: {DATA_DIR}")
         return
 
-    for fname in os.listdir(DATA_DIR):
-        if fname.endswith(".csv"):
-            file_path = os.path.join(DATA_DIR, fname)
-            try:
-                df = load_data(file_path)
-                result = run_clustering(df, algorithm="kmeans", n_clusters=3,
-                                        output_filename=f"{fname.replace('.csv','')}_clustered.csv")
-                if result:
-                    summary.append(result)
-            except Exception as e:
-                logger.error(f"❌ فشل تحميل الملف {fname}: {e}", exc_info=True)
+    for file_path in DATA_DIR.glob("*.csv"):
+        try:
+            df = load_data(str(file_path))
+            result = run_clustering(df, algorithm="kmeans", n_clusters=3,
+                                    output_filename=f"{file_path.stem}_clustered.csv")
+            if result:
+                summary.append(result)
+        except Exception as e:
+            logger.error(f"❌ فشل تحميل الملف {file_path.name}: {e}", exc_info=True)
 
     if summary:
         summary_df = pd.DataFrame(summary)
-        summary_path = os.path.join(CLUSTERING_RESULTS_DIR, "clustering_summary.csv")
+        summary_path = CLUSTERING_RESULTS_DIR / "clustering_summary.csv"
         summary_df.to_csv(summary_path, index=False)
         logger.info(f"📄 تم حفظ ملخص جميع التجميعات في: {summary_path}")
     else:
