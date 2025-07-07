@@ -11,7 +11,7 @@ from data_intelligence_system.analysis.descriptive_stats import (
     analyze_datetime_columns
 )
 from data_intelligence_system.etl.extract import extract_file, extract_all_data
-from data_intelligence_system.core.data_bindings import save_uploaded_data
+from data_intelligence_system.utils.file_manager import save_file, extract_file_name
 
 # 🛠️ إعداد نظام التسجيل
 LOG_FORMAT = "%(asctime)s — %(levelname)s — %(name)s — %(message)s"
@@ -95,9 +95,10 @@ def run_full_pipeline(
 
             analyze_columns(df_clean, name)
 
-            clean_name = name.rsplit(".", 1)[0]  # إزالة الامتداد إن وجد
-            saved_path = save_uploaded_data(df_clean, filename=f"cleaned_{clean_name}.csv")
-            logger.info(f"💾 تم حفظ البيانات المعالجة في: {saved_path}")
+            clean_name = extract_file_name(name)  # إزالة الامتداد إن وجد
+            save_path = output_dir / f"cleaned_{clean_name}.csv"
+            save_file(df_clean, str(save_path))
+            logger.info(f"💾 تم حفظ البيانات المعالجة في: {save_path}")
 
         elapsed = datetime.now() - start_time
         logger.info(f"✅ التحليل الكامل اكتمل خلال {elapsed}")
@@ -118,5 +119,3 @@ if __name__ == "__main__":
         logger.info("✅ ETL pipeline انتهت بنجاح 🚀")
     else:
         logger.error("❌ فشل تنفيذ ETL pipeline، راجع التفاصيل.")
-
-
