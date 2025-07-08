@@ -56,7 +56,7 @@ def register_charts_callbacks(app):
             df = drop_empty_rows(df)
             df = drop_empty_columns(df)
             df = standardize_column_names(df)
-            df = fill_missing(df)  # ✅ استبدال fill_missing_values بـ fill_missing
+            df = fill_missing_values(df)  # ✅ استبدال fill_missing_values بـ fill_missing
             df = remove_duplicates(df)
 
             table_data = df.to_dict("records")
