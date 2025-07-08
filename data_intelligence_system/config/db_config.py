@@ -4,33 +4,46 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+from data_intelligence_system.utils.config_handler import ConfigHandler
+from data_intelligence_system.utils.logger import get_logger
+
+logger = get_logger("db_config")
+
 # تحميل متغيرات البيئة من ملف .env (إذا كان موجودًا)
 env_path = Path(__file__).resolve().parent.parent / ".env"
 if env_path.exists():
     load_dotenv(dotenv_path=env_path)
 else:
-    print("⚠️ ملف .env غير موجود. سيتم الاعتماد على متغيرات البيئة المباشرة.")
+    logger.warning("⚠️ ملف .env غير موجود. سيتم الاعتماد على متغيرات البيئة المباشرة.")
 
-# 🧠 تحديد نوع قاعدة البيانات المستخدمة
-DB_TYPE = os.getenv("DB_TYPE", "sqlite").lower()  # الخيارات: "sqlite", "postgresql"
+# تحميل إعدادات إضافية من config.yaml إن وُجد
+config_path = Path(__file__).resolve().parent / "config.yaml"
+config = ConfigHandler(str(config_path)) if config_path.exists() else None
 
-# 🔐 إعدادات اتصال PostgreSQL (تُستخدم إذا DB_TYPE = postgresql)
+# 🧠 تحديد نوع قاعدة البيانات
+DB_TYPE = os.getenv("DB_TYPE") or (config.get("database.type", default="sqlite") if config else "sqlite")
+DB_TYPE = DB_TYPE.lower()
+
+# 🔐 إعدادات PostgreSQL
 POSTGRES_CONFIG = {
-    "host": os.getenv("POSTGRES_HOST", "localhost"),
-    "port": int(os.getenv("POSTGRES_PORT", 5432)),
-    "user": os.getenv("POSTGRES_USER", "postgres"),
-    "password": os.getenv("POSTGRES_PASSWORD", "password"),
-    "database": os.getenv("POSTGRES_DB", "data_system"),
+    "host": os.getenv("POSTGRES_HOST") or (config.get("database.postgres.host") if config else "localhost"),
+    "port": int(os.getenv("POSTGRES_PORT") or (config.get("database.postgres.port") if config else 5432)),
+    "user": os.getenv("POSTGRES_USER") or (config.get("database.postgres.user") if config else "postgres"),
+    "password": os.getenv("POSTGRES_PASSWORD") or (config.get("database.postgres.password") if config else "password"),
+    "database": os.getenv("POSTGRES_DB") or (config.get("database.postgres.database") if config else "data_system"),
 }
 
-# 📦 إعداد SQLite (بديل محلي بسيط)
-SQLITE_PATH = Path(__file__).resolve().parent.parent / "data_intelligence_system" / "data" / "processed" / "clean_data.db"
+# 📦 إعداد SQLite
+SQLITE_PATH = Path(
+    os.getenv("SQLITE_PATH") or
+    (config.get("database.sqlite.path") if config else Path(__file__).resolve().parent.parent / "data_intelligence_system/data/processed/clean_data.db")
+)
 
-# التأكد من وجود مجلد قاعدة بيانات SQLite
+# التأكد من وجود مجلد قاعدة البيانات
 try:
     SQLITE_PATH.parent.mkdir(parents=True, exist_ok=True)
 except Exception as e:
-    print(f"❌ فشل إنشاء مجلد قاعدة بيانات SQLite: {e}")
+    logger.error(f"❌ فشل إنشاء مجلد قاعدة بيانات SQLite: {e}")
 
 # 🧪 URI للاتصال بحسب النوع
 def get_database_uri():
@@ -42,9 +55,9 @@ def get_database_uri():
     elif DB_TYPE == "sqlite":
         return f"sqlite:///{SQLITE_PATH.as_posix()}"
     else:
-        raise ValueError(f"نوع قاعدة البيانات غير مدعوم: {DB_TYPE}")
+        raise ValueError(f"❌ نوع قاعدة البيانات غير مدعوم: {DB_TYPE}")
 
-# 🧾 ملخص الإعدادات عند التشغيل المباشر
+# 🧾 ملخص عند التشغيل المباشر
 if __name__ == "__main__":
-    print(f"🗄️ نوع قاعدة البيانات: {DB_TYPE}")
-    print(f"🧩 URI الاتصال: {get_database_uri()}")
+    logger.info(f"🗄️ نوع قاعدة البيانات: {DB_TYPE}")
+    logger.info(f"🧩 URI الاتصال: {get_database_uri()}")
