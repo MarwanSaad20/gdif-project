@@ -15,10 +15,15 @@ from data_intelligence_system.data.external.external_data_utils import (
     describe_data,
 )
 from data_intelligence_system.utils.data_loader import load_data
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values
 
-# ✅ استخدام نظام اللوجر الجديد
 from data_intelligence_system.utils.logger import get_logger
+from data_intelligence_system.utils.visualization.visuals_static import plot_distribution  # ✅ جديد
+
+import matplotlib.pyplot as plt
+from pathlib import Path
+import uuid
+
 logger = get_logger("ChartsCallback")
 
 
@@ -56,7 +61,7 @@ def register_charts_callbacks(app):
             df = drop_empty_rows(df)
             df = drop_empty_columns(df)
             df = standardize_column_names(df)
-            df = fill_missing_values(df)  # ✅ استبدال fill_missing_values 
+            df = fill_missing_values(df)
             df = remove_duplicates(df)
 
             table_data = df.to_dict("records")
