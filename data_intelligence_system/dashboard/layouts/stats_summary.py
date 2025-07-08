@@ -6,6 +6,7 @@ BACKGROUND_COLOR = "#0A0F1A"
 TEXT_COLOR = "#FFFFFF"
 PRIMARY_COLOR = "#1E90FF"
 
+
 def stats_summary_card():
     """
     إنشاء بطاقة تحتوي على ملخص إحصائي للبيانات مثل (describe()).
@@ -45,7 +46,7 @@ def stats_summary_card():
                         "minHeight": "120px",
                         "border": f"1px solid {border_color}",
                         "direction": "ltr",
-                        "tabIndex": 0  # لتحسين إمكانية التمرير بلوحة المفاتيح
+                        "tabIndex": 0
                     }
                 )
             ])
