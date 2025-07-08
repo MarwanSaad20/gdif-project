@@ -6,7 +6,8 @@ import seaborn as sns
 from pathlib import Path
 from typing import Optional
 
-from data_intelligence_system.utils.data_loader import load_data  # تكامل مباشر مع نظام التحميل الجديد
+from data_intelligence_system.utils.data_loader import load_data
+from data_intelligence_system.utils.timer import Timer  # ⏱️ تكامل مع نظام التوقيت الجديد
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,7 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # تحديد جذر المشروع بناءً على المسار الثابت
-BASE_DIR = Path(__file__).resolve().parents[2]  # جذر مشروع data_intelligence_system
+BASE_DIR = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = BASE_DIR / "analysis" / "analysis_output"
 
 
@@ -62,7 +63,7 @@ def save_dataframe(df: pd.DataFrame, name: str, output_dir: Optional[Path] = OUT
     if file_format == 'csv':
         df.to_csv(filepath, index=False)
     elif file_format in ['excel', 'xlsx']:
-        df.to_excel(filepath, index=False)  # تأكد من تثبيت openpyxl أو xlsxwriter
+        df.to_excel(filepath, index=False)
     elif file_format == 'parquet':
         df.to_parquet(filepath, index=False)
     else:
