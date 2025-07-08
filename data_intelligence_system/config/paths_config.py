@@ -1,82 +1,76 @@
 from pathlib import Path
+from data_intelligence_system.utils.config_handler import ConfigHandler
+from data_intelligence_system.utils.logger import get_logger
+
+# ✅ إعداد اللوجر
+logger = get_logger("PathsConfig")
+
+# ===================== تحميل إعدادات من config.yaml =====================
+CONFIG_FILE = Path(__file__).resolve().parent / "config.yaml"
+config = None
+
+try:
+    config = ConfigHandler(str(CONFIG_FILE))
+    logger.info(f"✅ تم تحميل الإعدادات من: {CONFIG_FILE}")
+except Exception as e:
+    logger.warning(f"⚠️ فشل تحميل إعدادات المسارات من {CONFIG_FILE}: {e}")
 
 # ===================== الجذر الرئيسي للمشروع =====================
-# يفترض أن هذا الملف داخل data_intelligence_system/config/
-# إذن PROJECT_ROOT هو مجلد data_intelligence_system مباشرة
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-
-# 📄 ملف البيئة (.env)
-ENV_FILE = PROJECT_ROOT / ".env"
-
-# ===================== مجلد النظام الداخلي =====================
-# SYSTEM_ROOT يساوي PROJECT_ROOT لأنه يمثل مجلد data_intelligence_system
 SYSTEM_ROOT = PROJECT_ROOT
+
+# ===================== إعداد المسارات من config إن وجد =====================
+def get_path_from_config(key: str, fallback: Path) -> Path:
+    value = config.get(key) if config else None
+    return Path(value) if value else fallback
 
 # ===================== مسارات البيانات =====================
 DATA_DIR = SYSTEM_ROOT / "data"
-RAW_DATA_DIR = DATA_DIR / "raw"
-PROCESSED_DATA_DIR = DATA_DIR / "processed"
+RAW_DATA_DIR = get_path_from_config("paths.raw_data", DATA_DIR / "raw")
+PROCESSED_DATA_DIR = get_path_from_config("paths.processed_data", DATA_DIR / "processed")
 EXTERNAL_DATA_DIR = DATA_DIR / "external"
-
-print("PROJECT_ROOT:", PROJECT_ROOT)
-print("SYSTEM_ROOT:", SYSTEM_ROOT)
-print("RAW DATA PATH:", RAW_DATA_DIR)
-print("PROCESSED DATA PATH:", PROCESSED_DATA_DIR)
-
-# إضافة مجلد التنزيلات ضمن البيانات الخارجية (إن وجد)
 EXTERNAL_DOWNLOADED_DIR = EXTERNAL_DATA_DIR / "downloaded"
 
-# ===================== قائمة المسارات الخاصة ببيانات المصدر الخام والخارجية =====================
-RAW_DATA_PATHS = [
-    RAW_DATA_DIR,                # مجلد البيانات الخام
-    EXTERNAL_DOWNLOADED_DIR      # مجلد البيانات الخارجية المنزّلة
-]
-
-# ===================== الامتدادات المدعومة للملفات =====================
+RAW_DATA_PATHS = [RAW_DATA_DIR, EXTERNAL_DOWNLOADED_DIR]
 SUPPORTED_EXTENSIONS = {'.csv', '.json', '.xlsx'}
 
 # ===================== توصيف البيانات والتحليل الاستكشافي =====================
 DATA_PROFILES_DIR = SYSTEM_ROOT / "data_profiles"
 EDA_OUTPUT_DIR = DATA_PROFILES_DIR / "eda_output"
 
-# ===================== وحدات ETL (استخراج - تحويل - تحميل) =====================
+# ===================== وحدات ETL =====================
 ETL_DIR = SYSTEM_ROOT / "etl"
 
-# ===================== التحليلات الإحصائية والارتباطية =====================
+# ===================== التحليلات =====================
 ANALYSIS_DIR = SYSTEM_ROOT / "analysis"
 
-# ===================== نماذج تعلم الآلة =====================
-ML_MODELS_DIR = SYSTEM_ROOT / "ml_models"
+# ===================== النماذج =====================
+ML_MODELS_DIR = get_path_from_config("paths.models", SYSTEM_ROOT / "ml_models")
 
-# ===================== واجهة المستخدم (Dashboard باستخدام Dash) =====================
+# ===================== الواجهة =====================
 DASHBOARD_DIR = SYSTEM_ROOT / "dashboard"
 DASHBOARD_ASSETS_DIR = DASHBOARD_DIR / "assets"
 
-# ===================== التقارير وتوليدها =====================
+# ===================== التقارير =====================
 REPORTS_DIR = SYSTEM_ROOT / "reports"
 REPORT_GENERATORS_DIR = REPORTS_DIR / "generators"
 REPORT_TEMPLATES_DIR = REPORT_GENERATORS_DIR / "templates"
-REPORT_OUTPUT_DIR = REPORTS_DIR / "output"
+REPORT_OUTPUT_DIR = get_path_from_config("paths.reports", REPORTS_DIR / "output")
 STATIC_ASSETS_DIR = REPORTS_DIR / "static_assets"
 
-# ===================== دفاتر Jupyter والمستندات التحليلية =====================
+# ===================== دفاتر ومساعدات =====================
 NOTEBOOKS_DIR = SYSTEM_ROOT / "notebooks"
-
-# ===================== الأدوات والمكتبات المساعدة =====================
 UTILS_DIR = SYSTEM_ROOT / "utils"
-
-# ===================== إعدادات النظام =====================
 CONFIG_DIR = SYSTEM_ROOT / "config"
-
-# ===================== اختبارات النظام =====================
 TESTS_DIR = SYSTEM_ROOT / "tests"
 
-# ===================== ملفات مهمة =====================
+# ===================== ملفات رئيسية =====================
 CLEAN_DATA_FILE = PROCESSED_DATA_DIR / "clean_data.csv"
 MAIN_SCRIPT = SYSTEM_ROOT / "main.py"
-REQUIREMENTS_FILE = PROJECT_ROOT.parent / "requirements.txt"  # إذا كان requirements خارج data_intelligence_system
-DOCKERFILE = PROJECT_ROOT.parent / "Dockerfile"              # كذلك
+REQUIREMENTS_FILE = PROJECT_ROOT.parent / "requirements.txt"
+DOCKERFILE = PROJECT_ROOT.parent / "Dockerfile"
 
+# ===================== إنشاء المجلدات =====================
 def ensure_directories_exist():
     """
     تنشئ المجلدات الأساسية إذا لم تكن موجودة.
@@ -104,9 +98,5 @@ def ensure_directories_exist():
         CONFIG_DIR,
         TESTS_DIR,
     ]
-
     for directory in dirs_to_create:
         directory.mkdir(parents=True, exist_ok=True)
-
-# يمكن استدعاء هذه الدالة عند بدء تشغيل المشروع لضمان وجود المجلدات:
-# ensure_directories_exist()
