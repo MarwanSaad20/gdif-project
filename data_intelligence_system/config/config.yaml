@@ -50,3 +50,11 @@ database:
     database: data_system
   sqlite:
     path: data_intelligence_system/data/processed/clean_data.db
+
+# ✅ إعدادات النماذج
+model:
+  random_state: 42
+  test_size: 0.2
+  validation_split: 0.1
+  cross_validation_folds: 5
+  scaling_method: standard
