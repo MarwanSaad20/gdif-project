@@ -4,8 +4,10 @@ from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.utils.logger import get_logger  # ✅ نظام تسجيل موحد
 from data_intelligence_system.dashboard.components import indicators
+from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
 
 logger = get_logger("KPICallbacks")  # ⬅️ تخصيص اسم لوجر مميز
+
 
 def parse_data(data_json):
     if not data_json:
@@ -15,10 +17,12 @@ def parse_data(data_json):
         df = pd.read_json(data_json, orient="split")
         if df.empty:
             raise PreventUpdate
+        df = fill_missing(df)  # ✅ معالجة القيم المفقودة قبل التحليل
         return df
     except Exception as e:
         logger.error(f"❌ فشل في فك تشفير البيانات: {e}", exc_info=True)
         raise PreventUpdate
+
 
 def register_kpi_callbacks(app):
     @app.callback(
