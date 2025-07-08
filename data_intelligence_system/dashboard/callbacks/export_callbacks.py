@@ -5,9 +5,9 @@ from dash.exceptions import PreventUpdate
 from dash.dcc import send_bytes
 
 from data_intelligence_system.reports.report_dispatcher import generate_report
-
-# ✅ استخدام اللوجر الموحّد من النظام
 from data_intelligence_system.utils.logger import get_logger
+from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
+
 logger = get_logger("ExportCallback")
 
 
@@ -59,8 +59,12 @@ def register_export_callbacks(app):
             if df.empty:
                 logger.warning("⚠️ البيانات المحولة فارغة.")
                 raise PreventUpdate
+
+            # ✅ معالجة القيم المفقودة باستخدام النظام الجديد
+            df = fill_missing(df)
+
         except Exception as e:
-            logger.error(f"❌ فشل في تحويل JSON إلى DataFrame: {e}", exc_info=True)
+            logger.error(f"❌ فشل في تحويل JSON إلى DataFrame أو معالجته: {e}", exc_info=True)
             raise PreventUpdate
 
         try:
