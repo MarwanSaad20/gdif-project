@@ -7,6 +7,7 @@ from sklearn.metrics import silhouette_score
 
 from data_intelligence_system.utils.preprocessing import fill_missing_values, scale_numericals
 from data_intelligence_system.ml_models.base_model import BaseModel
+from data_intelligence_system.utils.timer import Timer  # ⏱️ تم الاستيراد الجديد
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -36,6 +37,7 @@ class KMeansClusteringModel(BaseModel):
         self.scaler_type = scaler_type
         self.is_fitted = False
 
+    @Timer("تدريب نموذج KMeans")  # ⏱️ إضافة ديكور قياس الزمن
     def fit(self, X):
         """
         تدريب النموذج بعد التحجيم.
