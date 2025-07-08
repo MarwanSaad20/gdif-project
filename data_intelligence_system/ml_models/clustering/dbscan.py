@@ -8,6 +8,7 @@ from sklearn.cluster import DBSCAN
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.feature_utils import generate_derived_features
+from data_intelligence_system.utils.timer import Timer  # ⏱️ استيراد التايمر الجديد
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -28,6 +29,7 @@ class DBSCANClusteringModel(BaseModel):
         self.scaler_type = scaler_type
         self.is_fitted = False
 
+    @Timer("تدريب نموذج DBSCAN")  # ⏱️ قياس وقت التدريب
     def fit(self, X: pd.DataFrame):
         """
         تدريب نموذج DBSCAN.
