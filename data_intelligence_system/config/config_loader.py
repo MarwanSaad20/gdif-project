@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 # إعداد اللوجينغ المحلي
 logger = logging.getLogger(__name__)
-if not logger.handlers:
+if not logger.hasHandlers():
     logging.basicConfig(level=logging.INFO)
     logger.setLevel(logging.INFO)
 
