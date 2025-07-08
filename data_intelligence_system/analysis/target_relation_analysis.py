@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import chi2_contingency, f_oneway
 from sklearn.preprocessing import LabelEncoder
 
+# ✅ استيرادات من جذر المشروع
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
     get_numerical_columns,
@@ -16,7 +17,8 @@ from data_intelligence_system.analysis.analysis_utils import (
     save_plot,
     log_basic_info
 )
-from data_intelligence_system.utils.data_loader import load_data  # ✅ استيراد التكامل الجديد
+from data_intelligence_system.utils.data_loader import load_data
+from data_intelligence_system.utils.timer import Timer  # ⏱️ التكامل الجديد
 
 # إعداد المسارات
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -76,6 +78,7 @@ def encode_target(df, target):
 
 # ======================== الدالة الداخلية ========================
 
+@Timer("تحليل العلاقة مع الهدف")
 def run_target_relation_analysis(df=None, target_col=None):
     ensure_output_dir(OUTPUT_DIR)
 
@@ -84,7 +87,7 @@ def run_target_relation_analysis(df=None, target_col=None):
             logger.error(f"❌ لم يتم العثور على الملف: {FILE_PATH}")
             return
         try:
-            df = load_data(FILE_PATH)  # ✅ استبدال pd.read_csv بـ load_data
+            df = load_data(FILE_PATH)
         except Exception as e:
             logger.error(f"⚠️ خطأ في تحميل الملف: {e}")
             return
