@@ -46,6 +46,8 @@ def create_placeholder_chart(chart_type, chart_id, title):
         data = [go.Scatter(x=[], y=[], fill='tozeroy')]
     elif chart_type == "bubble":
         data = [go.Scatter(x=[], y=[], mode='markers', marker=dict(size=[]))]
+    elif chart_type == "dist":
+        data = [go.Histogram(x=[], nbinsx=30)]
     else:
         raise ValueError(f"نوع الرسم غير مدعوم: {chart_type}")
 
@@ -87,3 +89,6 @@ def bubble_chart():
 
 def forecast_chart():
     return wrap_chart("⏳ الرسم التنبؤي", create_placeholder_chart("area", "forecast-chart", "الرسم التنبؤي"))
+
+def distribution_chart():
+    return wrap_chart("📊 توزيع القيم", create_placeholder_chart("dist", "distribution-chart", "توزيع القيم"))
