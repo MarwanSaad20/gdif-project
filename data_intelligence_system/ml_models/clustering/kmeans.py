@@ -5,7 +5,7 @@ from pathlib import Path
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
-from data_intelligence_system.utils.preprocessing import fill_missing_values, scale_numericals  # ✅ تم التحديث هنا
+from data_intelligence_system.utils.preprocessing import fill_missing_values, scale_numericals
 from data_intelligence_system.ml_models.base_model import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -40,8 +40,8 @@ class KMeansClusteringModel(BaseModel):
         """
         تدريب النموذج بعد التحجيم.
         """
-        X = fill_missing_values(X)  # ✅ تحديث اسم الدالة
-        X_scaled = scale_numericals(X)
+        X = fill_missing_values(X)
+        X_scaled = scale_numericals(X, method=self.scaler_type)
         self.model.fit(X_scaled)
         self.X_train_ = X_scaled
         self.is_fitted = True
@@ -54,7 +54,7 @@ class KMeansClusteringModel(BaseModel):
         """
         self._check_is_fitted()
         X = fill_missing_values(X)
-        X_scaled = scale_numericals(X)
+        X_scaled = scale_numericals(X, method=self.scaler_type)
         return self.model.predict(X_scaled)
 
     def get_cluster_centers(self):
@@ -73,7 +73,7 @@ class KMeansClusteringModel(BaseModel):
             X = self.X_train_
         else:
             X = fill_missing_values(X)
-            X = scale_numericals(X)
+            X = scale_numericals(X, method=self.scaler_type)
         labels = self.model.predict(X)
         score = silhouette_score(X, labels)
         logger.info(f"📈 Silhouette Score: {score:.4f}")
