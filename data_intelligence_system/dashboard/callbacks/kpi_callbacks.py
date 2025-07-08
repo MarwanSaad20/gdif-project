@@ -4,7 +4,7 @@ from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.utils.logger import get_logger  # ✅ نظام تسجيل موحد
 from data_intelligence_system.dashboard.components import indicators
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ جديد
 
 logger = get_logger("KPICallbacks")  # ⬅️ تخصيص اسم لوجر مميز
 
