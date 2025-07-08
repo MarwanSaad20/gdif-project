@@ -1,4 +1,3 @@
-import sys
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -6,11 +5,7 @@ import numpy as np
 import logging
 from pathlib import Path
 
-# === إعداد المسارات والدوال المساعدة ===
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-OUTPUT_DIR = BASE_DIR / 'data_intelligence_system' / 'analysis' / 'analysis_output'
-
-sys.path.append(str(BASE_DIR / 'data_intelligence_system'))
+# استيرادات من جذر المشروع
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
     get_numerical_columns,
@@ -19,8 +14,13 @@ from data_intelligence_system.analysis.analysis_utils import (
     log_basic_info
 )
 from data_intelligence_system.utils.data_loader import load_data
+from data_intelligence_system.utils.timer import Timer  # ⏱️
 
-# === إعداد اللوغ ===
+# إعداد المسارات
+BASE_DIR = Path(__file__).resolve().parents[2]
+OUTPUT_DIR = BASE_DIR / 'data_intelligence_system' / 'analysis' / 'analysis_output'
+
+# إعداد اللوغ
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -55,6 +55,7 @@ def plot_correlation_heatmap(corr_matrix: pd.DataFrame, method: str, filename: s
     logger.info(f"✅ تم حفظ خريطة الارتباط: {output_dir / filename}")
 
 
+@Timer("تحليل الارتباط")
 def run_correlation_analysis(df: pd.DataFrame, method: str = "pearson", output_dir: Path = OUTPUT_DIR) -> dict:
     ensure_output_dir(output_dir)
     log_basic_info(df, "correlation_analysis")
