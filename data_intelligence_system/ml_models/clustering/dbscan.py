@@ -7,10 +7,8 @@ from sklearn.cluster import DBSCAN
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.utils.preprocessing import fill_missing_values
-from data_intelligence_system.utils.feature_utils import (
-    scale_numericals,
-    generate_derived_features,
-)
+from data_intelligence_system.utils.feature_utils import generate_derived_features
+
 
 
 logger = logging.getLogger(__name__)
@@ -41,7 +39,6 @@ class DBSCANClusteringModel(BaseModel):
         """
         X = fill_missing_values(X)
         X = generate_derived_features(X)  # ✅ إنشاء الميزات الجديدة
-        X_scaled = scale_numericals(X, method=self.scaler_type)
         self.model.fit(X_scaled)
         self.is_fitted = True
         logger.info("✅ تم تدريب نموذج DBSCAN.")
