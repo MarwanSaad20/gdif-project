@@ -11,6 +11,7 @@ from data_intelligence_system.ml_models.utils.preprocessing import DataPreproces
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.feature_utils import generate_derived_features  # ✅ جديد
+from data_intelligence_system.utils.timer import Timer  # ⏱️ تكامل التوقيت
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -33,6 +34,7 @@ class XGBoostClassifierModel(BaseModel):
             X = self.preprocessor.encode_labels(X.copy(), categorical_cols)
         return self.preprocessor.transform_scaler(X)
 
+    @Timer("تدريب نموذج XGBoost")  # ⏱️ إضافة التوقيت على التدريب
     def fit(self, X, y, categorical_cols=None):
         assert len(X) == len(y), "❌ عدد العينات غير متطابق"
         X = fill_missing_values(X)
