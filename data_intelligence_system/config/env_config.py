@@ -3,6 +3,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 from types import SimpleNamespace
 
+# ✅ استيراد ConfigHandler و logger
+from data_intelligence_system.utils.config_handler import ConfigHandler
+from data_intelligence_system.utils.logger import get_logger
+
+logger = get_logger("env_config")
+
 # ===================== تحميل ملف .env من الجذر =====================
 BASE_DIR = Path(__file__).resolve().parent.parent
 env_path = BASE_DIR / ".env"
@@ -10,32 +16,37 @@ env_path = BASE_DIR / ".env"
 if env_path.exists():
     load_dotenv(dotenv_path=env_path)
 else:
-    print("⚠️ ملف .env غير موجود. سيتم الاعتماد على متغيرات البيئة المباشرة.")
+    logger.warning("⚠️ ملف .env غير موجود. سيتم الاعتماد على متغيرات البيئة المباشرة.")
+
+# ===================== تحميل إعدادات config.yaml إن وجد =====================
+config_path = BASE_DIR / "config" / "config.yaml"
+config = ConfigHandler(str(config_path)) if config_path.exists() else None
 
 # ===================== إعدادات بيئة التشغيل =====================
-ENV_MODE = os.getenv("ENV_MODE", "development").lower()  # development | production | testing
-DEBUG_MODE = os.getenv("DEBUG_MODE", "true").lower() in ["1", "true", "yes"]
+ENV_MODE = os.getenv("ENV_MODE") or (config.get("project.env_mode", default="development") if config else "development")
+ENV_MODE = ENV_MODE.lower()
+DEBUG_MODE = (os.getenv("DEBUG_MODE") or "true").lower() in ["1", "true", "yes"]
 
 # ===================== إعدادات عامة =====================
-DEFAULT_LANG = os.getenv("DEFAULT_LANG", "ar")
-AUTHOR = os.getenv("AUTHOR", "Marwan Al_Jubouri")
-PROJECT_NAME = os.getenv("PROJECT_NAME", "General Data Intelligence Framework")
+DEFAULT_LANG = os.getenv("DEFAULT_LANG") or (config.get("project.language", default="ar") if config else "ar")
+AUTHOR = os.getenv("AUTHOR") or (config.get("project.author", default="Marwan Al_Jubouri") if config else "Marwan Al_Jubouri")
+PROJECT_NAME = os.getenv("PROJECT_NAME") or (config.get("project.name", default="General Data Intelligence Framework") if config else "General Data Intelligence Framework")
 
 # ===================== إعدادات أمنية =====================
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
 if not SECRET_KEY or SECRET_KEY.strip() == "" or SECRET_KEY == "dev-secret-key":
-    print("⚠️ تحذير: لم يتم تعيين SECRET_KEY بشكل آمن. تأكد من ضبطه في ملف البيئة .env.")
+    logger.warning("⚠️ تحذير: لم يتم تعيين SECRET_KEY بشكل آمن. تأكد من ضبطه في ملف البيئة .env.")
 
 # ===================== إعدادات المسارات =====================
-RAW_DATA_PATH = Path(os.getenv("RAW_DATA_PATH", BASE_DIR / "data" / "raw"))
-PROCESSED_DATA_PATH = Path(os.getenv("PROCESSED_DATA_PATH", BASE_DIR / "data" / "processed"))
-REPORTS_OUTPUT_PATH = Path(os.getenv("REPORTS_OUTPUT_PATH", BASE_DIR / "reports" / "output"))
+RAW_DATA_PATH = Path(os.getenv("RAW_DATA_PATH") or (config.get("paths.raw_data", default=BASE_DIR / "data" / "raw") if config else BASE_DIR / "data" / "raw"))
+PROCESSED_DATA_PATH = Path(os.getenv("PROCESSED_DATA_PATH") or (config.get("paths.processed_data", default=BASE_DIR / "data" / "processed") if config else BASE_DIR / "data" / "processed"))
+REPORTS_OUTPUT_PATH = Path(os.getenv("REPORTS_OUTPUT_PATH") or (config.get("paths.reports", default=BASE_DIR / "reports" / "output") if config else BASE_DIR / "reports" / "output"))
 
 for path in [RAW_DATA_PATH, PROCESSED_DATA_PATH, REPORTS_OUTPUT_PATH]:
     try:
         path.mkdir(parents=True, exist_ok=True)
     except Exception as e:
-        print(f"❌ فشل إنشاء المسار: {path} - {e}")
+        logger.error(f"❌ فشل إنشاء المسار: {path} - {e}")
 
 # ===================== إعدادات البريد =====================
 EMAIL_CONFIG = {
@@ -46,14 +57,14 @@ EMAIL_CONFIG = {
 }
 
 if not EMAIL_CONFIG["password"]:
-    print("⚠️ تحذير: لم يتم تعيين كلمة مرور البريد الإلكتروني. لن تتمكن من إرسال تقارير عبر البريد.")
+    logger.warning("⚠️ تحذير: لم يتم تعيين كلمة مرور البريد الإلكتروني. لن تتمكن من إرسال تقارير عبر البريد.")
 
 # ===================== إعداد اللغة =====================
 _app_language = os.getenv("APP_LANGUAGE", DEFAULT_LANG).lower()
 LANGUAGE = _app_language if _app_language in ["ar", "en"] else "ar"
 
-# ===================== إضافة DATABASE_URL =====================
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///default.db")  # قيمة افتراضية لتجنب فشل الاختبارات
+# ===================== إعداد قاعدة البيانات =====================
+DATABASE_URL = os.getenv("DATABASE_URL") or (config.get("database.url", default="sqlite:///default.db") if config else "sqlite:///default.db")
 
 # ===================== تجهيز Namespace للإرجاع =====================
 env_namespace = SimpleNamespace(
@@ -68,13 +79,10 @@ env_namespace = SimpleNamespace(
     PROCESSED_DATA_PATH=PROCESSED_DATA_PATH,
     REPORTS_OUTPUT_PATH=REPORTS_OUTPUT_PATH,
     EMAIL_CONFIG=EMAIL_CONFIG,
-    DATABASE_URL=DATABASE_URL,  # أضفنا هذا السطر
+    DATABASE_URL=DATABASE_URL,
 )
 
-# ================ لإمكانية الاستيراد كـ config.env =================
-# عند استيراد هذا الملف، استورد env_namespace فقط
-# في config_loader.py يمكنك عمل: env = config.env_config.env_namespace
-
+# ================ للإمكانية الاستيراد كـ config.env =================
 if __name__ == "__main__":
     print("📌 إعدادات النظام الحالية:")
     print(f"📍 نمط البيئة: {ENV_MODE}")
