@@ -61,7 +61,7 @@ def register_export_callbacks(app):
                 raise PreventUpdate
 
             # ✅ معالجة القيم المفقودة باستخدام النظام الجديد
-            df = fill_missing(df)
+            df = fill_missing_values(df)
 
         except Exception as e:
             logger.error(f"❌ فشل في تحويل JSON إلى DataFrame أو معالجته: {e}", exc_info=True)
