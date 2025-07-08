@@ -4,22 +4,22 @@ from typing import Any
 # خريطة النماذج المتوفرة حسب النوع
 MODEL_REGISTRY = {
     "regression": {
-        "linear": "ml_models.regression.linear_regression.LinearRegressionModel",
-        "lasso": "ml_models.regression.lasso_regression.LassoRegressionModel",
-        "ridge": "ml_models.regression.ridge_regression.RidgeRegressionModel"
+        "linear": "data_intelligence_system.ml_models.regression.linear_regression.LinearRegressionModel",
+        "lasso": "data_intelligence_system.ml_models.regression.lasso_regression.LassoRegressionModel",
+        "ridge": "data_intelligence_system.ml_models.regression.ridge_regression.RidgeRegressionModel"
     },
     "classification": {
-        "logistic": "ml_models.classification.logistic_regression.LogisticRegressionModel",
-        "random_forest": "ml_models.classification.random_forest.RandomForestClassifierModel",
-        "xgboost": "ml_models.classification.xgboost_classifier.XGBoostClassifierModel"
+        "logistic": "data_intelligence_system.ml_models.classification.logistic_regression.LogisticRegressionModel",
+        "random_forest": "data_intelligence_system.ml_models.classification.random_forest.RandomForestClassifierModel",
+        "xgboost": "data_intelligence_system.ml_models.classification.xgboost_classifier.XGBoostClassifierModel"
     },
     "clustering": {
-        "kmeans": "ml_models.clustering.kmeans.KMeansClusteringModel",
-        "dbscan": "ml_models.clustering.dbscan.DBSCANClusteringModel"
+        "kmeans": "data_intelligence_system.ml_models.clustering.kmeans.KMeansClusteringModel",
+        "dbscan": "data_intelligence_system.ml_models.clustering.dbscan.DBSCANClusteringModel"
     },
     "forecasting": {
-        "arima": "ml_models.forecasting.arima_model.ARIMAForecastingModel",
-        "prophet": "ml_models.forecasting.prophet_model.ProphetForecastingModel"
+        "arima": "data_intelligence_system.ml_models.forecasting.arima_model.ARIMAForecastingModel",
+        "prophet": "data_intelligence_system.ml_models.forecasting.prophet_model.ProphetForecastingModel"
     }
 }
 
