@@ -3,7 +3,8 @@ from dash import Input, Output, State, html
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.core.data_bindings import json_to_df, df_to_dash_json, filter_data_by_date
-from data_intelligence_system.utils.logger import get_logger  # ✅ تكامل مع نظام التسجيل الموحد
+from data_intelligence_system.utils.logger import get_logger
+from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
 
 logger = get_logger("FiltersCallbacks")
 
@@ -29,6 +30,8 @@ def register_filters_callbacks(app):
             raise PreventUpdate
 
         try:
+            df = fill_missing(df)  # ✅ معالجة القيم المفقودة
+
             # تصفية حسب الفئة
             if category_value and 'category' in df.columns:
                 df = df[df['category'].astype(str) == str(category_value)]
@@ -99,6 +102,7 @@ def register_filters_callbacks(app):
             return df_to_dash_json(None)
 
         try:
+            df = fill_missing(df)  # ✅ معالجة القيم المفقودة
             filtered = df[df['type'].isin(selected)]
             if filtered.empty:
                 logger.info("ℹ️ الفلترة حسب النوع لم تُرجع بيانات.")
