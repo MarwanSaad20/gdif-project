@@ -30,7 +30,7 @@ def register_filters_callbacks(app):
             raise PreventUpdate
 
         try:
-            df = fill_missing(df)  # ✅ معالجة القيم المفقودة
+            df = fill_missing_values(df)  # ✅ معالجة القيم المفقودة
 
             # تصفية حسب الفئة
             if category_value and 'category' in df.columns:
