@@ -6,34 +6,40 @@ project:
   language: ar
   env_mode: development
 
+# المسارات
 paths:
   raw_data: data_intelligence_system/data/raw/
   processed_data: data_intelligence_system/data/processed/
   reports: data_intelligence_system/reports/output/
   models: data_intelligence_system/ml_models/
-  logs: logs/
+  logs: data_intelligence_system/logs/
 
+# إعدادات الواجهة
 dashboard:
   theme: dark
   max_records: 500
   refresh_interval: 60
 
+# مؤشرات الأداء الرئيسية (KPIs)
 kpis:
   - name: revenue
     label: "الإيرادات"
     unit: "$"
     color: "#27AE60"
     icon: "💰"
+
   - name: growth
     label: "معدل النمو"
     unit: "%"
     color: "#2980B9"
     icon: "📈"
+
   - name: churn_rate
     label: "معدل التسرب"
     unit: "%"
     color: "#E74C3C"
     icon: "⚠️"
+
   - name: customer_count
     label: "عدد العملاء"
     unit: ""
