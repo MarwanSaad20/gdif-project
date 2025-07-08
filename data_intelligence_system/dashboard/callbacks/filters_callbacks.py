@@ -102,7 +102,7 @@ def register_filters_callbacks(app):
             return df_to_dash_json(None)
 
         try:
-            df = fill_missing(df)  # ✅ معالجة القيم المفقودة
+            df = fill_missing_values(df)  # ✅ معالجة القيم المفقودة
             filtered = df[df['type'].isin(selected)]
             if filtered.empty:
                 logger.info("ℹ️ الفلترة حسب النوع لم تُرجع بيانات.")
