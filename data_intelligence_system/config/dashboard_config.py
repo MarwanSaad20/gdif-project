@@ -1,40 +1,36 @@
 # config/dashboard_config.py
 
+from data_intelligence_system.utils.config_handler import ConfigHandler
+from data_intelligence_system.utils.logger import get_logger
+from pathlib import Path
+
+# ✅ إعداد اللوجر
+logger = get_logger("dashboard_config")
+
+# ✅ تحميل الإعدادات من ملف YAML
+config_path = Path(__file__).resolve().parent / "config.yaml"
+_config = ConfigHandler(str(config_path))
+
 # 🎯 عنوان النظام
 DASHBOARD_TITLE = "لوحة تحكم تحليل البيانات العام – GDIF"
 
-# 🌐 اللغة الافتراضية
-DEFAULT_LANGUAGE = "ar"
-
-# 🎨 الثيم العام (light/dark/custom)
-DEFAULT_THEME = "dark"
+# 🌐 إعدادات الواجهة من الملف
+DEFAULT_LANGUAGE = _config.get("project.language", default="ar")
+DEFAULT_THEME = _config.get("dashboard.theme", default="dark")
+REFRESH_INTERVAL = _config.get("dashboard.refresh_interval", default=60)
+MAX_RECORDS_DISPLAY = _config.get("dashboard.max_records", default=500)
 
 # 📦 إعدادات مؤشرات الأداء الرئيسية (KPIs)
+_KPI_LIST = _config.get("kpis", default=[])
 KPI_SETTINGS = {
-    "revenue": {
-        "label": "الإيرادات",
-        "unit": "$",
-        "color": "#27AE60",   # أخضر
-        "icon": "💰"
-    },
-    "growth": {
-        "label": "معدل النمو",
-        "unit": "%",
-        "color": "#2980B9",   # أزرق
-        "icon": "📈"
-    },
-    "churn_rate": {
-        "label": "معدل التسرب",
-        "unit": "%",
-        "color": "#E74C3C",   # أحمر
-        "icon": "⚠️"
-    },
-    "customer_count": {
-        "label": "عدد العملاء",
-        "unit": "",
-        "color": "#8E44AD",   # بنفسجي
-        "icon": "👥"
+    kpi["name"]: {
+        "label": kpi.get("label", kpi["name"]),
+        "unit": kpi.get("unit", ""),
+        "color": kpi.get("color", "#000000"),
+        "icon": kpi.get("icon", "📊"),
     }
+    for kpi in _KPI_LIST
+    if isinstance(kpi, dict) and "name" in kpi
 }
 
 # 🗂️ إعدادات أقسام الواجهة (Navigation / Tabs)
@@ -48,17 +44,5 @@ LAYOUT_SECTIONS = {
 }
 
 # 🔧 إعدادات عامة إضافية
-REFRESH_INTERVAL = 60  # تحديث البيانات كل 60 ثانية (Dashboard auto-refresh)
 DEFAULT_FONT = "Cairo"
-MAX_RECORDS_DISPLAY = 500
 ENABLE_EXPORT_BUTTONS = True
-
-# ======== ملاحظات ومراجعة ========
-# 1. DEFAULT_FONT: تأكد من توفر خط "Cairo" في بيئة التشغيل أو توفير بديل بديناميكية.
-# 2. REFRESH_INTERVAL: 60 ثانية جيد لتحديث تلقائي، لكن قد يؤثر على الأداء حسب حجم البيانات والعمليات.
-# 3. KPI_SETTINGS: القيم ثابتة وجيدة، لكن يمكن جعلها قابلة للتعديل ديناميكياً (مثلاً من ملف إعدادات خارجي أو لوحة تحكم).
-# 4. LAYOUT_SECTIONS: التسمية جيدة ومنظمة، يجب التأكد أن أسماء المفاتيح تتطابق مع الـ callbacks والروابط في الواجهة.
-# 5. يفضل إضافة إعدادات للغات أخرى إذا تم دعم تعدد اللغات مستقبلًا.
-# 6. يفضل توفير إعدادات ثيم مخصصة (custom) بشكل أوضح، أو دعم ملفات CSS خارجية للثيمات.
-# 7. عدم وجود مسارات في هذا الملف يعني أنه لا يحتوي على مشاكل مسار واضحة.
-
