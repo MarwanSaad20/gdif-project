@@ -8,6 +8,7 @@ import pandas as pd
 
 # ✅ تحديث الاستيراد لدالة الحفظ من utils.file_manager وليس etl.load
 from data_intelligence_system.utils.file_manager import save_file
+from data_intelligence_system.utils.preprocessing import fill_missing  # ✅ إضافة جديدة
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,8 @@ def json_to_df(data_json: Optional[str], parse_dates: bool = True) -> Optional[p
                     converted = pd.to_datetime(df[col], errors='coerce')
                     if not converted.isnull().all():
                         df[col] = converted
+
+        df = fill_missing(df)  # ✅ تكامل مع نظام المعالجة الجديد
 
         logger.info("✅ تم تحويل JSON إلى DataFrame (split) بنجاح.")
         return df
