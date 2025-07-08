@@ -15,7 +15,8 @@ from sklearn.metrics import (
 )
 
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ محدث
+from data_intelligence_system.utils.preprocessing import fill_missing_values
+from data_intelligence_system.utils.timer import Timer  # ✅ مضاف لتوقيت الدوال
 
 
 class RegressionMetrics:
@@ -39,6 +40,7 @@ class RegressionMetrics:
         return r2_score(y_true, y_pred)
 
     @staticmethod
+    @Timer("⏱️ حساب جميع مؤشرات الانحدار")
     def all_metrics(y_true: np.ndarray, y_pred: np.ndarray, inverse_transform=False,
                     preprocessor: DataPreprocessor = None) -> dict:
         if isinstance(y_true, np.ndarray):
@@ -87,6 +89,7 @@ class ClassificationMetrics:
         return sk_confusion_matrix(y_true, y_pred)
 
     @staticmethod
+    @Timer("⏱️ حساب جميع مؤشرات التصنيف")
     def all_metrics(y_true: np.ndarray, y_pred: np.ndarray, average="binary") -> dict:
         if isinstance(y_true, np.ndarray):
             y_true = pd.DataFrame(y_true)
@@ -147,6 +150,7 @@ class ClusteringMetrics:
         return adjusted_rand_score(y_true, y_pred)
 
     @staticmethod
+    @Timer("⏱️ حساب جميع مؤشرات التجميع")
     def all_metrics(X: np.ndarray, y_true: np.ndarray, y_pred: np.ndarray) -> dict:
         return {
             "Silhouette Score": ClusteringMetrics.silhouette(X, y_pred),
