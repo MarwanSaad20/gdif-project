@@ -43,7 +43,7 @@ def register_upload_callbacks(app):
                 save_path = save_uploaded_file(upload_contents, filename)
 
                 df = load_data(str(save_path))
-                df = fill_missing(df)  # ✅ تنظيف بعد التحميل
+                df = fill_missing_values(df)  # ✅ تنظيف بعد التحميل
 
                 if df.empty or df.shape[1] == 0:
                     msg = f"⚠️ الملف {filename} لا يحتوي على بيانات!"
@@ -90,7 +90,7 @@ def register_upload_callbacks(app):
             try:
                 logger.info(f"🚀 بدء التحليل الكامل من: {last_uploaded_path}")
                 df = load_data(str(last_uploaded_path))
-                df = fill_missing(df)  # ✅ تنظيف قبل التحليل
+                df = fill_missing_values(df) # ✅ تنظيف قبل التحليل
 
                 if df.empty:
                     return (
