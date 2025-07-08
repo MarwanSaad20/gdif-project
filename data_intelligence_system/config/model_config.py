@@ -1,17 +1,26 @@
 # config/model_config.py
 
+from data_intelligence_system.utils.config_handler import ConfigHandler
+from data_intelligence_system.utils.logger import get_logger
+from pathlib import Path
+
+logger = get_logger("model_config")
+
+# ✅ تحميل config.yaml إن وجد
+CONFIG_PATH = Path(__file__).resolve().parent / "config.yaml"
+config = ConfigHandler(str(CONFIG_PATH)) if CONFIG_PATH.exists() else None
+
 # 🔢 الإعدادات العامة للنماذج
-RANDOM_STATE = 42
-TEST_SIZE = 0.2
-VALIDATION_SPLIT = 0.1
-CROSS_VALIDATION_FOLDS = 5
-SCALING_METHOD = "standard"  # خيارات: "minmax", "standard", "robust"
+RANDOM_STATE = config.get("model.random_state", 42) if config else 42
+TEST_SIZE = config.get("model.test_size", 0.2) if config else 0.2
+VALIDATION_SPLIT = config.get("model.validation_split", 0.1) if config else 0.1
+CROSS_VALIDATION_FOLDS = config.get("model.cross_validation_folds", 5) if config else 5
+SCALING_METHOD = config.get("model.scaling_method", "standard") if config else "standard"
 
 # ⚙️ إعدادات النماذج الانحدارية (Regression)
 REGRESSION_MODELS = {
     "linear": {
         "fit_intercept": True,
-        # ملاحظة: خيار normalize قديم في scikit-learn >= 1.0، يُفضل استخدام StandardScaler خارجياً
         "normalize": False
     },
     "lasso": {
@@ -29,7 +38,7 @@ CLASSIFICATION_MODELS = {
     "logistic": {
         "penalty": "l2",
         "C": 1.0,
-        "solver": "liblinear"  # قد تحتاج تعديل إلى 'saga' أو 'lbfgs' في التصنيفات المتعددة أو الكبيرة
+        "solver": "liblinear"
     },
     "random_forest": {
         "n_estimators": 100,
@@ -43,7 +52,7 @@ CLASSIFICATION_MODELS = {
         "n_estimators": 100,
         "subsample": 0.8,
         "colsample_bytree": 0.8,
-        "random_state": RANDOM_STATE  # توحيد اسم المتغير مع scikit-learn
+        "random_state": RANDOM_STATE
     }
 }
 
@@ -75,3 +84,11 @@ TIME_SERIES_MODELS = {
         "daily_seasonality": False
     }
 }
+
+# 🧪 عرض القيم عند التشغيل المباشر
+if __name__ == "__main__":
+    print(f"RANDOM_STATE: {RANDOM_STATE}")
+    print(f"SCALING_METHOD: {SCALING_METHOD}")
+    print(f"TEST_SIZE: {TEST_SIZE}")
+    print(f"VALIDATION_SPLIT: {VALIDATION_SPLIT}")
+    print(f"CROSS_VALIDATION_FOLDS: {CROSS_VALIDATION_FOLDS}")
