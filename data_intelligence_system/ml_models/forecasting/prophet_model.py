@@ -9,10 +9,12 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تحديث الاستيراد
+from data_intelligence_system.utils.preprocessing import fill_missing_values
+from data_intelligence_system.utils.timer import Timer  # ⏱️ تم استيراده لدعم قياس الأداء
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
 
 class ProphetForecastingModel(BaseModel):
     def __init__(self, growth='linear', daily_seasonality=True, yearly_seasonality=True,
@@ -37,6 +39,7 @@ class ProphetForecastingModel(BaseModel):
         if not self.is_fitted or self.fitted_model is None:
             raise RuntimeError("❌ النموذج غير مدرب بعد. يرجى استدعاء fit أولاً.")
 
+    @Timer("تدريب نموذج Prophet")  # ⏱️ ديكور لقياس زمن التدريب
     def fit(self, df: pd.DataFrame):
         if not {'ds', 'y'}.issubset(df.columns):
             raise ValueError("❌ يجب أن يحتوي DataFrame على الأعمدة ['ds', 'y']")
