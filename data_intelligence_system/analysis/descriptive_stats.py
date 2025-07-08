@@ -10,10 +10,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data_intelligence_system" / "data" / "processed"
 OUTPUT_DIR = BASE_DIR / "data_intelligence_system" / "analysis" / "analysis_output"
 
-# === استيراد الأدوات المساعدة ===
+# === استيراد الأدوات المساعدة من جذر المشروع ===
 from data_intelligence_system.analysis.analysis_utils import ensure_output_dir
-from data_intelligence_system.utils.data_loader import load_data  # ✅ الدالة الموحدة
-from data_intelligence_system.utils.visualization.visuals_static import plot_distribution  # ✅ التحديث الجديد
+from data_intelligence_system.utils.data_loader import load_data
+from data_intelligence_system.utils.visualization.visuals_static import plot_distribution
+from data_intelligence_system.utils.timer import Timer  # ⏱️ التوقيت
 
 # === إعداد اللوجر ===
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
@@ -93,6 +94,7 @@ def save_categorical_value_counts(df: pd.DataFrame, filename_prefix: str, output
         logger.info(f"✅ تم حفظ القيم المتكررة للعمود: {col}")
 
 
+@Timer("التحليل الوصفي الكامل")
 def generate_descriptive_stats(df_or_path: Union[pd.DataFrame, str, Path], filename_prefix: str = "output",
                                output_dir: Path = OUTPUT_DIR, save_outputs: bool = True) -> Dict[str, Any]:
     if isinstance(df_or_path, (str, Path)):
