@@ -25,6 +25,8 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from typing import Optional, Union
 from data_intelligence_system.utils.logger import get_logger
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ الصحيح
+
 
 logger = get_logger(name="Preprocessing")
 
