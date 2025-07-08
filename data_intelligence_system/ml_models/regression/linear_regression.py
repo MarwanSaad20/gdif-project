@@ -7,8 +7,9 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ محدث
+from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.data.processed.scale_numericals import scale_numericals
+from data_intelligence_system.utils.timer import Timer  # ⏱️ تم إضافة التكامل مع timer.py
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -26,6 +27,7 @@ class LinearRegressionModel(BaseModel):
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
+    @Timer("تدريب نموذج الانحدار الخطي")  # ⏱️ لقياس زمن التدريب
     def fit(self, X, y):
         """تدريب النموذج بعد التحقق من المدخلات"""
         if isinstance(X, pd.DataFrame):
@@ -38,8 +40,8 @@ class LinearRegressionModel(BaseModel):
         else:
             y = pd.Series(y)
 
-        X = fill_missing_values(X)  # ✅ تحديث
-        y = fill_missing_values(y)  # ✅ تحديث
+        X = fill_missing_values(X)
+        y = fill_missing_values(y)
 
         assert not np.isnan(X).any().any(), "❌ توجد قيم مفقودة في X"
         assert not np.isnan(y).any(), "❌ توجد قيم مفقودة في y"
@@ -60,7 +62,7 @@ class LinearRegressionModel(BaseModel):
         else:
             X = pd.DataFrame(X)
 
-        X = fill_missing_values(X)  # ✅ تحديث
+        X = fill_missing_values(X)
         X = scale_numericals(X)
 
         y_pred = self.model.predict(X)
@@ -82,8 +84,8 @@ class LinearRegressionModel(BaseModel):
         else:
             y = pd.Series(y)
 
-        X = fill_missing_values(X)  # ✅ تحديث
-        y = fill_missing_values(y)  # ✅ تحديث
+        X = fill_missing_values(X)
+        y = fill_missing_values(y)
 
         predictions = self.predict(X, inverse_transform=inverse_transform)
         mse = mean_squared_error(y, predictions)
