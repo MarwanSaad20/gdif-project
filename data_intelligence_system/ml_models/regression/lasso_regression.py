@@ -9,8 +9,9 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ استيراد محدث
-from data_intelligence_system.data.processed.scale_numericals import scale_numericals  # ✅ كما هو
+from data_intelligence_system.utils.preprocessing import fill_missing_values
+from data_intelligence_system.data.processed.scale_numericals import scale_numericals
+from data_intelligence_system.utils.timer import Timer  # ⏱️ تمت إضافة التكامل
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +33,7 @@ class LassoRegressionModel(BaseModel):
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
+    @Timer("تدريب نموذج Lasso")  # ⏱️ لقياس زمن التدريب
     def fit(self, X, y):
         """تدريب النموذج"""
         if isinstance(X, pd.DataFrame):
@@ -44,14 +46,14 @@ class LassoRegressionModel(BaseModel):
         else:
             y = pd.Series(y)
 
-        X = fill_missing_values(X)  # ✅ تعديل
-        y = fill_missing_values(y)  # ✅ تعديل
+        X = fill_missing_values(X)
+        y = fill_missing_values(y)
 
         assert X.shape[0] == y.shape[0], "❌ عدد العينات في X و y غير متطابق"
         assert not np.isnan(X).any().any(), "❌ توجد قيم مفقودة في X"
         assert not np.isnan(y).any(), "❌ توجد قيم مفقودة في y"
 
-        X = scale_numericals(X)  # ✅ استخدام وحدة الموازنة الموحدة
+        X = scale_numericals(X)
         y = scale_numericals(pd.DataFrame(y)).squeeze()
 
         self.model.fit(X, y)
@@ -66,7 +68,7 @@ class LassoRegressionModel(BaseModel):
         else:
             X = pd.DataFrame(X)
 
-        X = fill_missing_values(X)  # ✅ تعديل
+        X = fill_missing_values(X)
         X = scale_numericals(X)
 
         y_pred = self.model.predict(X)
@@ -90,8 +92,8 @@ class LassoRegressionModel(BaseModel):
         else:
             y = pd.Series(y)
 
-        X = fill_missing_values(X)  # ✅ تعديل
-        y = fill_missing_values(y)  # ✅ تعديل
+        X = fill_missing_values(X)
+        y = fill_missing_values(y)
 
         predictions = self.predict(X, inverse_transform=inverse_transform)
         mae = mean_absolute_error(y, predictions)
