@@ -5,7 +5,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 import logging
 
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تحديث الاستيراد
+from data_intelligence_system.utils.preprocessing import fill_missing_values
+from data_intelligence_system.utils.timer import Timer  # ✅ مضاف
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -30,16 +31,14 @@ class BaseModel(ABC):
         self.model_name = model_name
         self.model_dir = Path(model_dir)
         self.model_path = self.model_dir / f"{self.model_name}.pkl"
-        self.model = None  # النموذج الفعلي (مثل sklearn model أو Prophet model)
-        self.is_fitted = False  # تتبع حالة التدريب
+        self.model = None
+        self.is_fitted = False
 
-        # إنشاء مجلد الحفظ إذا لم يكن موجودًا
         os.makedirs(self.model_dir, exist_ok=True)
 
     @abstractmethod
     def fit(self, X, y=None):
         """تدريب النموذج. يجب تنفيذه في الفئات الفرعية."""
-        # ✅ معالجة القيم المفقودة باستخدام fill_missing_values
         if hasattr(fill_missing_values, "__call__"):
             if X is not None:
                 try:
@@ -63,6 +62,7 @@ class BaseModel(ABC):
         """تقييم النموذج. يجب تنفيذه في الفئات الفرعية."""
         raise NotImplementedError
 
+    @Timer("💾 حفظ النموذج")
     def save(self):
         """حفظ النموذج إلى ملف باستخدام joblib."""
         if self.model is None:
@@ -74,6 +74,7 @@ class BaseModel(ABC):
             logger.error(f"❌ خطأ أثناء حفظ النموذج: {e}")
             raise
 
+    @Timer("📥 تحميل النموذج")
     def load(self):
         """تحميل النموذج من ملف."""
         if not self.model_path.exists():
@@ -92,6 +93,7 @@ class BaseModel(ABC):
         if not self.is_fitted:
             raise RuntimeError("النموذج لم يتم تدريبه بعد. الرجاء استدعاء fit() أولاً.")
 
+    @Timer("📋 استعلام معلومات النموذج")
     def info(self):
         """إظهار معلومات عامة عن النموذج."""
         exists = self.model_path.exists()
