@@ -8,8 +8,9 @@ from sklearn.linear_model import LogisticRegression
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.model_evaluation import ClassificationMetrics
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تم التصحيح هنا
-from data_intelligence_system.utils.data_loader import load_data  # ✅ تكامل مع دالة التحميل الجديدة
+from data_intelligence_system.utils.preprocessing import fill_missing_values
+from data_intelligence_system.utils.data_loader import load_data
+from data_intelligence_system.utils.feature_utils import generate_derived_features  # ✅ جديد
 
 # إعداد السجل
 logger = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ class LogisticRegressionModel(BaseModel):
         """
         تجهيز البيانات (تشفير + تحجيم) قبل التنبؤ.
         """
-        X = fill_missing_values(X)  # ✅ تعديل الدالة
+        X = fill_missing_values(X)
         if categorical_cols:
             X = self.preprocessor.encode_labels(X.copy(), categorical_cols)
         return self.preprocessor.transform_scaler(X)
@@ -48,7 +49,7 @@ class LogisticRegressionModel(BaseModel):
         يعيد مقاييس التقييم على مجموعة الاختبار.
         """
         assert len(X) == len(y), "❌ عدد العينات غير متطابق بين X و y"
-        X = fill_missing_values(X)  # ✅ تعديل الدالة
+        X = fill_missing_values(X)
 
         if categorical_cols:
             df = X.assign(target=y)
@@ -93,7 +94,7 @@ class LogisticRegressionModel(BaseModel):
         """
         if not self.is_fitted:
             raise ValueError("❌ النموذج غير مدرب بعد.")
-        X = fill_missing_values(X)  # ✅ تعديل الدالة
+        X = fill_missing_values(X)
         y_pred = self.predict(X, categorical_cols)
         return ClassificationMetrics.all_metrics(y, y_pred, average="binary")
 
