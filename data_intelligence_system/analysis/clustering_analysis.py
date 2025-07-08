@@ -10,13 +10,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 
-# مسارات المشروع
-BASE_DIR = Path(__file__).resolve().parents[1]  # data_intelligence_system
-DATA_DIR = BASE_DIR / "data" / "processed"
-OUTPUT_DIR = BASE_DIR / "analysis" / "analysis_output"
-CLUSTERING_RESULTS_DIR = OUTPUT_DIR / "clustering"
-
-# الاستيرادات من جذر المشروع
+# استيرادات من جذر المشروع
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
     get_numerical_columns,
@@ -25,11 +19,20 @@ from data_intelligence_system.analysis.analysis_utils import (
     log_basic_info
 )
 from data_intelligence_system.utils.data_loader import load_data
+from data_intelligence_system.utils.timer import Timer  # ⏱️ تكامل مع نظام التوقيت
 
+# إعدادات اللوجر
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
 
+# مسارات المشروع
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / "data" / "processed"
+OUTPUT_DIR = BASE_DIR / "analysis" / "analysis_output"
+CLUSTERING_RESULTS_DIR = OUTPUT_DIR / "clustering"
+
 ensure_output_dir(CLUSTERING_RESULTS_DIR)
+
 
 # ================= دوال التجميع =================
 
@@ -66,6 +69,7 @@ def plot_clusters(data_2d, labels, title, path):
     plt.close()
 
 
+@Timer("تشغيل تحليل التجميع")
 def run_clustering(df: pd.DataFrame,
                    algorithm: str = "kmeans",
                    n_clusters: int = 3,
