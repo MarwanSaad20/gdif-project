@@ -1,14 +1,15 @@
 from dash import Input, Output, State, callback_context, html, dash
 from dash.exceptions import PreventUpdate
 
-from data_intelligence_system.utils.logger import get_logger  # ✅ تكامل مع نظام اللوجر
-from data_intelligence_system.utils.data_loader import load_data  # ✅ استيراد موحّد من الجذر
-
+from data_intelligence_system.utils.logger import get_logger
+from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.dashboard.components.upload_component import save_uploaded_file
 from data_intelligence_system.core.data_bindings import df_to_dash_json
 from data_intelligence_system.etl import pipeline as etl_pipeline
 from data_intelligence_system.analysis.descriptive_stats import compute_statistics
 from data_intelligence_system.reports import report_dispatcher
+
+from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
 
 logger = get_logger("UploadCallbacks")
 
@@ -42,6 +43,7 @@ def register_upload_callbacks(app):
                 save_path = save_uploaded_file(upload_contents, filename)
 
                 df = load_data(str(save_path))
+                df = fill_missing(df)  # ✅ تنظيف بعد التحميل
 
                 if df.empty or df.shape[1] == 0:
                     msg = f"⚠️ الملف {filename} لا يحتوي على بيانات!"
@@ -88,6 +90,7 @@ def register_upload_callbacks(app):
             try:
                 logger.info(f"🚀 بدء التحليل الكامل من: {last_uploaded_path}")
                 df = load_data(str(last_uploaded_path))
+                df = fill_missing(df)  # ✅ تنظيف قبل التحليل
 
                 if df.empty:
                     return (
