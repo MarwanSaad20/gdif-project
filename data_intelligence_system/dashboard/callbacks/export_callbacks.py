@@ -6,7 +6,7 @@ from dash.dcc import send_bytes
 
 from data_intelligence_system.reports.report_dispatcher import generate_report
 from data_intelligence_system.utils.logger import get_logger
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ جديد
 
 logger = get_logger("ExportCallback")
 
