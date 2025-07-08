@@ -8,9 +8,10 @@ from sklearn.cluster import DBSCAN
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.feature_utils import (
-    scale_numerical_features,
-    generate_derived_features,  # ✅ تم الاستيراد
+    scale_numericals,
+    generate_derived_features,
 )
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
