@@ -9,8 +9,9 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ محدث
+from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.data.processed.scale_numericals import scale_numericals
+from data_intelligence_system.utils.timer import Timer  # ⏱️ تم التكامل مع ملف timer.py
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -34,6 +35,7 @@ class RidgeRegressionModel(BaseModel):
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
+    @Timer("⏱️ تدريب نموذج Ridge Regression")  # ✅ قياس زمن التدريب
     def fit(self, X, y):
         """تدريب النموذج"""
         if isinstance(X, pd.DataFrame):
@@ -46,8 +48,8 @@ class RidgeRegressionModel(BaseModel):
         else:
             y = pd.Series(y)
 
-        X = fill_missing_values(X)  # ✅ تحديث
-        y = fill_missing_values(y)  # ✅ تحديث
+        X = fill_missing_values(X)
+        y = fill_missing_values(y)
 
         assert X.shape[0] == y.shape[0], "❌ عدد العينات غير متطابق بين X و y"
         assert not np.isnan(X).any().any(), "❌ توجد قيم مفقودة في X"
@@ -68,7 +70,7 @@ class RidgeRegressionModel(BaseModel):
         else:
             X = pd.DataFrame(X)
 
-        X = fill_missing_values(X)  # ✅ تحديث
+        X = fill_missing_values(X)
         X = scale_numericals(X)
 
         predictions = self.model.predict(X)
@@ -90,8 +92,8 @@ class RidgeRegressionModel(BaseModel):
         else:
             y = pd.Series(y)
 
-        X = fill_missing_values(X)  # ✅ تحديث
-        y = fill_missing_values(y)  # ✅ تحديث
+        X = fill_missing_values(X)
+        y = fill_missing_values(y)
 
         self._check_is_fitted()
         predictions = self.predict(X, inverse_transform=inverse_transform)
