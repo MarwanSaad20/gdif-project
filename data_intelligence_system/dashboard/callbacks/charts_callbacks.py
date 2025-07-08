@@ -7,7 +7,6 @@ from data_intelligence_system.core.data_bindings import json_to_df
 from data_intelligence_system.data.external.external_data_utils import (
     drop_empty_rows,
     drop_empty_columns,
-    fill_missing_values,
     standardize_column_names,
     remove_duplicates,
     convert_column_types,
@@ -16,6 +15,7 @@ from data_intelligence_system.data.external.external_data_utils import (
     describe_data,
 )
 from data_intelligence_system.utils.data_loader import load_data
+from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
 
 # ✅ استخدام نظام اللوجر الجديد
 from data_intelligence_system.utils.logger import get_logger
@@ -56,7 +56,7 @@ def register_charts_callbacks(app):
             df = drop_empty_rows(df)
             df = drop_empty_columns(df)
             df = standardize_column_names(df)
-            df = fill_missing_values(df, strategy="mean")
+            df = fill_missing(df)  # ✅ استبدال fill_missing_values بـ fill_missing
             df = remove_duplicates(df)
 
             table_data = df.to_dict("records")
