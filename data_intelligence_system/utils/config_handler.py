@@ -1,8 +1,8 @@
 import json
 import configparser
-import os
+from pathlib import Path
+import logging
 
-# ✅ استيراد اللوجر المحدث من جذر المشروع
 from data_intelligence_system.utils.logger import get_logger
 
 try:
@@ -11,60 +11,64 @@ try:
 except ImportError:
     _HAS_YAML = False
 
-# ✅ لوجر موحد
 logger = get_logger(name="ConfigHandler")
+
+
+def convert_ini_value(value: str):
+    """
+    تحويل قيمة نصية من ملف ini إلى النوع المناسب (int, float, bool, أو str).
+    """
+    for conv in (int, float):
+        try:
+            return conv(value)
+        except ValueError:
+            continue
+    low = value.lower()
+    if low in ('true', 'yes', 'on'):
+        return True
+    elif low in ('false', 'no', 'off'):
+        return False
+    return value
 
 
 class ConfigHandler:
     """
     فئة لتحميل وتفسير ملفات الإعدادات من JSON, YAML, INI.
 
-    الاستخدام:
+    Usage:
         config = ConfigHandler('config.yaml')
         value = config.get('section.key', default=None)
     """
 
-    def __init__(self, filepath: str):
-        self.filepath = filepath
+    def __init__(self, filepath: str, encoding: str = 'utf-8', lazy_load: bool = False):
+        self.filepath = Path(filepath)
+        self.encoding = encoding
         self.config_data = {}
-        self._load()
+        if not lazy_load:
+            self._load()
 
     def _load(self):
-        if not os.path.exists(self.filepath):
+        if not self.filepath.exists():
             raise FileNotFoundError(f"ملف الإعدادات غير موجود: {self.filepath}")
 
-        ext = os.path.splitext(self.filepath)[1].lower()
+        ext = self.filepath.suffix.lower()
 
         try:
             if ext in ['.yaml', '.yml']:
                 if not _HAS_YAML:
                     raise ImportError("مكتبة PyYAML غير مثبتة. قم بتثبيتها باستخدام 'pip install pyyaml'")
-                with open(self.filepath, 'r', encoding='utf-8') as f:
+                with self.filepath.open('r', encoding=self.encoding) as f:
                     self.config_data = yaml.safe_load(f)
 
             elif ext == '.json':
-                with open(self.filepath, 'r', encoding='utf-8') as f:
+                with self.filepath.open('r', encoding=self.encoding) as f:
                     self.config_data = json.load(f)
 
             elif ext == '.ini':
                 parser = configparser.ConfigParser()
-                parser.read(self.filepath, encoding='utf-8')
-
-                def _convert_value(value):
-                    for conv in (int, float):
-                        try:
-                            return conv(value)
-                        except ValueError:
-                            continue
-                    low = value.lower()
-                    if low in ('true', 'yes', 'on'):
-                        return True
-                    elif low in ('false', 'no', 'off'):
-                        return False
-                    return value
-
+                parser.read(self.filepath, encoding=self.encoding)
                 self.config_data = {
-                    section: {k: _convert_value(v) for k, v in parser.items(section)}
+                    section: {k: convert_ini_value(v) for k, v in parser.items(section)}
                     for section in parser.sections()
                 }
 
@@ -85,6 +89,10 @@ class ConfigHandler:
         استرجاع قيمة من الإعدادات باستخدام مفتاح نصي مثل 'section.subsection.key'.
         إذا لم يُعثر على المفتاح، يعيد القيمة الافتراضية.
         """
+        if not isinstance(self.config_data, dict):
+            logger.warning(f"⚠️ بيانات الإعدادات ليست من نوع dict، لا يمكن الوصول للمفتاح '{key}'.")
+            return default
+
         keys = key.split('.')
         data = self.config_data
         try:
