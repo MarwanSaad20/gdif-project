@@ -10,7 +10,6 @@ from data_intelligence_system.dashboard.components.upload_component import uploa
 
 # 🧩 مكونات التخطيط الثابتة
 from data_intelligence_system.dashboard.layouts.charts_placeholders import forecast_chart
-
 from data_intelligence_system.dashboard.layouts.stats_summary import stats_summary_card
 
 # 🎨 ثيم الألوان
