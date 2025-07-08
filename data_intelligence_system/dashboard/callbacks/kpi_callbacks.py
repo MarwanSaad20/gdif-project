@@ -17,7 +17,7 @@ def parse_data(data_json):
         df = pd.read_json(data_json, orient="split")
         if df.empty:
             raise PreventUpdate
-        df = fill_missing(df)  # ✅ معالجة القيم المفقودة قبل التحليل
+        df = fill_missing_values(df)  # ✅ معالجة القيم المفقودة قبل التحليل
         return df
     except Exception as e:
         logger.error(f"❌ فشل في فك تشفير البيانات: {e}", exc_info=True)
