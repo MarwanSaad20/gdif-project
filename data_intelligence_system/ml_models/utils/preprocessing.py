@@ -118,7 +118,7 @@ class DataPreprocessor:
     def preprocess(self, df, target_col=None, categorical_cols=None, scale=True):
         df = df.copy()
 
-        # ✅ معالجة القيم المفقودة باستخدام الدالة الموحدة
+        # ✅ استخدام الدالة الموحدة لمعالجة القيم الناقصة
         df = fill_missing_values(df)
 
         initial_shape = df.shape
