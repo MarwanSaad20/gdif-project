@@ -1,125 +1,222 @@
-import os
-import json
-import logging
-from pathlib import Path
-from typing import Optional
+"""
+utils/preprocessing.py
+
+وصف:
+    دوال المعالجة الأولية للبيانات (Preprocessing)، تُستخدم قبل التحليل أو النمذجة.
+    تشمل:
+        - توحيد أسماء الأعمدة
+        - معالجة القيم المفقودة
+        - ترميز البيانات النوعية
+        - موازنة وتوحيد البيانات الرقمية
+
+الاستخدام:
+    from utils.preprocessing import (
+        normalize_column_names,
+        fill_missing_values,
+        encode_categoricals,
+        scale_numericals
+    )
+
+    df = normalize_column_names(df)
+"""
 
 import pandas as pd
-
-# ✅ تحديث الاستيراد لدالة الحفظ من utils.file_manager وليس etl.load
-from data_intelligence_system.utils.file_manager import save_file
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ الصحيح
-
-logger = logging.getLogger(__name__)
-
-# ======== المسارات الرئيسية ========
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / 'data'
-PROFILES_DIR = BASE_DIR / 'data_profiles'
+import numpy as np
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from typing import Optional, Union
+from data_intelligence_system.utils.logger import get_logger
 
 
-# ======== تحويل DataFrame إلى JSON بصيغة Dash ========
-def df_to_dash_json(df: Optional[pd.DataFrame], orient: str = "split") -> str:
+logger = get_logger(name="Preprocessing")
+
+
+def normalize_column_names(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    توحيد أسماء الأعمدة لتكون صغيرة وخالية من الفراغات والرموز الخاصة.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        إطار بيانات الإدخال.
+
+    Returns
+    -------
+    pd.DataFrame
+        نسخة من DataFrame مع أسماء أعمدة موحدة.
+    
+    Raises
+    ------
+    ValueError
+        إذا كان df None أو فارغ.
+    """
     if df is None or df.empty:
-        logger.warning("⚠️ DataFrame فارغ أو None عند التحويل إلى JSON.")
-        return json.dumps({}, default=str)
+        raise ValueError("Input DataFrame is None or empty.")
 
-    try:
-        df_copy = df.copy()
-        for col in df_copy.select_dtypes(include=["datetime", "datetimetz"]).columns:
-            df_copy[col] = df_copy[col].dt.strftime("%Y-%m-%d")
-
-        json_str = df_copy.to_json(orient=orient, date_format='iso', default_handler=str)
-        logger.info("✅ تم تحويل DataFrame إلى JSON (orient=%s) بنجاح.", orient)
-        return json_str
-    except Exception as e:
-        logger.error(f"❌ فشل تحويل DataFrame إلى JSON: {e}", exc_info=True)
-        return json.dumps({}, default=str)
+    logger.info("🔤 توحيد أسماء الأعمدة...")
+    df = df.copy()
+    df.columns = (
+        df.columns.str.strip()
+                  .str.lower()
+                  .str.replace(r'[^\w]+', '_', regex=True)
+                  .str.strip('_')
+    )
+    return df
 
 
-# ======== تحويل JSON إلى DataFrame ========
-def json_to_df(data_json: Optional[str], parse_dates: bool = True) -> Optional[pd.DataFrame]:
-    if not data_json or data_json.strip() in ('{}', ''):
-        logger.warning("⚠️ JSON فارغ أو غير صالح.")
-        return None
+def fill_missing_values(df: pd.DataFrame, strategy: str = "mean") -> pd.DataFrame:
+    """
+    معالجة القيم المفقودة باستخدام استراتيجية محددة.
 
-    try:
-        df = pd.read_json(data_json, orient='split')
-        if df.empty:
-            logger.warning("⚠️ DataFrame الناتج فارغ بعد التحويل من JSON.")
-            return None
+    Parameters
+    ----------
+    df : pd.DataFrame
+        إطار بيانات الإدخال.
+    strategy : str, optional
+        استراتيجية الملء، الخيارات: 'mean', 'median', 'mode', 'zero' (الافتراضي 'mean').
 
-        if parse_dates:
-            for col in df.columns:
-                if df[col].dtype == object:
-                    converted = pd.to_datetime(df[col], errors='coerce')
-                    if not converted.isnull().all():
-                        df[col] = converted
+    Returns
+    -------
+    pd.DataFrame
+        نسخة من DataFrame بعد ملء القيم المفقودة.
 
-        df = fill_missing_values(df)  # ✅ تم التصحيح هنا
+    Raises
+    ------
+    ValueError
+        إذا كانت الاستراتيجية غير مدعومة أو df None أو فارغ.
+    """
+    if df is None or df.empty:
+        raise ValueError("Input DataFrame is None or empty.")
 
-        logger.info("✅ تم تحويل JSON إلى DataFrame (split) بنجاح.")
-        return df
-    except Exception as e:
-        logger.error(f"❌ فشل تحويل JSON إلى DataFrame: {e}", exc_info=True)
-        return None
+    allowed_strategies = {"mean", "median", "mode", "zero"}
+    if strategy not in allowed_strategies:
+        raise ValueError(f"استراتيجية ملء غير مدعومة: {strategy}. الرجاء اختيار واحدة من {allowed_strategies}")
+
+    logger.info(f"🧩 معالجة القيم المفقودة باستخدام: {strategy}")
+    df = df.copy()
+
+    for col in df.columns:
+        if df[col].isnull().sum() > 0:
+            try:
+                if strategy == "mean" and pd.api.types.is_numeric_dtype(df[col]):
+                    if df[col].dropna().empty:
+                        logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب المتوسط.")
+                        continue
+                    df[col] = df[col].fillna(df[col].mean())
+                elif strategy == "median" and pd.api.types.is_numeric_dtype(df[col]):
+                    if df[col].dropna().empty:
+                        logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب الوسيط.")
+                        continue
+                    df[col] = df[col].fillna(df[col].median())
+                elif strategy == "mode":
+                    mode_vals = df[col].mode()
+                    if mode_vals.empty:
+                        logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب الوضع (mode).")
+                        continue
+                    df[col] = df[col].fillna(mode_vals[0])
+                elif strategy == "zero":
+                    df[col] = df[col].fillna(0)
+                else:
+                    logger.warning(f"⚠️ لا يمكن تطبيق استراتيجية {strategy} على العمود '{col}'")
+            except Exception as e:
+                logger.error(f"❌ خطأ أثناء ملء العمود '{col}': {e}")
+                raise
+    return df
 
 
-# ======== تصفية DataFrame حسب التاريخ ========
-def filter_data_by_date(
-    df: pd.DataFrame,
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
-    date_column: str = "date"
-) -> pd.DataFrame:
-    if date_column not in df.columns:
-        logger.warning(f"⚠️ عمود التاريخ '{date_column}' غير موجود في DataFrame، سيتم إرجاع البيانات بدون فلترة.")
-        return df
+def encode_categoricals(df: pd.DataFrame, method: str = "label") -> pd.DataFrame:
+    """
+    ترميز الأعمدة النوعية (Categorical) باستخدام إما LabelEncoder أو OneHotEncoding.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        إطار بيانات الإدخال.
+    method : str, optional
+        طريقة الترميز: 'label' أو 'onehot' (الافتراضي 'label').
+
+    Returns
+    -------
+    pd.DataFrame
+        نسخة من DataFrame بعد الترميز.
+
+    Raises
+    ------
+    ValueError
+        إذا لم توجد أعمدة نوعية أو طريقة الترميز غير مدعومة.
+    """
+    if df is None or df.empty:
+        raise ValueError("Input DataFrame is None or empty.")
 
     df = df.copy()
-    df[date_column] = pd.to_datetime(df[date_column], errors='coerce')
+    cat_cols = df.select_dtypes(include=['object', 'category']).columns
 
-    if start_date:
-        try:
-            df = df[df[date_column] >= pd.to_datetime(start_date)]
-        except Exception as e:
-            logger.warning(f"⚠️ تاريخ بداية غير صالح '{start_date}': {e}")
+    if len(cat_cols) == 0:
+        logger.warning("⚠️ لا توجد أعمدة نوعية (categorical) في البيانات للترميز.")
+        return df  # مرونة أفضل من رفع استثناء
 
-    if end_date:
+    logger.info(f"🔠 ترميز الأعمدة النوعية باستخدام: {method}")
+
+    if method == "label":
+        for col in cat_cols:
+            try:
+                le = LabelEncoder()
+                df[col] = le.fit_transform(df[col].astype(str))
+            except Exception as e:
+                logger.error(f"❌ فشل ترميز العمود '{col}': {e}")
+                raise
+
+    elif method == "onehot":
         try:
-            df = df[df[date_column] <= pd.to_datetime(end_date)]
+            df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
         except Exception as e:
-            logger.warning(f"⚠️ تاريخ نهاية غير صالح '{end_date}': {e}")
+            logger.error(f"❌ فشل OneHot Encoding: {e}")
+            raise
+
+    else:
+        logger.warning(f"⚠️ طريقة ترميز غير معروفة: {method}")
+        raise ValueError("طريقة الترميز غير مدعومة. استخدم 'label' أو 'onehot'.")
 
     return df
 
 
-# ======== قراءة ملف Excel أو CSV حسب الامتداد ========
-def read_file(path: Path) -> pd.DataFrame:
-    if not path.exists():
-        logger.error(f"❌ الملف غير موجود: {path}")
-        raise FileNotFoundError(f"❌ الملف غير موجود: {path}")
+def scale_numericals(df: pd.DataFrame, scaler: Optional[object] = None) -> pd.DataFrame:
+    """
+    موازنة الأعمدة الرقمية باستخدام StandardScaler أو scaler مخصص.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        إطار بيانات الإدخال.
+    scaler : object, optional
+        كائن scaler (مثل StandardScaler)، إذا لم يُحدد يتم استخدام StandardScaler.
+
+    Returns
+    -------
+    pd.DataFrame
+        نسخة من DataFrame بعد الموازنة.
+
+    Raises
+    ------
+    Exception
+        في حالة فشل عملية الموازنة.
+    """
+    if df is None or df.empty:
+        raise ValueError("Input DataFrame is None or empty.")
+
+    df = df.copy()
+    num_cols = df.select_dtypes(include=[np.number]).columns
+
+    if len(num_cols) == 0:
+        logger.warning("⚠️ لا توجد أعمدة رقمية لموازنتها.")
+        return df
+
+    if scaler is None:
+        scaler = StandardScaler()
 
     try:
-        if path.suffix.lower() == '.csv':
-            try:
-                return pd.read_csv(path, encoding='utf-8')
-            except UnicodeDecodeError:
-                return pd.read_csv(path, encoding='cp1256')
-        elif path.suffix.lower() in ['.xlsx', '.xls']:
-            return pd.read_excel(path)
-        else:
-            raise ValueError(f"❌ امتداد غير مدعوم: {path.suffix}")
+        df[num_cols] = scaler.fit_transform(df[num_cols])
     except Exception as e:
-        logger.error(f"❌ فشل قراءة الملف {path}: {e}", exc_info=True)
+        logger.error(f"❌ فشل في موازنة الأعمدة الرقمية: {e}")
         raise
 
-
-# ======== تحميل البيانات الخام ========
-def load_raw_data(filename: str) -> pd.DataFrame:
-    return read_file(DATA_DIR / filename)
-
-
-# ======== تحميل البيانات المعالجة المحفوظة مسبقًا ========
-def load_saved_data(filename: str = "uploaded.csv") -> pd.DataFrame:
-    return read_file(DATA_DIR / "processed" / filename)
+    return df
