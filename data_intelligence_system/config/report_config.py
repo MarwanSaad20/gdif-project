@@ -1,19 +1,35 @@
-# config/report_config.py
-
 from datetime import datetime
 from pathlib import Path
+from data_intelligence_system.utils.config_handler import ConfigHandler
+from data_intelligence_system.utils.logger import get_logger
+
+# ✅ اللوجر
+logger = get_logger("ReportConfig")
+
+# ===================== تحميل الإعدادات =====================
+CONFIG_FILE = Path(__file__).resolve().parent / "config.yaml"
+config = None
+
+try:
+    config = ConfigHandler(str(CONFIG_FILE))
+    logger.info(f"✅ تم تحميل الإعدادات من: {CONFIG_FILE}")
+except Exception as e:
+    logger.warning(f"⚠️ فشل تحميل إعدادات التقارير: {e}")
+
+def get_config_value(key: str, default=None):
+    return config.get(key, default) if config else default
 
 # 📄 عنوان التقرير الأساسي
 REPORT_TITLE = "تقرير تحليلي شامل - نظام تحليل البيانات العام"
 
-# 📆 تاريخ التقرير (افتراضيًا وقت التشغيل)
+# 📆 تاريخ التقرير
 REPORT_DATE = datetime.now().strftime("%Y-%m-%d")
 
 # 🏷️ بيانات المرسل
-AUTHOR = "Marwan Al_Jubouri"
+AUTHOR = get_config_value("project.author", "Marwan Al_Jubouri")
 ORGANIZATION = "General Data Intelligence Framework - GDIF"
 
-# 🎨 الألوان الأساسية المستخدمة في الرسوم والتقارير
+# 🎨 الألوان الأساسية
 COLOR_SCHEME = {
     "primary": "#2E86C1",
     "secondary": "#1ABC9C",
@@ -23,20 +39,20 @@ COLOR_SCHEME = {
     "highlight": "#F1C40F"
 }
 
-# 📌 شعارات وصور للتقارير (تُستخدم في الـ PDF أو HTML)
+# 📌 شعارات وصور
 LOGO_PATH = Path("data_intelligence_system/reports/static_assets/logo.png")
 FOOTER_BANNER_PATH = Path("data_intelligence_system/reports/static_assets/footer_banner.png")
 
-# 📁 قوالب HTML (Jinja2)
+# 📁 قالب HTML (Jinja2)
 TEMPLATE_PATH = Path("data_intelligence_system/reports/generators/templates/base_report.html")
 
-# ⚙️ إعدادات خطوط وتنسيق عام
+# ⚙️ الخطوط والتنسيق
 FONT = "Cairo"
 FONT_SIZE = 12
 HEADER_FONT_SIZE = 18
 LINE_SPACING = 1.5
 
-# 📈 تنسيق جداول Excel أو HTML
+# 📈 تنسيق الجداول
 TABLE_STYLE = {
     "header_bg": "#34495E",
     "header_fg": "#ECF0F1",
@@ -47,13 +63,4 @@ TABLE_STYLE = {
 
 # 📄 إعدادات الحفظ
 DEFAULT_FORMAT = "pdf"  # يمكن أن تكون: "pdf", "excel", "html"
-OUTPUT_DIR = Path("data_intelligence_system/reports/output")
-
-# ======== الملاحظات والتوصيات ========
-# 1. تأكد من وجود مجلد OUTPUT_DIR والمجلدات الأخرى المشار إليها في المسارات لتجنب أخطاء عدم وجود الملفات.
-# 2. يمكن إضافة تحقق عند تحميل الصور والقوالب، مثلا:
-#    if not LOGO_PATH.exists():
-#        raise FileNotFoundError(f"شعار التقرير غير موجود في المسار: {LOGO_PATH}")
-# 3. إذا كان المشروع يستخدم إعدادات مسارات مركزية (config/paths_config.py)، فمن الأفضل استيراد تلك المسارات بدلاً من كتابتها هنا كمسارات ثابتة.
-# 4. خطوط مثل "Cairo" يجب التأكد من توفرها في بيئة التشغيل أو توفير بدائل مناسبة.
-# 5. يمكن التفكير في دعم إعدادات أكثر ديناميكية مثل تغيير لغة التقرير، أو تخصيص الإخراج عبر متغيرات بيئية أو ملف إعدادات خارجي.
+OUTPUT_DIR = Path(get_config_value("paths.reports", "data_intelligence_system/reports/output"))
