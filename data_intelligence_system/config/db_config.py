@@ -26,12 +26,13 @@ DB_TYPE = DB_TYPE.lower()
 
 # 🔐 إعدادات PostgreSQL
 POSTGRES_CONFIG = {
-    "host": os.getenv("POSTGRES_HOST") or (config.get("database.postgres.host") if config else "localhost"),
-    "port": int(os.getenv("POSTGRES_PORT") or (config.get("database.postgres.port") if config else 5432)),
-    "user": os.getenv("POSTGRES_USER") or (config.get("database.postgres.user") if config else "postgres"),
-    "password": os.getenv("POSTGRES_PASSWORD") or (config.get("database.postgres.password") if config else "password"),
-    "database": os.getenv("POSTGRES_DB") or (config.get("database.postgres.database") if config else "data_system"),
+    "host": os.getenv("POSTGRES_HOST") or (config.get("database.postgres.host", default="localhost") if config else "localhost"),
+    "port": int(os.getenv("POSTGRES_PORT") or (config.get("database.postgres.port", default=5432) if config else 5432)),
+    "user": os.getenv("POSTGRES_USER") or (config.get("database.postgres.user", default="postgres") if config else "postgres"),
+    "password": os.getenv("POSTGRES_PASSWORD") or (config.get("database.postgres.password", default="password") if config else "password"),
+    "database": os.getenv("POSTGRES_DB") or (config.get("database.postgres.database", default="data_system") if config else "data_system"),
 }
+
 
 # 📦 إعداد SQLite
 SQLITE_PATH = Path(
