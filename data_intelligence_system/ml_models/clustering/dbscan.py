@@ -41,7 +41,7 @@ class DBSCANClusteringModel(BaseModel):
         """
         X = fill_missing_values(X)
         X = generate_derived_features(X)  # ✅ إنشاء الميزات الجديدة
-        X_scaled = scale_numerical_features(X, method=self.scaler_type)
+        X_scaled = scale_numericals(X, method=self.scaler_type)
         self.model.fit(X_scaled)
         self.is_fitted = True
         logger.info("✅ تم تدريب نموذج DBSCAN.")
@@ -60,7 +60,7 @@ class DBSCANClusteringModel(BaseModel):
             raise ValueError("❌ النموذج غير مدرب بعد.")
         X = fill_missing_values(X)
         X = generate_derived_features(X)  # ✅ إنشاء الميزات الجديدة
-        X_scaled = scale_numerical_features(X, method=self.scaler_type)
+        X_scaled = scale_numericals(X, method=self.scaler_type)
         return self.model.fit_predict(X_scaled)
 
     def save(self, filepath=None):
