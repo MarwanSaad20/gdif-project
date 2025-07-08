@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import logging
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import (
     StandardScaler,
@@ -7,9 +8,9 @@ from sklearn.preprocessing import (
     RobustScaler,
     LabelEncoder
 )
-import logging
 
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ محدث
+from data_intelligence_system.utils.preprocessing import fill_missing_values
+from data_intelligence_system.utils.timer import Timer  # ✅ مضاف
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -115,10 +116,10 @@ class DataPreprocessor:
             logger.error(f"❌ فشل في تقسيم البيانات: {e}")
             raise
 
+    @Timer("⏱️ تنفيذ المعالجة المسبقة للبيانات")
     def preprocess(self, df, target_col=None, categorical_cols=None, scale=True):
         df = df.copy()
 
-        # ✅ استخدام الدالة الموحدة لمعالجة القيم الناقصة
         df = fill_missing_values(df)
 
         initial_shape = df.shape
@@ -154,7 +155,6 @@ class DataPreprocessor:
             return self.split(X)
 
 
-# اختبار تجريبي
 if __name__ == "__main__":
     data = {
         "feature1": [10, 20, 30, 40, 50, None],
@@ -168,7 +168,7 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = preprocessor.preprocess(
         df,
         target_col="target",
-        categorical_cols=None,  # اكتشاف تلقائي
+        categorical_cols=None,
         scale=True
     )
 
