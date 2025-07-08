@@ -41,34 +41,38 @@ class LogisticRegressionModel(BaseModel):
         X = fill_missing_values(X)
         if categorical_cols:
             X = self.preprocessor.encode_labels(X.copy(), categorical_cols)
-        return self.preprocessor.transform_scaler(X)
+            return self.preprocessor.transform_scaler(X)
+    
+        def fit(self, X, y, categorical_cols=None):
+            """
+            تدريب النموذج باستخدام البيانات المُعطاة.
+            يعيد مقاييس التقييم على مجموعة الاختبار.
+            """
+            assert len(X) == len(y), "❌ عدد العينات غير متطابق بين X و y"
+            X = fill_missing_values(X)
+    
+            # ✅ توليد الميزات الاشتقاقية تلقائيًا عند توفر الأعمدة
+            X = generate_derived_features(X)
+    
+            if categorical_cols:
+                df = X.assign(target=y)
+                X_train, X_test, y_train, y_test = self.preprocessor.preprocess(
+                    df, target_col="target", categorical_cols=categorical_cols, scale=True
+                )
+            else:
+                X_train, X_test, y_train, y_test = self.preprocessor.split(X, y)
+    
+            X_train = self.preprocessor.unify_column_names(X_train)
+            X_test = self.preprocessor.unify_column_names(X_test)
+    
+            self.model.fit(X_train, y_train)
+            self.is_fitted = True
+            logger.info("✅ تم تدريب نموذج الانحدار اللوجستي.")
+    
+            y_pred = self.model.predict(X_test)
+            metrics = ClassificationMetrics.all_metrics(y_test, y_pred, average="binary")
+            return metrics
 
-    def fit(self, X, y, categorical_cols=None):
-        """
-        تدريب النموذج باستخدام البيانات المُعطاة.
-        يعيد مقاييس التقييم على مجموعة الاختبار.
-        """
-        assert len(X) == len(y), "❌ عدد العينات غير متطابق بين X و y"
-        X = fill_missing_values(X)
-
-        if categorical_cols:
-            df = X.assign(target=y)
-            X_train, X_test, y_train, y_test = self.preprocessor.preprocess(
-                df, target_col="target", categorical_cols=categorical_cols, scale=True
-            )
-        else:
-            X_train, X_test, y_train, y_test = self.preprocessor.split(X, y)
-
-        X_train = self.preprocessor.unify_column_names(X_train)
-        X_test = self.preprocessor.unify_column_names(X_test)
-
-        self.model.fit(X_train, y_train)
-        self.is_fitted = True
-        logger.info("✅ تم تدريب نموذج الانحدار اللوجستي.")
-
-        y_pred = self.model.predict(X_test)
-        metrics = ClassificationMetrics.all_metrics(y_test, y_pred, average="binary")
-        return metrics
 
     def predict(self, X, categorical_cols=None):
         """
