@@ -15,7 +15,7 @@ from data_intelligence_system.data.external.external_data_utils import (
     describe_data,
 )
 from data_intelligence_system.utils.data_loader import load_data
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ جديد
 
 # ✅ استخدام نظام اللوجر الجديد
 from data_intelligence_system.utils.logger import get_logger
