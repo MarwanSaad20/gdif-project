@@ -4,7 +4,7 @@ from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.core.data_bindings import json_to_df, df_to_dash_json, filter_data_by_date
 from data_intelligence_system.utils.logger import get_logger
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ جديد
 
 logger = get_logger("FiltersCallbacks")
 
