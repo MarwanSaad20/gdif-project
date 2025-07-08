@@ -9,7 +9,7 @@ from data_intelligence_system.etl import pipeline as etl_pipeline
 from data_intelligence_system.analysis.descriptive_stats import compute_statistics
 from data_intelligence_system.reports import report_dispatcher
 
-from data_intelligence_system.data.processed.fill_missing import fill_missing  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ جديد
 
 logger = get_logger("UploadCallbacks")
 
