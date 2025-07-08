@@ -11,11 +11,11 @@ if not logger.hasHandlers():
 
 # 🧩 أسماء ملفات الإعداد المتوقعة داخل مجلد config/
 CONFIG_MODULES = {
-    "paths": "config.paths_config",
-    "models": "config.model_config",
-    "reports": "config.report_config",
-    "dashboard": "config.dashboard_config",
-    "env": "config.env_config"
+    "paths": "data_intelligence_system.config.paths_config",
+    "models": "data_intelligence_system.config.model_config",
+    "reports": "data_intelligence_system.config.report_config",
+    "dashboard": "data_intelligence_system.config.dashboard_config",
+    "env": "data_intelligence_system.config.env_config"
 }
 
 def dictify(obj: object) -> dict:
