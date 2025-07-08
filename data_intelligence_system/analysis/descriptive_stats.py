@@ -1,8 +1,5 @@
 import pandas as pd
 import numpy as np
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 from tabulate import tabulate
 import logging
 from typing import Dict, Any, Union
@@ -14,8 +11,9 @@ DATA_DIR = BASE_DIR / "data_intelligence_system" / "data" / "processed"
 OUTPUT_DIR = BASE_DIR / "data_intelligence_system" / "analysis" / "analysis_output"
 
 # === استيراد الأدوات المساعدة ===
-from data_intelligence_system.analysis.analysis_utils import ensure_output_dir, save_plot
-from data_intelligence_system.utils.data_loader import load_data  # ✅ تحديث التحميل إلى الدالة الموحدة
+from data_intelligence_system.analysis.analysis_utils import ensure_output_dir
+from data_intelligence_system.utils.data_loader import load_data  # ✅ الدالة الموحدة
+from data_intelligence_system.utils.visualization.visuals_static import plot_distribution  # ✅ التحديث الجديد
 
 # === إعداد اللوجر ===
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
@@ -75,14 +73,11 @@ def generate_numeric_histograms(df: pd.DataFrame, filename_prefix: str, output_d
     numeric_cols = df.select_dtypes(include=[np.number]).columns
 
     for col in numeric_cols:
-        plt.figure(figsize=(8, 4))
-        df[col].hist(bins=bins, color='skyblue', edgecolor='black')
-        plt.title(f"Distribution of {col}")
-        plt.xlabel(col)
-        plt.ylabel("Frequency")
-        filename = f"{filename_prefix}_distribution_{col}.png"
-        save_plot(plt.gcf(), filename, output_dir)
-        plt.close()
+        save_path = output_dir / f"{filename_prefix}_distribution_{col}.png"
+        try:
+            plot_distribution(df, column=col, bins=bins, save_path=str(save_path))
+        except Exception as e:
+            logger.warning(f"⚠️ فشل رسم العمود '{col}': {e}")
 
     logger.info(f"✅ تم حفظ الرسوم البيانية للأعمدة الرقمية في: {output_dir}")
 
@@ -101,7 +96,7 @@ def save_categorical_value_counts(df: pd.DataFrame, filename_prefix: str, output
 def generate_descriptive_stats(df_or_path: Union[pd.DataFrame, str, Path], filename_prefix: str = "output",
                                output_dir: Path = OUTPUT_DIR, save_outputs: bool = True) -> Dict[str, Any]:
     if isinstance(df_or_path, (str, Path)):
-        df = load_data(str(df_or_path))  # ✅ استخدام الدالة الموحدة للتحميل
+        df = load_data(str(df_or_path))
         filename_prefix = Path(df_or_path).stem
         logger.info(f"✅ تم تحميل البيانات من: {df_or_path}")
     else:
