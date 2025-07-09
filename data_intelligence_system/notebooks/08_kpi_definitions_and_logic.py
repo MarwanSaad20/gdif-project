@@ -11,34 +11,34 @@
 - مثال على تصدير KPIs
 """
 
-import os
 import sys
-import pandas as pd
-import numpy as np
 import json
 import pprint
+import pandas as pd
+import numpy as np
+from pathlib import Path
 
 # --- إعداد المسارات بشكل متوافق مع Jupyter وملفات .py ---
 try:
-    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    SCRIPT_PATH = Path(__file__).resolve()
 except NameError:
-    SCRIPT_DIR = os.getcwd()
+    SCRIPT_PATH = Path.cwd()
 
-BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, '..'))
-DATA_PATH = os.path.join(BASE_DIR, 'data', 'processed', 'clean_data.csv')
-REPORTS_DIR = os.path.join(BASE_DIR, 'reports')
-os.makedirs(REPORTS_DIR, exist_ok=True)
+BASE_DIR = SCRIPT_PATH.parent.parent
+DATA_PATH = BASE_DIR / 'data' / 'processed' / 'clean_data.csv'
+REPORTS_DIR = BASE_DIR / 'reports'
+REPORTS_DIR.mkdir(exist_ok=True)
 
-print(f"SCRIPT_DIR = {SCRIPT_DIR}")
+EXPORT_PATH_CSV = REPORTS_DIR / 'kpis.csv'
+EXPORT_PATH_JSON = REPORTS_DIR / 'kpis.json'
+
+print(f"SCRIPT_PATH = {SCRIPT_PATH}")
 print(f"BASE_DIR = {BASE_DIR}")
 print(f"DATA_PATH = {DATA_PATH}")
-print(f"DATA_PATH exists = {os.path.exists(DATA_PATH)}")
+print(f"DATA_PATH exists = {DATA_PATH.exists()}")
 
-if not os.path.exists(DATA_PATH):
+if not DATA_PATH.exists():
     sys.exit(f"⚠️ لم يتم العثور على ملف البيانات: {DATA_PATH}")
-
-EXPORT_PATH_CSV = os.path.join(REPORTS_DIR, 'kpis.csv')
-EXPORT_PATH_JSON = os.path.join(REPORTS_DIR, 'kpis.json')
 
 # --- تحميل البيانات ---
 df = pd.read_csv(DATA_PATH)
