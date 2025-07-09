@@ -1,6 +1,5 @@
-import os
-import joblib
 import logging
+import joblib
 from pathlib import Path
 import pandas as pd
 from sklearn.cluster import DBSCAN
@@ -9,7 +8,7 @@ from sklearn.cluster import DBSCAN
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.feature_utils import generate_derived_features
-from data_intelligence_system.utils.timer import Timer  # ⏱️ استيراد التايمر
+from data_intelligence_system.utils.timer import Timer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -44,34 +43,33 @@ class DBSCANClusteringModel(BaseModel):
         """
         توقعات التجميع للمشاهد الجديدة.
         """
-        if not self.is_fitted:
-            raise ValueError("❌ النموذج غير مدرب بعد.")
+        self._check_is_fitted()
         X = fill_missing_values(X)
         X = generate_derived_features(X)
         return self.model.fit_predict(X)
 
-    def save(self, filepath=None):
+    def save(self):
         """
         حفظ النموذج إلى ملف.
         """
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        if self.model is None:
+            raise ValueError("❌ لا يوجد نموذج لحفظه.")
+        self.model_path.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({
             "model": self.model,
             "scaler_type": self.scaler_type,
             "is_fitted": self.is_fitted
-        }, filepath)
-        logger.info(f"💾 تم حفظ نموذج DBSCAN في: {filepath}")
+        }, self.model_path)
+        logger.info(f"💾 تم حفظ نموذج DBSCAN في: {self.model_path}")
 
-    def load(self, filepath=None):
+    def load(self):
         """
         تحميل النموذج من ملف.
         """
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        data = joblib.load(filepath)
+        if not self.model_path.exists():
+            raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {self.model_path}")
+        data = joblib.load(self.model_path)
         self.model = data["model"]
         self.scaler_type = data.get("scaler_type", "standard")
         self.is_fitted = data["is_fitted"]
-        logger.info(f"📥 تم تحميل نموذج DBSCAN من: {filepath}")
+        logger.info(f"📥 تم تحميل نموذج DBSCAN من: {self.model_path}")
