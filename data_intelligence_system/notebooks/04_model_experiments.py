@@ -15,9 +15,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
 
-# استيراد نماذج الانحدار المحسّنة
+# استيراد نماذج الانحدار والتصنيف المحسّنة
 from data_intelligence_system.ml_models.regression.lasso_regression import LassoRegressionModel
 from data_intelligence_system.ml_models.regression.ridge_regression import RidgeRegressionModel
+from data_intelligence_system.ml_models.classification.logistic_regression import LogisticRegressionModel
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
