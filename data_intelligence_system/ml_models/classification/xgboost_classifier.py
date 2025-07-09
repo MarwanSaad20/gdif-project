@@ -1,6 +1,8 @@
 import logging
 import joblib
 from pathlib import Path
+from typing import Optional, List
+
 from xgboost import XGBClassifier
 
 from data_intelligence_system.ml_models.base_model import BaseModel
@@ -15,72 +17,133 @@ logging.basicConfig(level=logging.INFO)
 
 
 class XGBoostClassifierModel(BaseModel):
-    def __init__(self, model_params=None, scaler_type="standard"):
+    """
+    نموذج XGBoost لتصنيف البيانات باستخدام scikit-learn.
+    """
+
+    def __init__(
+        self,
+        model_params: Optional[dict] = None,
+        scaler_type: str = "standard"
+    ):
         super().__init__(model_name="xgboost_classifier", model_dir="ml_models/saved_models")
         self.model_params = model_params if model_params else {}
         self.model = XGBClassifier(use_label_encoder=False, eval_metric='logloss', **self.model_params)
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type)
         self.is_fitted = False
 
-    def _prepare_features(self, X, categorical_cols=None):
+    def _prepare_features(self, X, categorical_cols: Optional[List[str]] = None):
+        """
+        تنظيف وتحضير الميزات للتنبؤ أو التدريب.
+        """
+        if X is None or X.empty:
+            raise ValueError("❌ بيانات الإدخال فارغة أو None.")
         X = fill_missing_values(X)
+        X = generate_derived_features(X)
         if categorical_cols:
             X = self.preprocessor.encode_labels(X.copy(), categorical_cols)
         return self.preprocessor.transform_scaler(X)
 
     @Timer("تدريب نموذج XGBoost")
-    def fit(self, X, y, categorical_cols=None):
-        assert len(X) == len(y), "❌ عدد العينات غير متطابق"
-        X = fill_missing_values(X)
-        X = generate_derived_features(X)
+    def fit(self, X, y, categorical_cols: Optional[List[str]] = None):
+        """
+        تدريب النموذج مع تقسيم البيانات، وإرجاع مقاييس التقييم.
+
+        Raises
+        ------
+        ValueError: إذا كانت البيانات غير متناسقة أو فارغة.
+        """
+        if X is None or y is None:
+            raise ValueError("❌ بيانات التدريب أو الهدف فارغة.")
+        if len(X) != len(y):
+            raise ValueError("❌ عدد العينات في X و y غير متطابق.")
+
+        X_processed = self._prepare_features(X, categorical_cols)
 
         if categorical_cols:
-            df = X.assign(target=y)
+            df = X_processed.assign(target=y)
             X_train, X_test, y_train, y_test = self.preprocessor.preprocess(
                 df, target_col="target", categorical_cols=categorical_cols, scale=True
             )
         else:
-            X_train, X_test, y_train, y_test = self.preprocessor.split(X, y)
+            X_train, X_test, y_train, y_test = self.preprocessor.split(X_processed, y)
 
-        self.model.fit(X_train, y_train)
-        self.is_fitted = True
-        logger.info("✅ تم تدريب نموذج XGBoost.")
+        try:
+            self.model.fit(X_train, y_train)
+            self.is_fitted = True
+            logger.info("✅ تم تدريب نموذج XGBoost.")
+        except Exception as e:
+            logger.error(f"❌ خطأ أثناء تدريب النموذج: {e}")
+            raise
 
         y_pred = self.model.predict(X_test)
-        return ClassificationMetrics.all_metrics(y_test, y_pred, average="binary")
 
-    def predict(self, X, categorical_cols=None):
-        self._check_is_fitted()
-        X = self._prepare_features(X, categorical_cols)
-        return self.model.predict(X)
+        # ضبط average تلقائيًا حسب نوع المهمة (binary/multiclass)
+        avg_method = "binary" if len(set(y)) == 2 else "weighted"
 
-    def predict_proba(self, X, categorical_cols=None):
-        self._check_is_fitted()
-        X = self._prepare_features(X, categorical_cols)
-        return self.model.predict_proba(X)
+        return ClassificationMetrics.all_metrics(y_test, y_pred, average=avg_method)
 
-    def evaluate(self, X, y, categorical_cols=None):
+    def predict(self, X, categorical_cols: Optional[List[str]] = None):
+        """
+        التنبؤ بالفئات باستخدام النموذج المدرب.
+        """
         self._check_is_fitted()
-        X = fill_missing_values(X)
-        y_pred = self.predict(X, categorical_cols)
-        return ClassificationMetrics.all_metrics(y, y_pred, average="binary")
+        X_prepared = self._prepare_features(X, categorical_cols)
+        return self.model.predict(X_prepared)
+
+    def predict_proba(self, X, categorical_cols: Optional[List[str]] = None):
+        """
+        التنبؤ باحتمالات الفئات.
+        """
+        self._check_is_fitted()
+        X_prepared = self._prepare_features(X, categorical_cols)
+        return self.model.predict_proba(X_prepared)
+
+    def evaluate(self, X, y, categorical_cols: Optional[List[str]] = None):
+        """
+        تقييم النموذج باستخدام بيانات الاختبار.
+        """
+        self._check_is_fitted()
+        if X is None or y is None:
+            raise ValueError("❌ بيانات التقييم أو الهدف فارغة.")
+
+        X_prepared = self._prepare_features(X, categorical_cols)
+        y_pred = self.model.predict(X_prepared)
+
+        avg_method = "binary" if len(set(y)) == 2 else "weighted"
+
+        return ClassificationMetrics.all_metrics(y, y_pred, average=avg_method)
 
     def save(self):
+        """
+        حفظ النموذج والإعدادات.
+        """
         if self.model is None:
             raise ValueError("❌ لا يوجد نموذج لحفظه.")
-        self.model_path.parent.mkdir(parents=True, exist_ok=True)
-        joblib.dump({
-            "model": self.model,
-            "preprocessor": self.preprocessor,
-            "is_fitted": self.is_fitted
-        }, self.model_path)
-        logger.info(f"💾 تم حفظ النموذج في: {self.model_path}")
+        try:
+            self.model_path.parent.mkdir(parents=True, exist_ok=True)
+            joblib.dump({
+                "model": self.model,
+                "preprocessor": self.preprocessor,
+                "is_fitted": self.is_fitted
+            }, self.model_path)
+            logger.info(f"💾 تم حفظ النموذج في: {self.model_path}")
+        except Exception as e:
+            logger.error(f"❌ خطأ أثناء حفظ النموذج: {e}")
+            raise
 
     def load(self):
+        """
+        تحميل النموذج والإعدادات.
+        """
         if not self.model_path.exists():
             raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {self.model_path}")
-        data = joblib.load(self.model_path)
-        self.model = data["model"]
-        self.preprocessor = data["preprocessor"]
-        self.is_fitted = data["is_fitted"]
-        logger.info(f"📥 تم تحميل النموذج من: {self.model_path}")
+        try:
+            data = joblib.load(self.model_path)
+            self.model = data["model"]
+            self.preprocessor = data["preprocessor"]
+            self.is_fitted = data["is_fitted"]
+            logger.info(f"📥 تم تحميل النموذج من: {self.model_path}")
+        except Exception as e:
+            logger.error(f"❌ خطأ أثناء تحميل النموذج: {e}")
+            raise
