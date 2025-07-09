@@ -26,6 +26,7 @@ from data_intelligence_system.ml_models.classification.random_forest import Rand
 from data_intelligence_system.ml_models.classification.xgboost_classifier import XGBoostClassifierModel
 from data_intelligence_system.ml_models.clustering.dbscan import DBSCANClusteringModel
 from data_intelligence_system.ml_models.forecasting.arima_model import ARIMAForecastingModel
+from data_intelligence_system.ml_models.forecasting.prophet_model import ProphetForecastingModel
 from data_intelligence_system.utils.logger import get_logger
 
 import matplotlib.pyplot as plt
