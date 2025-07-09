@@ -14,7 +14,7 @@ from data_intelligence_system.analysis.analysis_utils import (
 )
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.preprocessing import fill_missing_values
-from data_intelligence_system.utils.timer import Timer  # ⏱️ إضافة مهمة
+from data_intelligence_system.utils.timer import Timer
 
 # ===================== إعداد المسارات =====================
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -27,27 +27,27 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s �
 logger = logging.getLogger(__name__)
 
 
-# ===================== دوال اكتشاف القيم الشاذة =====================
-
 def detect_outliers_zscore(df: pd.DataFrame, threshold=3) -> pd.Series:
+    """Detect outliers using Z-Score method."""
     logger.info("🧮 اكتشاف القيم الشاذة باستخدام Z-Score")
     df = fill_missing_values(df)
     numeric_cols = get_numerical_columns(df)
     if not numeric_cols:
         logger.warning("⚠️ لا توجد أعمدة رقمية لاكتشاف القيم الشاذة باستخدام Z-Score.")
-        return pd.Series([False] * len(df), index=df.index)
+        return pd.Series(False, index=df.index)
 
     z_scores = np.abs(stats.zscore(df[numeric_cols]))
     return (z_scores > threshold).any(axis=1)
 
 
 def detect_outliers_iqr(df: pd.DataFrame, factor=1.5) -> pd.Series:
+    """Detect outliers using IQR method."""
     logger.info("🧮 اكتشاف القيم الشاذة باستخدام IQR")
     df = fill_missing_values(df)
     numeric_cols = get_numerical_columns(df)
     if not numeric_cols:
         logger.warning("⚠️ لا توجد أعمدة رقمية لاكتشاف القيم الشاذة باستخدام IQR.")
-        return pd.Series([False] * len(df), index=df.index)
+        return pd.Series(False, index=df.index)
 
     Q1 = df[numeric_cols].quantile(0.25)
     Q3 = df[numeric_cols].quantile(0.75)
@@ -56,23 +56,22 @@ def detect_outliers_iqr(df: pd.DataFrame, factor=1.5) -> pd.Series:
 
 
 def detect_outliers_isolation_forest(df: pd.DataFrame, contamination=0.05) -> pd.Series:
+    """Detect outliers using Isolation Forest."""
     logger.info("🌲 اكتشاف القيم الشاذة باستخدام Isolation Forest")
     df = fill_missing_values(df)
     numeric_cols = get_numerical_columns(df)
     if not numeric_cols:
         logger.warning("⚠️ لا توجد أعمدة رقمية لاكتشاف القيم الشاذة باستخدام Isolation Forest.")
-        return pd.Series([False] * len(df), index=df.index)
+        return pd.Series(False, index=df.index)
 
     model = IsolationForest(contamination=contamination, random_state=42)
-    X = df[numeric_cols]
-    preds = model.fit_predict(X)
+    preds = model.fit_predict(df[numeric_cols])
     return preds == -1
 
 
-# ===================== دالة تنفيذ واحدة =====================
-
 @Timer("تحليل القيم الشاذة الفردي")
 def run_outlier_detection(df: pd.DataFrame, method: str = "iqr", output_dir: Path = OUTPUT_DIR) -> dict:
+    """Run outlier detection using the specified method."""
     ensure_output_dir(output_dir)
     log_basic_info(df, "outlier_detection")
 
@@ -88,22 +87,20 @@ def run_outlier_detection(df: pd.DataFrame, method: str = "iqr", output_dir: Pat
     outliers_df = df[mask].copy()
     file_name = f"outliers_{method}.csv"
     save_dataframe(outliers_df, file_name, output_dir)
-    out_path = output_dir / file_name
 
-    logger.info(f"✅ تم حفظ النتائج في: {out_path}")
+    logger.info(f"✅ تم حفظ النتائج في: {output_dir / file_name}")
 
     return {
         "method": method,
         "outliers_detected": len(outliers_df),
-        "file_saved": str(out_path),
+        "file_saved": str(output_dir / file_name),
         "outlier_rows": outliers_df
     }
 
 
-# ===================== دالة تنفيذ على دفعة كاملة =====================
-
 @Timer("تحليل القيم الشاذة - دفعة كاملة")
 def run_batch_detection():
+    """Run outlier detection on all processed CSV files."""
     ensure_output_dir(OUTPUT_DIR)
     if not DATA_DIR.exists():
         logger.error(f"❌ مجلد البيانات غير موجود: {DATA_DIR}")
@@ -141,8 +138,6 @@ def run_batch_detection():
     else:
         logger.warning("❗ لم يتم اكتشاف ملفات قابلة للمعالجة.")
 
-
-# ===================== نقطة التشغيل الرئيسية =====================
 
 if __name__ == "__main__":
     run_batch_detection()
