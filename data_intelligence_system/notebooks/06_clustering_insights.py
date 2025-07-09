@@ -10,6 +10,7 @@ from sklearn.metrics import (
     mean_squared_error,
     r2_score,
 )
+from sklearn.preprocessing import LabelEncoder  # ✅ جديد
 import joblib
 from pathlib import Path
 
@@ -67,12 +68,16 @@ y_pred = model.predict(X)
 is_classification = y.nunique() <= 10
 
 if is_classification:
-    acc = accuracy_score(y, y_pred)
+    # ✅ ترميز القيم الفعلية إلى أرقام للتوافق مع y_pred
+    le = LabelEncoder()
+    y_encoded = le.fit_transform(y)
+
+    acc = accuracy_score(y_encoded, y_pred)
     print(f"🎯 الدقة الإجمالية: {acc:.4f}\n")
     print("📌 تقرير التصنيف:")
-    print(classification_report(y, y_pred))
+    print(classification_report(y_encoded, y_pred))
 
-    cm = confusion_matrix(y, y_pred)
+    cm = confusion_matrix(y_encoded, y_pred)
     plt.figure(figsize=(8, 6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
     plt.title("مصفوفة الالتباس النهائية")
