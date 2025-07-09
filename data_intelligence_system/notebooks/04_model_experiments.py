@@ -31,7 +31,7 @@ def load_clean_data():
     except NameError:
         # أثناء التشغيل في بيئة Jupyter أو غيرها
         project_root = Path.cwd().parents[0]
-    
+
     data_path = project_root / "data" / "processed" / "clean_data.csv"
     if not data_path.exists():
         raise FileNotFoundError(f"❌ الملف غير موجود: {data_path}")
@@ -49,7 +49,7 @@ def detect_target_column(df):
         if col.lower() in ['target', 'label', 'y']:
             print(f"🎯 تم اكتشاف العمود الهدف تلقائيًا: {col}")
             return col
-    
+
     print("🚫 لم يتم العثور على عمود هدف باسم 'target' أو 'label' أو 'y'")
     print("🧠 الأعمدة المتاحة:", list(df.columns))
 
