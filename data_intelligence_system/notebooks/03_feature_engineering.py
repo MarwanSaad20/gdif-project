@@ -8,23 +8,28 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-import os
+from pathlib import Path
 import warnings
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
-
 
 # ============================
 # 📂 تحميل البيانات
 # ============================
 
 def load_data():
-    data_path = os.path.join("..", "data", "processed", "clean_data.csv")
+    try:
+        project_root = Path(__file__).resolve().parents[1]
+    except NameError:
+        project_root = Path.cwd().parents[1]
+
+    data_path = project_root / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
+    if not data_path.exists():
+        raise FileNotFoundError(f"الملف غير موجود: {data_path}")
     df = pd.read_csv(data_path)
     print(f"✅ البيانات المحملة: {df.shape}")
     return df
-
 
 # =============================================
 # 🧪 توليد سمات جديدة مشتقة (فرق، نسب، مجموع)
@@ -39,7 +44,6 @@ def generate_derived_features(df):
         print("✅ تم توليد السمات المشتقة (فرق، نسبة، مجموع)")
     return df, numeric_cols
 
-
 # ===========================================
 # 🧮 Polynomial Features (تفاعلات مرتبة)
 # ===========================================
@@ -52,7 +56,6 @@ def generate_polynomial_features(df, numeric_cols):
         df = pd.concat([df, poly_df.iloc[:, 2:]], axis=1)  # استثناء الأعمدة الأصلية
         print("✅ تم توليد السمات متعددة الحدود (تفاعلية)")
     return df
-
 
 # =================================
 # ⏳ استخراج السمات من التواريخ
@@ -73,7 +76,6 @@ def generate_datetime_features(df):
         except Exception:
             continue
     return df
-
 
 # ============================================
 # ⭐ تحليل أهمية السمات باستخدام Random Forest
@@ -107,7 +109,6 @@ def feature_importance_analysis(df):
     plt.tight_layout()
     plt.show()
     print("✅ تم تحليل أهمية السمات.")
-
 
 # ======================
 # 🚀 نقطة تشغيل السكربت
