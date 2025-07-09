@@ -1,4 +1,3 @@
-import os
 import sys
 import pandas as pd
 import numpy as np
@@ -14,15 +13,18 @@ from sklearn.metrics import (
 import joblib
 from pathlib import Path
 
-# ======= ضبط المسارات النسبية بناءً على مكان السكربت =======
-try:
-    project_root = Path(__file__).resolve().parents[1]  # مجلد data_intelligence_system
-except NameError:
-    project_root = Path.cwd().parents[1]  # عند تشغيل السكربت في بيئة لا تحتوي على __file__
+# استيراد من جذر المشروع للتكامل مع clustering_analysis.py
+from data_intelligence_system.analysis.clustering_analysis import run_clustering
 
-DATA_PATH = project_root / "data" / "processed" / "clean_data.csv"
-MODEL_PATH = project_root / "ml_models" / "trained_model.pkl"
-EXPORT_DIR = project_root / "reports" / "output"
+# ======= ضبط المسارات بناءً على مكان الدفتر =======
+try:
+    PROJECT_ROOT = Path(__file__).resolve().parents[1]
+except NameError:
+    PROJECT_ROOT = Path.cwd().parents[0]
+
+DATA_PATH = PROJECT_ROOT / "data" / "processed" / "clean_data.csv"
+MODEL_PATH = PROJECT_ROOT / "ml_models" / "trained_model.pkl"
+EXPORT_DIR = PROJECT_ROOT / "reports" / "output"
 EXPORT_PATH = EXPORT_DIR / "predictions_output.csv"
 
 print(f"🔍 تحميل البيانات من: {DATA_PATH}")
@@ -99,6 +101,13 @@ results_df = pd.DataFrame({
     'Actual': y,
     'Predicted': y_pred
 })
-
 results_df.to_csv(EXPORT_PATH, index=False)
 print(f"✅ تم حفظ النتائج النهائية في: {EXPORT_PATH}")
+
+# ======= (اختياري) تنفيذ تحليل التجميع لإضافة رؤى إضافية =======
+try:
+    clustering_result = run_clustering(df, algorithm="kmeans", n_clusters=3, output_filename="clustering_insights.csv")
+    if clustering_result:
+        print(f"📊 تم إنشاء رؤى التجميع وحفظها في: {clustering_result.get('clustered_file')}")
+except Exception as e:
+    print(f"⚠️ فشل تحليل التجميع: {e}")
