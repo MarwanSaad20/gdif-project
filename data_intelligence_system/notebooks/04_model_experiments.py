@@ -21,7 +21,7 @@ from data_intelligence_system.ml_models.regression.ridge_regression import Ridge
 from data_intelligence_system.ml_models.classification.logistic_regression import LogisticRegressionModel
 from data_intelligence_system.ml_models.classification.random_forest import RandomForestModel
 from data_intelligence_system.ml_models.classification.xgboost_classifier import XGBoostClassifierModel
-from data_intelligence_system.forecasting.arima_model import ARIMAForecastingModel
+from data_intelligence_system.ml_models.forecasting.arima_model import ARIMAForecastingModel
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
