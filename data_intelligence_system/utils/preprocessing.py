@@ -63,64 +63,96 @@ def normalize_column_names(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def fill_missing_values(df: pd.DataFrame, strategy: str = "mean") -> pd.DataFrame:
+def fill_missing_values(data, strategy: str = "mean"):
     """
     معالجة القيم المفقودة باستخدام استراتيجية محددة.
-
+    
     Parameters
     ----------
-    df : pd.DataFrame
-        إطار بيانات الإدخال.
+    data : pd.DataFrame أو pd.Series
+        إطار بيانات أو سلسلة بيانات.
     strategy : str, optional
         استراتيجية الملء، الخيارات: 'mean', 'median', 'mode', 'zero' (الافتراضي 'mean').
 
     Returns
     -------
-    pd.DataFrame
-        نسخة من DataFrame بعد ملء القيم المفقودة.
+    pd.DataFrame أو pd.Series
+        نسخة بعد ملء القيم المفقودة.
 
     Raises
     ------
     ValueError
-        إذا كانت الاستراتيجية غير مدعومة أو df None أو فارغ.
+        إذا كانت الاستراتيجية غير مدعومة أو البيانات None أو فارغة.
     """
-    if df is None or df.empty:
-        raise ValueError("Input DataFrame is None or empty.")
+    if data is None or (isinstance(data, (pd.DataFrame, pd.Series)) and data.empty):
+        raise ValueError("Input data is None or empty.")
 
     allowed_strategies = {"mean", "median", "mode", "zero"}
     if strategy not in allowed_strategies:
         raise ValueError(f"استراتيجية ملء غير مدعومة: {strategy}. الرجاء اختيار واحدة من {allowed_strategies}")
 
     logger.info(f"🧩 معالجة القيم المفقودة باستخدام: {strategy}")
-    df = df.copy()
+    data = data.copy()
 
-    for col in df.columns:
-        if df[col].isnull().sum() > 0:
+    if isinstance(data, pd.Series):
+        if data.isnull().sum() > 0:
             try:
-                if strategy == "mean" and pd.api.types.is_numeric_dtype(df[col]):
-                    if df[col].dropna().empty:
-                        logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب المتوسط.")
-                        continue
-                    df[col] = df[col].fillna(df[col].mean())
-                elif strategy == "median" and pd.api.types.is_numeric_dtype(df[col]):
-                    if df[col].dropna().empty:
-                        logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب الوسيط.")
-                        continue
-                    df[col] = df[col].fillna(df[col].median())
+                if strategy == "mean" and pd.api.types.is_numeric_dtype(data):
+                    if data.dropna().empty:
+                        logger.warning("⚠️ السلسلة لا تحتوي على قيم صالحة لحساب المتوسط.")
+                        return data
+                    return data.fillna(data.mean())
+                elif strategy == "median" and pd.api.types.is_numeric_dtype(data):
+                    if data.dropna().empty:
+                        logger.warning("⚠️ السلسلة لا تحتوي على قيم صالحة لحساب الوسيط.")
+                        return data
+                    return data.fillna(data.median())
                 elif strategy == "mode":
-                    mode_vals = df[col].mode()
+                    mode_vals = data.mode()
                     if mode_vals.empty:
-                        logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب الوضع (mode).")
-                        continue
-                    df[col] = df[col].fillna(mode_vals[0])
+                        logger.warning("⚠️ السلسلة لا تحتوي على قيم صالحة لحساب الوضع (mode).")
+                        return data
+                    return data.fillna(mode_vals[0])
                 elif strategy == "zero":
-                    df[col] = df[col].fillna(0)
+                    return data.fillna(0)
                 else:
-                    logger.warning(f"⚠️ لا يمكن تطبيق استراتيجية {strategy} على العمود '{col}'")
+                    logger.warning(f"⚠️ لا يمكن تطبيق استراتيجية {strategy} على السلسلة.")
             except Exception as e:
-                logger.error(f"❌ خطأ أثناء ملء العمود '{col}': {e}")
+                logger.error(f"❌ خطأ أثناء ملء السلسلة: {e}")
                 raise
-    return df
+        return data
+
+    elif isinstance(data, pd.DataFrame):
+        for col in data.columns:
+            if data[col].isnull().sum() > 0:
+                try:
+                    if strategy == "mean" and pd.api.types.is_numeric_dtype(data[col]):
+                        if data[col].dropna().empty:
+                            logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب المتوسط.")
+                            continue
+                        data[col] = data[col].fillna(data[col].mean())
+                    elif strategy == "median" and pd.api.types.is_numeric_dtype(data[col]):
+                        if data[col].dropna().empty:
+                            logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب الوسيط.")
+                            continue
+                        data[col] = data[col].fillna(data[col].median())
+                    elif strategy == "mode":
+                        mode_vals = data[col].mode()
+                        if mode_vals.empty:
+                            logger.warning(f"⚠️ العمود '{col}' لا يحتوي على قيم صالحة لحساب الوضع (mode).")
+                            continue
+                        data[col] = data[col].fillna(mode_vals[0])
+                    elif strategy == "zero":
+                        data[col] = data[col].fillna(0)
+                    else:
+                        logger.warning(f"⚠️ لا يمكن تطبيق استراتيجية {strategy} على العمود '{col}'")
+                except Exception as e:
+                    logger.error(f"❌ خطأ أثناء ملء العمود '{col}': {e}")
+                    raise
+        return data
+    else:
+        raise TypeError("❌ نوع البيانات غير مدعوم. يجب أن يكون DataFrame أو Series.")
+
 
 
 def encode_categoricals(df: pd.DataFrame, method: str = "label") -> pd.DataFrame:
