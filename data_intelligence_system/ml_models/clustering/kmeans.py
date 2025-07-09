@@ -1,13 +1,13 @@
-import os
-import joblib
 import logging
+import joblib
 from pathlib import Path
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
+# ✅ استيرادات من جذر المشروع
 from data_intelligence_system.utils.preprocessing import fill_missing_values, scale_numericals
 from data_intelligence_system.ml_models.base_model import BaseModel
-from data_intelligence_system.utils.timer import Timer  # ⏱️ تم الاستيراد الجديد
+from data_intelligence_system.utils.timer import Timer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -37,7 +37,7 @@ class KMeansClusteringModel(BaseModel):
         self.scaler_type = scaler_type
         self.is_fitted = False
 
-    @Timer("تدريب نموذج KMeans")  # ⏱️ إضافة ديكور قياس الزمن
+    @Timer("تدريب نموذج KMeans")
     def fit(self, X):
         """
         تدريب النموذج بعد التحجيم.
@@ -81,22 +81,28 @@ class KMeansClusteringModel(BaseModel):
         logger.info(f"📈 Silhouette Score: {score:.4f}")
         return score
 
-    def save(self, filepath=None):
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    def save(self):
+        """
+        حفظ النموذج.
+        """
+        if self.model is None:
+            raise ValueError("❌ لا يوجد نموذج لحفظه.")
+        self.model_path.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({
             "model": self.model,
             "scaler_type": self.scaler_type,
             "is_fitted": self.is_fitted
-        }, filepath)
-        logger.info(f"💾 تم حفظ النموذج في: {filepath}")
+        }, self.model_path)
+        logger.info(f"💾 تم حفظ النموذج في: {self.model_path}")
 
-    def load(self, filepath=None):
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        data = joblib.load(filepath)
+    def load(self):
+        """
+        تحميل النموذج.
+        """
+        if not self.model_path.exists():
+            raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {self.model_path}")
+        data = joblib.load(self.model_path)
         self.model = data["model"]
         self.scaler_type = data.get("scaler_type", "standard")
         self.is_fitted = data["is_fitted"]
-        logger.info(f"📥 تم تحميل النموذج من: {filepath}")
+        logger.info(f"📥 تم تحميل النموذج من: {self.model_path}")
