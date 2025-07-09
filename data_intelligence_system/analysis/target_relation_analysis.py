@@ -18,7 +18,7 @@ from data_intelligence_system.analysis.analysis_utils import (
     log_basic_info
 )
 from data_intelligence_system.utils.data_loader import load_data
-from data_intelligence_system.utils.timer import Timer  # ⏱️ التكامل الجديد
+from data_intelligence_system.utils.timer import Timer
 
 # إعداد المسارات
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -32,9 +32,10 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s �
 logger = logging.getLogger(__name__)
 
 
-# ======================== دوال التحليل ========================
-
 def anova_test(df, target, numerical_cols):
+    """
+    تنفيذ اختبار ANOVA بين الأعمدة الرقمية والمتغير الهدف.
+    """
     logger.info("🔍 تحليل ANOVA بين الأعمدة الرقمية والمتغير الهدف")
     results = []
     groups = df[target].dropna().unique()
@@ -54,6 +55,9 @@ def anova_test(df, target, numerical_cols):
 
 
 def chi_square_test(df, target, categorical_cols):
+    """
+    تنفيذ اختبار Chi-Square بين الأعمدة الفئوية والمتغير الهدف.
+    """
     logger.info("🔍 تحليل Chi-Square بين الأعمدة الفئوية والمتغير الهدف")
     results = []
     for col in categorical_cols:
@@ -70,16 +74,20 @@ def chi_square_test(df, target, categorical_cols):
 
 
 def encode_target(df, target):
+    """
+    ترميز المتغير الهدف إذا كان نصيًا أو بعدد فئات قليل.
+    """
     if df[target].dtype == 'object' or df[target].nunique() < 15:
         le = LabelEncoder()
         df[target] = le.fit_transform(df[target])
     return df
 
 
-# ======================== الدالة الداخلية ========================
-
 @Timer("تحليل العلاقة مع الهدف")
 def run_target_relation_analysis(df=None, target_col=None):
+    """
+    تحليل العلاقة بين المتغير الهدف وبقية الأعمدة باستخدام ANOVA وChi-Square.
+    """
     ensure_output_dir(OUTPUT_DIR)
 
     if df is None:
@@ -129,9 +137,9 @@ def run_target_relation_analysis(df=None, target_col=None):
                 sns.scatterplot(data=df, x=target, y=feature)
             plt.title(f"{feature} vs {target}")
             plot_path = OUTPUT_DIR / f"{fname}_{feature}_relation.png"
-            fig = plt.gcf()
-            save_plot(fig, plot_path)
-            plt.close(fig)
+            save_plot(plt.gcf(), plot_path)
+            plt.close()
+            logger.info(f"✅ تم حفظ الرسم: {plot_path}")
         except Exception as e:
             logger.warning(f"⚠️ فشل رسم العلاقة بين {feature} و {target}: {e}")
 
@@ -140,13 +148,12 @@ def run_target_relation_analysis(df=None, target_col=None):
     return summary
 
 
-# ======================== الواجهة الرسمية للدالة ========================
-
 def analyze_target_relation(df: pd.DataFrame, target: str = "target"):
+    """
+    واجهة رسمية للتحليل عبر الاستدعاء الخارجي.
+    """
     return run_target_relation_analysis(df, target_col=target)
 
-
-# ======================== تنفيذ مباشر ========================
 
 if __name__ == "__main__":
     run_target_relation_analysis()
