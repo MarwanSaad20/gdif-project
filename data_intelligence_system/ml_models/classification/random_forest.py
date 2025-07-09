@@ -39,38 +39,32 @@ class RandomForestModel(BaseModel):
         return self.preprocessor.transform_scaler(X)
 
     @Timer("تدريب نموذج Random Forest")
-    def fit(self, X, y, categorical_cols: Optional[List[str]] = None) -> dict:
+    def fit(self, X, y, categorical_cols=None):
+        """
+        تدريب النموذج وإرجاع مقاييس التقييم.
+        """
         if X is None or y is None or len(X) == 0 or len(y) == 0:
             raise ValueError("❌ بيانات التدريب فارغة أو None.")
         if len(X) != len(y):
             raise ValueError("❌ عدد العينات غير متطابق بين X و y.")
 
-        X = self._prepare_features(X, categorical_cols)
+        X = generate_derived_features(fill_missing_values(X))
 
-        X_train, X_test, y_train, y_test = self.preprocessor.split(X, y)
+        if categorical_cols:
+            df = X.assign(target=y)
+            X_train, X_test, y_train, y_test = self.preprocessor.preprocess(
+                df, target_col="target", categorical_cols=categorical_cols, scale=True
+            )
+        else:
+            X_train, X_test, y_train, y_test = self.preprocessor.split(X, y)
+
         self.model.fit(X_train, y_train)
         self.is_fitted = True
         logger.info("✅ تم تدريب نموذج Random Forest.")
 
         y_pred = self.model.predict(X_test)
-        return ClassificationMetrics.all_metrics(y_test, y_pred, average="binary")
+        return ClassificationMetrics.all_metrics(y_test, y_pred, average="weighted")
 
-    def predict(self, X, categorical_cols: Optional[List[str]] = None) -> Any:
-        self._check_is_fitted()
-        X_prepared = self._prepare_features(X, categorical_cols)
-        return self.model.predict(X_prepared)
-
-    def predict_proba(self, X, categorical_cols: Optional[List[str]] = None) -> Any:
-        self._check_is_fitted()
-        X_prepared = self._prepare_features(X, categorical_cols)
-        return self.model.predict_proba(X_prepared)
-
-    def evaluate(self, X, y, categorical_cols: Optional[List[str]] = None) -> dict:
-        self._check_is_fitted()
-        if X is None or y is None or len(X) == 0 or len(y) == 0:
-            raise ValueError("❌ بيانات التقييم فارغة أو None.")
-        y_pred = self.predict(X, categorical_cols)
-        return ClassificationMetrics.all_metrics(y, y_pred, average="binary")
 
     def save(self, filepath: Optional[str] = None) -> None:
         if self.model is None:
