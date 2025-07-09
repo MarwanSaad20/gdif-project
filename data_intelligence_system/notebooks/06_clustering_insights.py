@@ -12,17 +12,18 @@ from sklearn.metrics import (
     r2_score,
 )
 import joblib
+from pathlib import Path
 
 # ======= ضبط المسارات النسبية بناءً على مكان السكربت =======
 try:
-    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    project_root = Path(__file__).resolve().parents[1]  # مجلد data_intelligence_system
 except NameError:
-    project_root = os.path.abspath(os.path.join(os.getcwd(), "..", ".."))
+    project_root = Path.cwd().parents[1]  # عند تشغيل السكربت في بيئة لا تحتوي على __file__
 
-DATA_PATH = os.path.join(project_root, "data_intelligence_system", "data", "processed", "clean_data.csv")
-MODEL_PATH = os.path.join(project_root, "data_intelligence_system", "ml_models", "trained_model.pkl")
-EXPORT_DIR = os.path.join(project_root, "data_intelligence_system", "reports", "output")
-EXPORT_PATH = os.path.join(EXPORT_DIR, "predictions_output.csv")
+DATA_PATH = project_root / "data" / "processed" / "clean_data.csv"
+MODEL_PATH = project_root / "ml_models" / "trained_model.pkl"
+EXPORT_DIR = project_root / "reports" / "output"
+EXPORT_PATH = EXPORT_DIR / "predictions_output.csv"
 
 print(f"🔍 تحميل البيانات من: {DATA_PATH}")
 df = pd.read_csv(DATA_PATH)
@@ -50,7 +51,7 @@ if X.shape[1] == 0:
     sys.exit("🚫 لا توجد سمات رقمية مناسبة للنمذجة بعد إزالة عمود الهدف.")
 
 # ======= التحقق من وجود النموذج =======
-if not os.path.exists(MODEL_PATH):
+if not MODEL_PATH.exists():
     sys.exit(f"🚫 النموذج المدرب غير موجود في المسار: {MODEL_PATH}")
 
 # ======= تحميل النموذج =======
@@ -92,7 +93,7 @@ else:
     plt.show()
 
 # ======= حفظ التنبؤات =======
-os.makedirs(EXPORT_DIR, exist_ok=True)
+EXPORT_DIR.mkdir(parents=True, exist_ok=True)
 
 results_df = pd.DataFrame({
     'Actual': y,
