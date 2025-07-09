@@ -29,13 +29,14 @@ except NameError:
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-# استيراد الأدوات من مسار كامل بدءًا من data_intelligence_system
+# ✅ استيراد الأدوات من جذر المشروع
 from data_intelligence_system.utils.visualization import (
     plot_box,
     plot_distribution,
     interactive_scatter_matrix,
     plot_correlation_heatmap
 )
+from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
 
 # =====================
 # 📂 تحميل البيانات
@@ -111,3 +112,7 @@ if __name__ == "__main__":
     generate_distributions(df, numeric_cols)
     generate_scatter_matrix(df, numeric_cols)
     generate_correlation_heatmap(df, numeric_cols)
+
+    # ✅ مثال تكامل: توليد مصفوفة الارتباط (حتى لو لم تُستخدم مباشرة)
+    corr_matrix = generate_correlation_matrix(df)
+    print("✅ مصفوفة الارتباط تم توليدها بنجاح")
