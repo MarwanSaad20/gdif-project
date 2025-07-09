@@ -211,16 +211,30 @@ def encode_categoricals(df: pd.DataFrame, method: str = "label") -> pd.DataFrame
     return df
 
 
-def scale_numericals(df: pd.DataFrame, scaler: Optional[object] = None) -> pd.DataFrame:
+import logging
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from typing import Optional, Union
+
+logger = logging.getLogger(__name__)
+
+def scale_numericals(
+    df: pd.DataFrame,
+    scaler: Optional[Union[str, object]] = None
+) -> pd.DataFrame:
     """
-    موازنة الأعمدة الرقمية باستخدام StandardScaler أو scaler مخصص.
+    موازنة الأعمدة الرقمية باستخدام StandardScaler أو scaler مخصص أو اختيار عبر سلسلة نصية.
 
     Parameters
     ----------
     df : pd.DataFrame
         إطار بيانات الإدخال.
-    scaler : object, optional
-        كائن scaler (مثل StandardScaler)، إذا لم يُحدد يتم استخدام StandardScaler.
+    scaler : str or object, optional
+        يمكن أن يكون:
+        - None: يستخدم StandardScaler.
+        - str: "standard" أو "minmax" لتحديد نوع الscaler.
+        - كائن scaler (مثل StandardScaler)، يستخدم مباشرة.
 
     Returns
     -------
@@ -243,12 +257,23 @@ def scale_numericals(df: pd.DataFrame, scaler: Optional[object] = None) -> pd.Da
         return df
 
     if scaler is None:
-        scaler = StandardScaler()
+        scaler_obj = StandardScaler()
+    elif isinstance(scaler, str):
+        if scaler.lower() == "standard":
+            scaler_obj = StandardScaler()
+        elif scaler.lower() == "minmax":
+            scaler_obj = MinMaxScaler()
+        else:
+            raise ValueError(f"نوع الscaler غير مدعوم: {scaler}")
+    else:
+        # نفترض أنه كائن scaler جاهز
+        scaler_obj = scaler
 
     try:
-        df[num_cols] = scaler.fit_transform(df[num_cols])
+        df[num_cols] = scaler_obj.fit_transform(df[num_cols])
     except Exception as e:
         logger.error(f"❌ فشل في موازنة الأعمدة الرقمية: {e}")
         raise
 
     return df
+
