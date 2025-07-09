@@ -7,6 +7,7 @@ import os
 import pandas as pd
 import warnings
 import plotly.io as pio
+from pathlib import Path
 
 # ⚙️ إعداد بيئة العرض لرسوم Plotly
 try:
@@ -16,10 +17,16 @@ except Exception:
 
 warnings.filterwarnings("ignore")
 
-# 🛠️ إضافة جذر المشروع إلى sys.path
-project_root = os.path.abspath(os.path.join(os.getcwd(), ".."))
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
+# 🛠️ ضبط جذر المشروع بشكل صحيح من pathlib
+try:
+    project_root = Path(__file__).resolve().parents[2]  # نصعد مرتين لجذر المشروع PythonProject10
+except NameError:
+    project_root = Path.cwd().parents[1]
+
+# أضف مجلد data_intelligence_system إلى sys.path لاستيراد utils بسهولة
+project_path = project_root / "data_intelligence_system"
+if str(project_path) not in sys.path:
+    sys.path.insert(0, str(project_path))
 
 from utils.visualization import (
     plot_box,
@@ -28,12 +35,15 @@ from utils.visualization import (
     plot_correlation_heatmap
 )
 
+
 # =====================
 # 📂 تحميل البيانات
 # =====================
 
 def load_clean_data():
-    data_path = os.path.join(project_root, "data", "processed", "clean_data.csv")
+    data_path = project_path / "data" / "processed" / "clean_data.csv"
+    if not data_path.exists():
+        raise FileNotFoundError(f"الملف غير موجود: {data_path}")
     df = pd.read_csv(data_path)
     print(f"✅ تم تحميل البيانات: {df.shape}")
     return df
