@@ -10,6 +10,7 @@ from sklearn.metrics import (
     accuracy_score, classification_report, confusion_matrix,
     mean_absolute_error, r2_score
 )
+from sklearn.preprocessing import LabelEncoder
 import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
@@ -86,18 +87,12 @@ def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
     if y_full.nunique() <= 10:
         print("📌 نوع المسألة: تصنيف (Classification)")
 
-        # مثال: تجربة نموذج XGBoost إلى جانب RandomForest
+        # تدريب وتقييم RandomForest كما هو
         rf_model = RandomForestModel()
         rf_model.fit(X_train, y_train)
         y_pred_rf = rf_model.predict(X_test)
 
-        xgb_model = XGBoostClassifierModel()
-        xgb_model.fit(X_train, y_train)
-        y_pred_xgb = xgb_model.predict(X_test)
-
-        # تقييم RandomForest
-        acc_rf = accuracy_score(y_test, y_pred_rf)
-        print(f"✅ RandomForest دقة (Accuracy): {acc_rf:.4f}\n")
+        print(f"✅ RandomForest دقة (Accuracy): {accuracy_score(y_test, y_pred_rf):.4f}")
         print("🔎 تقرير التصنيف RandomForest:")
         print(classification_report(y_test, y_pred_rf))
 
@@ -111,9 +106,17 @@ def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
         plt.savefig("confusion_matrix_random_forest.png")
         plt.show()
 
-        # تقييم XGBoost
-        acc_xgb = accuracy_score(y_test, y_pred_xgb)
-        print(f"✅ XGBoost دقة (Accuracy): {acc_xgb:.4f}\n")
+        # ترميز الهدف لـ XGBoost
+        le = LabelEncoder()
+        y_train_enc = le.fit_transform(y_train)
+        y_test_enc = le.transform(y_test)
+
+        xgb_model = XGBoostClassifierModel()
+        xgb_model.fit(X_train, y_train_enc)
+        y_pred_xgb_enc = xgb_model.predict(X_test)
+        y_pred_xgb = le.inverse_transform(y_pred_xgb_enc)
+
+        print(f"✅ XGBoost دقة (Accuracy): {accuracy_score(y_test, y_pred_xgb):.4f}")
         print("🔎 تقرير التصنيف XGBoost:")
         print(classification_report(y_test, y_pred_xgb))
 
