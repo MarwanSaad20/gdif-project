@@ -19,6 +19,7 @@ from data_intelligence_system.analysis.analysis_utils import (
 )
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.timer import Timer
+from data_intelligence_system.ml_models.clustering.kmeans import KMeansClusteringModel  # تحديث الاستيراد لاستخدام الكلاس
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
@@ -33,17 +34,18 @@ ensure_output_dir(CLUSTERING_RESULTS_DIR)
 
 def apply_kmeans(data: np.ndarray, n_clusters: int = 3) -> tuple[np.ndarray, float, float | None]:
     """
-    تطبق خوارزمية KMeans على البيانات.
+    تطبق خوارزمية KMeans على البيانات باستخدام كلاس KMeansClusteringModel.
 
     Returns:
         labels (np.ndarray): تسميات المجموعات.
         inertia (float): مجموع المربعات داخل المجموعات.
         silhouette (float | None): درجة السيلويت (None إذا كانت المجموعات أقل من 2).
     """
-    model = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
-    labels = model.fit_predict(data)
-    inertia = model.inertia_
-    silhouette = silhouette_score(data, labels) if n_clusters > 1 else None
+    model = KMeansClusteringModel(n_clusters=n_clusters, random_state=42)
+    model.fit(pd.DataFrame(data))  # تحويل np.ndarray إلى DataFrame لاستخدام المعالجة الداخلية
+    labels = model.predict(pd.DataFrame(data))
+    inertia = model.model.inertia_
+    silhouette = model.evaluate(pd.DataFrame(data)) if n_clusters > 1 else None
     return labels, inertia, silhouette
 
 
