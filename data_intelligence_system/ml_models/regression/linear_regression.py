@@ -9,7 +9,7 @@ from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.data.processed.scale_numericals import scale_numericals
-from data_intelligence_system.utils.timer import Timer  # ⏱️ تم إضافة التكامل مع timer.py
+from data_intelligence_system.utils.timer import Timer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -20,14 +20,14 @@ class LinearRegressionModel(BaseModel):
     نموذج انحدار خطي مبني على scikit-learn، مع دعم تحجيم البيانات.
     """
 
-    def __init__(self, model_name="linear_regression", model_dir=Path("ml_models/saved_models"), scaler_type="standard"):
+    def __init__(self, model_name="linear_regression", model_dir=Path("data_intelligence_system/ml_models/saved_models"), scaler_type="standard"):
         super().__init__(model_name, model_dir)
         self.model = LinearRegression()
         self.scaler_type = scaler_type
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
-    @Timer("تدريب نموذج الانحدار الخطي")  # ⏱️ لقياس زمن التدريب
+    @Timer("تدريب نموذج الانحدار الخطي")
     def fit(self, X, y):
         """تدريب النموذج بعد التحقق من المدخلات"""
         if isinstance(X, pd.DataFrame):
