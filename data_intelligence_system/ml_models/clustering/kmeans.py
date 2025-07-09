@@ -26,7 +26,7 @@ class KMeansClusteringModel(BaseModel):
         """
         نموذج KMeans للتجميع غير الخاضع للإشراف.
         """
-        super().__init__(model_name="kmeans_clustering", model_dir="ml_models/saved_models")
+        super().__init__(model_name="kmeans_clustering", model_dir="data_intelligence_system/ml_models/saved_models")
         self.model = KMeans(
             n_clusters=n_clusters,
             init=init,
