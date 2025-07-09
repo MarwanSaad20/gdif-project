@@ -10,7 +10,6 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 
-# استيرادات من جذر المشروع
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
     get_numerical_columns,
@@ -19,13 +18,11 @@ from data_intelligence_system.analysis.analysis_utils import (
     log_basic_info
 )
 from data_intelligence_system.utils.data_loader import load_data
-from data_intelligence_system.utils.timer import Timer  # ⏱️ تكامل مع نظام التوقيت
+from data_intelligence_system.utils.timer import Timer
 
-# إعدادات اللوجر
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
 
-# مسارات المشروع
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data" / "processed"
 OUTPUT_DIR = BASE_DIR / "analysis" / "analysis_output"
@@ -34,9 +31,15 @@ CLUSTERING_RESULTS_DIR = OUTPUT_DIR / "clustering"
 ensure_output_dir(CLUSTERING_RESULTS_DIR)
 
 
-# ================= دوال التجميع =================
+def apply_kmeans(data: np.ndarray, n_clusters: int = 3) -> tuple[np.ndarray, float, float | None]:
+    """
+    تطبق خوارزمية KMeans على البيانات.
 
-def apply_kmeans(data, n_clusters=3):
+    Returns:
+        labels (np.ndarray): تسميات المجموعات.
+        inertia (float): مجموع المربعات داخل المجموعات.
+        silhouette (float | None): درجة السيلويت (None إذا كانت المجموعات أقل من 2).
+    """
     model = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
     labels = model.fit_predict(data)
     inertia = model.inertia_
@@ -44,18 +47,39 @@ def apply_kmeans(data, n_clusters=3):
     return labels, inertia, silhouette
 
 
-def apply_dbscan(data, eps=0.5, min_samples=5):
+def apply_dbscan(data: np.ndarray, eps: float = 0.5, min_samples: int = 5) -> np.ndarray:
+    """
+    تطبق خوارزمية DBSCAN على البيانات.
+
+    Returns:
+        labels (np.ndarray): تسميات المجموعات، -1 تعني ضوضاء.
+    """
     model = DBSCAN(eps=eps, min_samples=min_samples)
     labels = model.fit_predict(data)
     return labels
 
 
-def reduce_dimensions(data, n_components=2):
+def reduce_dimensions(data: np.ndarray, n_components: int = 2) -> np.ndarray:
+    """
+    تقليل الأبعاد باستخدام PCA.
+
+    Returns:
+        data_2d (np.ndarray): بيانات منخفضة الأبعاد.
+    """
     pca = PCA(n_components=n_components)
     return pca.fit_transform(data)
 
 
-def plot_clusters(data_2d, labels, title, path):
+def plot_clusters(data_2d: np.ndarray, labels: np.ndarray, title: str, path: Path) -> None:
+    """
+    رسم المجموعات ثنائية الأبعاد وحفظ الرسم.
+
+    Args:
+        data_2d: بيانات ثنائية الأبعاد.
+        labels: تسميات المجموعات.
+        title: عنوان الرسم.
+        path: مسار حفظ الصورة.
+    """
     plt.figure(figsize=(8, 6))
     unique_labels = np.unique(labels)
     palette = sns.color_palette('Set2', n_colors=len(unique_labels))
@@ -76,6 +100,12 @@ def run_clustering(df: pd.DataFrame,
                    dbscan_eps: float = 0.5,
                    dbscan_min_samples: int = 5,
                    output_filename: str = "clustered_data.csv") -> dict:
+    """
+    تنفيذ تحليل التجميع على DataFrame وحفظ النتائج.
+
+    Returns:
+        dict: ملخص النتائج مع مسارات الملفات.
+    """
     try:
         log_basic_info(df, output_filename)
 
@@ -92,12 +122,13 @@ def run_clustering(df: pd.DataFrame,
         df_scaled = StandardScaler().fit_transform(df_clean)
         df_2d = reduce_dimensions(df_scaled)
 
-        if algorithm.lower() == "kmeans":
+        algo_lower = algorithm.lower()
+        if algo_lower == "kmeans":
             labels, inertia, silhouette = apply_kmeans(df_scaled, n_clusters=n_clusters)
             df.loc[df_clean.index, "cluster"] = labels
             algo_desc = f"kmeans_{n_clusters}"
             plot_title = f"KMeans Clustering (k={n_clusters})"
-        elif algorithm.lower() == "dbscan":
+        elif algo_lower == "dbscan":
             labels = apply_dbscan(df_scaled, eps=dbscan_eps, min_samples=dbscan_min_samples)
             df.loc[df_clean.index, "cluster"] = labels
             inertia = None
@@ -117,7 +148,7 @@ def run_clustering(df: pd.DataFrame,
         logger.info(f"✅ تم حفظ نتائج التجميع: {result_path}")
         return {
             "algorithm": algorithm,
-            "n_clusters": n_clusters if algorithm.lower() == "kmeans" else None,
+            "n_clusters": n_clusters if algo_lower == "kmeans" else None,
             "cluster_counts": pd.Series(labels).value_counts().to_dict(),
             "clustered_file": str(result_path),
             "plot_file": str(plot_path),
@@ -130,7 +161,10 @@ def run_clustering(df: pd.DataFrame,
         return {}
 
 
-def run_batch_clustering():
+def run_batch_clustering() -> None:
+    """
+    تشغيل التجميع على دفعة من ملفات CSV في مجلد البيانات وحفظ الملخص.
+    """
     summary = []
     if not DATA_DIR.exists():
         logger.error(f"❌ مجلد البيانات غير موجود: {DATA_DIR}")
