@@ -14,13 +14,13 @@ from data_intelligence_system.analysis.analysis_utils import (
     log_basic_info
 )
 from data_intelligence_system.utils.data_loader import load_data
-from data_intelligence_system.utils.timer import Timer  # ⏱️
+from data_intelligence_system.utils.timer import Timer
 
 # إعداد المسارات
 BASE_DIR = Path(__file__).resolve().parents[2]
-OUTPUT_DIR = BASE_DIR / 'data_intelligence_system' / 'analysis' / 'analysis_output'
+OUTPUT_DIR = BASE_DIR / "data_intelligence_system" / "analysis" / "analysis_output"
 
-# إعداد اللوغ
+# إعداد اللوغر
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -28,10 +28,10 @@ logger = logging.getLogger(__name__)
 # ==================== دوال التحليل ====================
 
 def calculate_correlation(df: pd.DataFrame, method: str = "pearson") -> pd.DataFrame:
-    numerical_cols = get_numerical_columns(df)
-    if not numerical_cols:
+    numeric_df = df.select_dtypes(include=[np.number])
+    if numeric_df.empty:
         raise ValueError("❌ لا توجد أعمدة رقمية لحساب الارتباط.")
-    return df[numerical_cols].corr(method=method)
+    return numeric_df.corr(method=method)
 
 
 def plot_correlation_heatmap(corr_matrix: pd.DataFrame, method: str, filename: str, output_dir: Path = OUTPUT_DIR):
@@ -81,21 +81,16 @@ def run_correlation_analysis(df: pd.DataFrame, method: str = "pearson", output_d
         return {}
 
 
-def compute_correlations(df: pd.DataFrame, method: str = "pearson") -> pd.DataFrame:
-    numeric_df = df.select_dtypes(include=np.number)
-    if numeric_df.empty:
-        raise ValueError("❌ لا توجد أعمدة رقمية لحساب الارتباط.")
-    return numeric_df.corr(method=method)
-
-
+# نسخة مبسطة فقط لحساب مصفوفة الارتباط (للاستخدام السريع)
 def generate_correlation_matrix(df: pd.DataFrame, method: str = "pearson") -> pd.DataFrame:
-    return compute_correlations(df, method)
+    return calculate_correlation(df, method)
 
 
+# ==================== نقطة التشغيل ====================
 if __name__ == "__main__":
-    test_file = BASE_DIR / 'data_intelligence_system' / 'data' / 'processed' / 'clean_data.csv'
+    test_file = BASE_DIR / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
     if test_file.exists():
-        df_test = load_data(str(test_file))  # ✅ استخدام الدالة الموحدة
+        df_test = load_data(str(test_file))
         results = run_correlation_analysis(df_test, method="pearson")
         print(results)
     else:
