@@ -6,14 +6,14 @@ from typing import Dict, Any, Union
 from pathlib import Path
 
 # === إعداد المسارات ===
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parents[2]
 DATA_DIR = BASE_DIR / "data_intelligence_system" / "data" / "processed"
 OUTPUT_DIR = BASE_DIR / "data_intelligence_system" / "analysis" / "analysis_output"
 
 # === استيراد الأدوات المساعدة من جذر المشروع ===
 from data_intelligence_system.analysis.analysis_utils import ensure_output_dir
 from data_intelligence_system.utils.data_loader import load_data
-from data_intelligence_system.utils.visualization.visuals_static import plot_distribution
+from data_intelligence_system.analysis.analysis_utils import plot_distribution
 from data_intelligence_system.utils.timer import Timer  # ⏱️ التوقيت
 
 # === إعداد اللوجر ===
@@ -74,9 +74,8 @@ def generate_numeric_histograms(df: pd.DataFrame, filename_prefix: str, output_d
     numeric_cols = df.select_dtypes(include=[np.number]).columns
 
     for col in numeric_cols:
-        save_path = output_dir / f"{filename_prefix}_distribution_{col}.png"
         try:
-            plot_distribution(df, column=col, bins=bins, save_path=str(save_path))
+            plot_distribution(df, column=col, output_name=f"{filename_prefix}_distribution_{col}.png", output_dir=output_dir)
         except Exception as e:
             logger.warning(f"⚠️ فشل رسم العمود '{col}': {e}")
 
