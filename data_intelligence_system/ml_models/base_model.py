@@ -6,7 +6,7 @@ from datetime import datetime
 import logging
 
 from data_intelligence_system.utils.preprocessing import fill_missing_values
-from data_intelligence_system.utils.timer import Timer  # ✅ مضاف
+from data_intelligence_system.utils.timer import Timer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -18,16 +18,11 @@ if not logger.hasHandlers():
 
 class BaseModel(ABC):
     """
-    كلاس أساسي مجرد (abstract) لجميع نماذج تعلم الآلة.
-    يوفر واجهة موحدة للوراثة تشمل التدريب، التنبؤ، التقييم، الحفظ والتحميل.
+    كلاس أساسي مجرد لجميع نماذج تعلم الآلة.
+    يوفر واجهة موحدة تشمل التدريب، التنبؤ، التقييم، الحفظ والتحميل.
     """
 
     def __init__(self, model_name: str, model_dir: str = "ml_models/saved_models"):
-        """
-        Args:
-            model_name (str): اسم النموذج، يستخدم في حفظ الملفات.
-            model_dir (str): مسار حفظ النماذج.
-        """
         self.model_name = model_name
         self.model_dir = Path(model_dir)
         self.model_path = self.model_dir / f"{self.model_name}.pkl"
@@ -38,7 +33,9 @@ class BaseModel(ABC):
 
     @abstractmethod
     def fit(self, X, y=None):
-        """تدريب النموذج. يجب تنفيذه في الفئات الفرعية."""
+        """
+        تدريب النموذج. يجب تنفيذه في الفئات الفرعية.
+        """
         if hasattr(fill_missing_values, "__call__"):
             if X is not None:
                 try:
@@ -54,17 +51,20 @@ class BaseModel(ABC):
 
     @abstractmethod
     def predict(self, X):
-        """توليد التنبؤات. يجب تنفيذه في الفئات الفرعية."""
+        """
+        توليد التنبؤات. يجب تنفيذه في الفئات الفرعية.
+        """
         raise NotImplementedError
 
     @abstractmethod
     def evaluate(self, X, y):
-        """تقييم النموذج. يجب تنفيذه في الفئات الفرعية."""
+        """
+        تقييم النموذج. يجب تنفيذه في الفئات الفرعية.
+        """
         raise NotImplementedError
 
     @Timer("💾 حفظ النموذج")
     def save(self):
-        """حفظ النموذج إلى ملف باستخدام joblib."""
         if self.model is None:
             raise ValueError("لا يوجد نموذج لحفظه.")
         try:
@@ -76,7 +76,6 @@ class BaseModel(ABC):
 
     @Timer("📥 تحميل النموذج")
     def load(self):
-        """تحميل النموذج من ملف."""
         if not self.model_path.exists():
             raise FileNotFoundError(f"لم يتم العثور على ملف النموذج: {self.model_path}")
         try:
@@ -89,18 +88,18 @@ class BaseModel(ABC):
             raise
 
     def _check_is_fitted(self):
-        """تأكد أن النموذج مدرب قبل التنبؤ أو التقييم."""
         if not self.is_fitted:
             raise RuntimeError("النموذج لم يتم تدريبه بعد. الرجاء استدعاء fit() أولاً.")
 
     @Timer("📋 استعلام معلومات النموذج")
     def info(self):
-        """إظهار معلومات عامة عن النموذج."""
         exists = self.model_path.exists()
-        info = {
+        return {
             "model_name": self.model_name,
             "model_path": str(self.model_path),
             "is_fitted": self.is_fitted,
             "last_modified": datetime.fromtimestamp(self.model_path.stat().st_mtime).isoformat() if exists else "N/A"
         }
-        return info
+
+    def __repr__(self):
+        return f"<BaseModel(name={self.model_name}, fitted={self.is_fitted})>"
