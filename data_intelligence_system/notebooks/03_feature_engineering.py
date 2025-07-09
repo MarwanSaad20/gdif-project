@@ -67,7 +67,7 @@ def generate_datetime_features(df):
     for col in object_cols:
         try:
             sample = df[col].dropna().iloc[0]
-            pd.to_datetime(sample)  # محاولة أولية
+            pd.to_datetime(sample)  # محاولة أولية للتحقق
             df[col] = pd.to_datetime(df[col], errors='coerce')
             df[f"{col}_year"] = df[col].dt.year
             df[f"{col}_month"] = df[col].dt.month
@@ -97,9 +97,9 @@ def feature_importance_analysis(df):
     y = df[target]
 
     if y.nunique() <= 10:
-        model = RandomForestClassifier()
+        model = RandomForestClassifier(random_state=42)
     else:
-        model = RandomForestRegressor()
+        model = RandomForestRegressor(random_state=42)
 
     model.fit(X, y)
     importances = pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)
