@@ -17,8 +17,16 @@ logging.basicConfig(level=logging.INFO)
 
 
 class RidgeRegressionModel(BaseModel):
-    def __init__(self, alpha=1.0, max_iter=None, tol=1e-4, random_state=None, solver='auto',
-                 scaler_type="standard", **kwargs):
+    def __init__(
+        self,
+        alpha: float = 1.0,
+        max_iter: int | None = None,
+        tol: float = 1e-4,
+        random_state: int | None = None,
+        solver: str = 'auto',
+        scaler_type: str = "standard",
+        **kwargs,
+    ):
         """
         نموذج Ridge Regression مع دعم تحجيم البيانات.
         """
@@ -34,25 +42,39 @@ class RidgeRegressionModel(BaseModel):
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
+    def _prepare_inputs(self, X, y=None):
+        """
+        تحويل المدخلات إلى DataFrame/Series، وملء القيم المفقودة، والتأكد من صحة الأبعاد.
+        """
+        if not isinstance(X, pd.DataFrame):
+            X = pd.DataFrame(X)
+        else:
+            X = X.copy()
+
+        X = fill_missing_values(X)
+        if y is not None:
+            if not isinstance(y, (pd.Series, np.ndarray)):
+                y = pd.Series(y)
+            else:
+                y = pd.Series(y)
+
+            y = fill_missing_values(y)
+            if X.shape[0] != y.shape[0]:
+                raise ValueError("❌ عدد العينات في X و y غير متطابق")
+            if np.isnan(X.values).any():
+                raise ValueError("❌ توجد قيم مفقودة في X بعد المعالجة")
+            if np.isnan(y.values).any():
+                raise ValueError("❌ توجد قيم مفقودة في y بعد المعالجة")
+            return X, y
+
+        if np.isnan(X.values).any():
+            raise ValueError("❌ توجد قيم مفقودة في X بعد المعالجة")
+        return X
+
     @Timer("⏱️ تدريب نموذج Ridge Regression")
     def fit(self, X, y):
         """تدريب النموذج"""
-        if isinstance(X, pd.DataFrame):
-            X = X.copy()
-        else:
-            X = pd.DataFrame(X)
-
-        if isinstance(y, (pd.Series, np.ndarray)):
-            y = pd.Series(y)
-        else:
-            y = pd.Series(y)
-
-        X = fill_missing_values(X)
-        y = fill_missing_values(y)
-
-        assert X.shape[0] == y.shape[0], "❌ عدد العينات غير متطابق بين X و y"
-        assert not np.isnan(X).any().any(), "❌ توجد قيم مفقودة في X"
-        assert not np.isnan(y).any(), "❌ توجد قيم مفقودة في y"
+        X, y = self._prepare_inputs(X, y)
 
         X = scale_numericals(X)
         y = scale_numericals(pd.DataFrame(y)).squeeze()
@@ -64,15 +86,9 @@ class RidgeRegressionModel(BaseModel):
     def predict(self, X, inverse_transform=True):
         """تنبؤ"""
         self._check_is_fitted()
-        if isinstance(X, pd.DataFrame):
-            X = X.copy()
-        else:
-            X = pd.DataFrame(X)
+        X = self._prepare_inputs(X)
 
-        X = fill_missing_values(X)
-        X = scale_numericals(X)
-
-        predictions = self.model.predict(X)
+        predictions = self.model.predict(scale_numericals(X))
 
         if inverse_transform and self.preprocessor:
             predictions = self.preprocessor.inverse_transform_scaler(predictions.reshape(-1, 1)).flatten()
@@ -81,20 +97,9 @@ class RidgeRegressionModel(BaseModel):
 
     def evaluate(self, X, y, inverse_transform=True):
         """تقييم النموذج"""
-        if isinstance(X, pd.DataFrame):
-            X = X.copy()
-        else:
-            X = pd.DataFrame(X)
-
-        if isinstance(y, (pd.Series, np.ndarray)):
-            y = pd.Series(y)
-        else:
-            y = pd.Series(y)
-
-        X = fill_missing_values(X)
-        y = fill_missing_values(y)
-
+        X, y = self._prepare_inputs(X, y)
         self._check_is_fitted()
+
         predictions = self.predict(X, inverse_transform=inverse_transform)
         mse = mean_squared_error(y, predictions)
         mae = mean_absolute_error(y, predictions)
@@ -102,10 +107,10 @@ class RidgeRegressionModel(BaseModel):
         logger.info(f"[📊] تقييم Ridge:\n - MAE: {mae:.4f}\n - MSE: {mse:.4f}\n - R²: {r2:.4f}")
         return {"mae": mae, "mse": mse, "r2": r2}
 
-    def save(self, filepath=None):
+    def save(self, filepath: Path | None = None):
         """حفظ النموذج"""
         if not filepath:
-            filepath = self.model_dir / f"{self.model_name}.pkl"
+            filepath = self.model_path
         filepath.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({
             "model": self.model,
@@ -114,13 +119,19 @@ class RidgeRegressionModel(BaseModel):
         }, filepath)
         logger.info(f"💾 تم حفظ النموذج في: {filepath}")
 
-    def load(self, filepath=None):
+    def load(self, filepath: Path | None = None):
         """تحميل النموذج"""
         if not filepath:
-            filepath = self.model_dir / f"{self.model_name}.pkl"
+            filepath = self.model_path
+        if not filepath.exists():
+            raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {filepath}")
         data = joblib.load(filepath)
         self.model = data["model"]
         self.preprocessor = data.get("preprocessor", None)
-        self.is_fitted = data["is_fitted"]
+        self.is_fitted = data.get("is_fitted", False)
         logger.info(f"📥 تم تحميل النموذج من: {filepath}")
         return self
+
+    def __repr__(self):
+        return (f"<RidgeRegressionModel(alpha={self.alpha}, max_iter={self.max_iter}, tol={self.tol}, "
+                f"solver='{self.solver}', scaler_type='{self.scaler_type}', is_fitted={self.is_fitted})>")
