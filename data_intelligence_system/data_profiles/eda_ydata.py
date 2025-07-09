@@ -1,9 +1,12 @@
 from pathlib import Path
 from ydata_profiling import ProfileReport
 from ydata_profiling.config import Settings  # استيراد إعدادات التهيئة
-from eda_utils import load_clean_data, logger
 
-# تحديد جذر المشروع بالنسبة لهذا الملف (عدّل حسب موقع ملفك)
+# ✅ استيراد من جذر المشروع
+from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
+from data_intelligence_system.notebooks.eda_utils import load_clean_data, logger
+
+# تحديد جذر المشروع
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEFAULT_DATA_PATH = BASE_DIR / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
 
@@ -36,6 +39,10 @@ def generate_ydata_report(
     try:
         df = load_clean_data(path=str(data_path))
 
+        # ✅ تجهيز مصفوفة الارتباط للاستخدام المحتمل في التقرير (حاليًا لا تُستخدم مباشرة)
+        corr_matrix = generate_correlation_matrix(df)
+        logger.info(f"✅ مصفوفة الارتباط:\n{corr_matrix}")
+
         # إعداد التهيئة الصحيحة لـ correlations
         settings = Settings(
             correlations={
@@ -59,7 +66,7 @@ def generate_ydata_report(
         profile.to_file(html_output)
         logger.info(f"📄 تم حفظ تقرير HTML في: {html_output}")
 
-        # حفظ التقرير كـ JSON (باستخدام to_json() وليس to_file() لأن to_file لا تدعم JSON)
+        # حفظ التقرير كـ JSON
         json_str = profile.to_json()
         with open(json_output, 'w', encoding='utf-8') as f:
             f.write(json_str)
