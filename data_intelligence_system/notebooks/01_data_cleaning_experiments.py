@@ -11,18 +11,18 @@ from pathlib import Path
 import sys
 
 # ======================
-# 🧩 استيراد معاينة البيانات والتحقق
+# 🧩 إعداد الجذر واستيراد دوال المراجعة
 # ======================
 try:
-    project_root = Path(__file__).resolve().parents[2]  # ✅ تم تصحيح مستوى الجذر
+    project_root = Path(__file__).resolve().parents[1]  # ← جذر المشروع
 except NameError:
     project_root = Path.cwd().parents[1]
 
 if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))  # ✅ إضافة جذر المشروع إلى sys.path
+    sys.path.insert(0, str(project_root))  # ← إضافة جذر المشروع للمسار
 
 from data_intelligence_system.data.processed.clean_preview import preview
-from data_intelligence_system.data.processed.validate_clean_data import validate  # ✅ مضاف حديثًا
+from data_intelligence_system.data.processed.validate_clean_data import validate
 
 # ======================
 # 📂 تحميل البيانات
@@ -41,6 +41,7 @@ def load_data():
     except Exception as e:
         print(f"⚠️ فشل التحقق من البيانات: {e}")
     return df, project_root
+
 
 # ==========================
 # 📉 التعامل مع القيم المفقودة
