@@ -14,15 +14,15 @@ import sys
 # 🧩 استيراد معاينة البيانات والتحقق
 # ======================
 try:
-    project_root = Path(__file__).resolve().parents[1]
+    project_root = Path(__file__).resolve().parents[2]  # ✅ تم تصحيح مستوى الجذر
 except NameError:
     project_root = Path.cwd().parents[1]
 
-sys.path.append(str(project_root / "data_intelligence_system"))
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))  # ✅ إضافة جذر المشروع إلى sys.path
 
-from data.processed.clean_preview import preview
-from data.processed.validate_clean_data import validate  # ✅ مضاف حديثًا
-
+from data_intelligence_system.data.processed.clean_preview import preview
+from data_intelligence_system.data.processed.validate_clean_data import validate  # ✅ مضاف حديثًا
 
 # ======================
 # 📂 تحميل البيانات
@@ -42,7 +42,6 @@ def load_data():
         print(f"⚠️ فشل التحقق من البيانات: {e}")
     return df, project_root
 
-
 # ==========================
 # 📉 التعامل مع القيم المفقودة
 # ==========================
@@ -58,7 +57,6 @@ def handle_missing_values(df):
     print(f"🔍 عدد القيم المفقودة بعد المعالجة: {df.isnull().sum().sum()}")
     return df
 
-
 # =====================
 # 🧱 توحيد أسماء الأعمدة
 # =====================
@@ -66,7 +64,6 @@ def handle_missing_values(df):
 def standardize_column_names(df):
     df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
     return df
-
 
 # =====================
 # 🔠 ترميز الأعمدة النوعية
@@ -76,7 +73,6 @@ def encode_categorical_columns(df):
     cat_cols = df.select_dtypes(include='object').columns.tolist()
     df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
     return df
-
 
 # ======================
 # 📊 موازنة القيم الرقمية
@@ -88,7 +84,6 @@ def scale_numeric_columns(df):
     df[num_cols] = scaler.fit_transform(df[num_cols])
     return df, num_cols
 
-
 # ======================
 # ✅ التحقق من الجودة
 # ======================
@@ -97,7 +92,6 @@ def check_quality(df, num_cols):
     print("🧪 التحقق من نطاق أول 5 أعمدة رقمية:")
     for col in num_cols[:5]:
         print(f"{col}: min={df[col].min():.2f}, max={df[col].max():.2f}")
-
 
 # ========================
 # 📈 رسم التوزيعات الرقمية
@@ -109,7 +103,6 @@ def plot_distributions(df, num_cols):
     plt.tight_layout()
     plt.show()
 
-
 # ========================
 # 💾 حفظ البيانات النظيفة
 # ========================
@@ -118,7 +111,6 @@ def save_clean_data(df, project_root):
     output_path = project_root / "data_intelligence_system" / "data" / "processed" / "clean_data_transformed.csv"
     df.to_csv(output_path, index=False)
     print(f"[✓] تم حفظ البيانات في: {output_path}")
-
 
 # ========================
 # 🚀 نقطة تشغيل السكربت
