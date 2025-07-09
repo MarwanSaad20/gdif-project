@@ -1,13 +1,19 @@
 import os
 from pathlib import Path
+import sys
 import pandas as pd
 from ydata_profiling import ProfileReport
 
-from eda_utils import load_clean_data, logger  # يجب أن يحتوي على load_clean_data و logger
+# ✅ إضافة مسار الجذر للمشروع
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+sys.path.append(str(BASE_DIR))
+
+# ✅ استيراد من جذر المشروع
+from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
+from data_intelligence_system.data_profiles.eda_utils import load_clean_data, logger
 
 # 🧭 المسارات
-BASE_DIR = Path(__file__).resolve().parent.parent
-DEFAULT_DATA_PATH = BASE_DIR / "data" / "processed" / "clean_data.csv"
+DEFAULT_DATA_PATH = BASE_DIR / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
 OUTPUT_DIR = BASE_DIR / "data_profiles" / "eda_output"
 REPORT_NAME = "eda_profile_report.html"
 REPORT_PATH = OUTPUT_DIR / REPORT_NAME
@@ -39,6 +45,10 @@ def generate_profile_report(
             logger.error(f"❌ الملف موجود لكنه فارغ: {data_path}")
             raise ValueError(f"Data file is empty: {data_path}")
 
+        # ✅ تجهيز مصفوفة الارتباط (حتى لو لم تُستخدم مباشرةً هنا)
+        corr_matrix = generate_correlation_matrix(df)
+        logger.info(f"✅ مصفوفة الارتباط:\n{corr_matrix}")
+
         if compare_with:
             compare_path = Path(compare_with)
             if not compare_path.exists():
@@ -49,7 +59,6 @@ def generate_profile_report(
             profile_main = ProfileReport(df, title="الملف الرئيسي", explorative=True)
             profile_compare = ProfileReport(df_compare, title="الملف المقارن", explorative=True)
 
-            # حفظ كلا التقريرين بتسميات مختلفة
             OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
             profile_main.to_file(OUTPUT_DIR / "profile_main.html")
             profile_compare.to_file(OUTPUT_DIR / "profile_compare.html")
