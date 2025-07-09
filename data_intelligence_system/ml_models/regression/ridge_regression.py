@@ -1,6 +1,5 @@
-import os
-import joblib
 import logging
+import joblib
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -11,7 +10,7 @@ from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.data.processed.scale_numericals import scale_numericals
-from data_intelligence_system.utils.timer import Timer  # ⏱️ تم التكامل مع ملف timer.py
+from data_intelligence_system.utils.timer import Timer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -23,7 +22,7 @@ class RidgeRegressionModel(BaseModel):
         """
         نموذج Ridge Regression مع دعم تحجيم البيانات.
         """
-        super().__init__(model_name="ridge_regression", model_dir="ml_models/saved_models")
+        super().__init__(model_name="ridge_regression", model_dir=Path("data_intelligence_system/ml_models/saved_models"))
         self.alpha = alpha
         self.max_iter = max_iter
         self.tol = tol
@@ -35,7 +34,7 @@ class RidgeRegressionModel(BaseModel):
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
-    @Timer("⏱️ تدريب نموذج Ridge Regression")  # ✅ قياس زمن التدريب
+    @Timer("⏱️ تدريب نموذج Ridge Regression")
     def fit(self, X, y):
         """تدريب النموذج"""
         if isinstance(X, pd.DataFrame):
@@ -106,8 +105,8 @@ class RidgeRegressionModel(BaseModel):
     def save(self, filepath=None):
         """حفظ النموذج"""
         if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            filepath = self.model_dir / f"{self.model_name}.pkl"
+        filepath.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({
             "model": self.model,
             "preprocessor": self.preprocessor,
@@ -118,7 +117,7 @@ class RidgeRegressionModel(BaseModel):
     def load(self, filepath=None):
         """تحميل النموذج"""
         if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
+            filepath = self.model_dir / f"{self.model_name}.pkl"
         data = joblib.load(filepath)
         self.model = data["model"]
         self.preprocessor = data.get("preprocessor", None)
