@@ -1,19 +1,15 @@
 import os
 import joblib
 import logging
-from pathlib import Path
-import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.model_evaluation import ClassificationMetrics
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
-from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.feature_utils import generate_derived_features
 from data_intelligence_system.utils.timer import Timer
 
-# إعداد السجل
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -29,16 +25,29 @@ class LogisticRegressionModel(BaseModel):
         self.model = LogisticRegression(**self.model_params)
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type)
         self.is_fitted = False
+        self.categorical_cols = None
 
-    def _prepare_features(self, X, categorical_cols=None):
+    def _prepare_features(self, X):
+        """
+        تجهيز البيانات: معالجة القيم المفقودة، الاشتقاق، التحجيم، الترميز.
+        """
         X = fill_missing_values(X)
-        if categorical_cols:
-            X = self.preprocessor.encode_labels(X.copy(), categorical_cols)
+        X = generate_derived_features(X)
+        if self.categorical_cols:
+            X = self.preprocessor.encode_labels(X.copy(), self.categorical_cols)
         return self.preprocessor.transform_scaler(X)
 
     @Timer("تدريب نموذج الانحدار اللوجستي")
     def fit(self, X, y, categorical_cols=None):
+        """
+        تدريب النموذج على البيانات.
+        """
         assert len(X) == len(y), "❌ عدد العينات غير متطابق بين X و y"
+        if y is None or len(y) == 0:
+            raise ValueError("❌ بيانات y فارغة.")
+
+        self.categorical_cols = categorical_cols
+
         X = fill_missing_values(X)
         X = generate_derived_features(X)
 
@@ -61,38 +70,57 @@ class LogisticRegressionModel(BaseModel):
         metrics = ClassificationMetrics.all_metrics(y_test, y_pred, average="binary")
         return metrics
 
-    def predict(self, X, categorical_cols=None):
+    def predict(self, X):
+        """
+        توقع الفئات.
+        """
         self._check_is_fitted()
-        X = self._prepare_features(X, categorical_cols)
-        return self.model.predict(X)
+        X_prepared = self._prepare_features(X)
+        return self.model.predict(X_prepared)
 
-    def predict_proba(self, X, categorical_cols=None):
+    def predict_proba(self, X):
+        """
+        توقع الاحتمالات.
+        """
         self._check_is_fitted()
-        X = self._prepare_features(X, categorical_cols)
-        return self.model.predict_proba(X)
+        X_prepared = self._prepare_features(X)
+        return self.model.predict_proba(X_prepared)
 
-    def evaluate(self, X, y, categorical_cols=None):
+    def evaluate(self, X, y):
+        """
+        تقييم النموذج على بيانات جديدة.
+        """
         self._check_is_fitted()
-        X = fill_missing_values(X)
-        y_pred = self.predict(X, categorical_cols)
+        X_prepared = self._prepare_features(X)
+        y_pred = self.model.predict(X_prepared)
         return ClassificationMetrics.all_metrics(y, y_pred, average="binary")
 
-    def save(self):
+    def save(self, filepath=None):
+        """
+        حفظ النموذج.
+        """
         if self.model is None:
             raise ValueError("❌ لا يوجد نموذج لحفظه.")
-        os.makedirs(self.model_path.parent, exist_ok=True)
+        path = filepath or self.model_path
+        os.makedirs(path.parent, exist_ok=True)
         joblib.dump({
             "model": self.model,
             "preprocessor": self.preprocessor,
-            "is_fitted": self.is_fitted
-        }, self.model_path)
-        logger.info(f"💾 تم حفظ النموذج في: {self.model_path}")
+            "is_fitted": self.is_fitted,
+            "categorical_cols": self.categorical_cols
+        }, path)
+        logger.info(f"💾 تم حفظ النموذج في: {path}")
 
-    def load(self):
-        if not self.model_path.exists():
-            raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {self.model_path}")
-        data = joblib.load(self.model_path)
+    def load(self, filepath=None):
+        """
+        تحميل النموذج.
+        """
+        path = filepath or self.model_path
+        if not path.exists():
+            raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {path}")
+        data = joblib.load(path)
         self.model = data["model"]
         self.preprocessor = data["preprocessor"]
         self.is_fitted = data["is_fitted"]
-        logger.info(f"📥 تم تحميل النموذج من: {self.model_path}")
+        self.categorical_cols = data.get("categorical_cols", None)
+        logger.info(f"📥 تم تحميل النموذج من: {path}")
