@@ -14,26 +14,27 @@ import seaborn as sns
 from pathlib import Path
 from IPython.display import display
 import importlib
+import sys
 
 # ⚙️ إعدادات العرض
 pd.set_option('display.max_columns', 100)
 sns.set(style="whitegrid")
 
-# 📂 تحميل البيانات المنظفة باستخدام مسار ديناميكي
+# 📂 تحديد جذر المشروع وضبط sys.path
 try:
-    # __file__ موجود: نحدد PROJECT_ROOT بناءً على موقع هذا الملف
-    PROJECT_ROOT = Path(__file__).resolve().parents[1]  # نرجع للمجلد data_intelligence_system
+    PROJECT_ROOT = Path(__file__).resolve().parents[1]
 except NameError:
-    # داخل Jupyter حيث __file__ غير معرف، نستخدم cwd مباشرة
-    PROJECT_ROOT = Path.cwd().parents[1]  # نرجع مجلد أب من current working dir
+    PROJECT_ROOT = Path.cwd().parents[1]
 
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# 📂 تحميل البيانات المنظفة
 DATA_PATH = PROJECT_ROOT / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
-
 print(f"مسار الملف المستخدم: {DATA_PATH}")
 if not DATA_PATH.exists():
     raise FileNotFoundError(f"الملف غير موجود في المسار: {DATA_PATH}")
 
-# 📥 قراءة البيانات
 df = pd.read_csv(DATA_PATH)
 
 # ✅ عرض الشكل والمحتوى العام
