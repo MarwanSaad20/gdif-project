@@ -20,7 +20,7 @@ from data_intelligence_system.utils.visualization.visuals_static import plot_dis
 from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
 from data_intelligence_system.analysis.outlier_detection import detect_outliers_iqr
 from data_intelligence_system.analysis.target_relation_analysis import analyze_target_relation
-from data_intelligence_system.regression.ridge_regression import RidgeRegressionModel  # ✅ جديد للتكامل
+from data_intelligence_system.ml_models.regression.ridge_regression import RidgeRegressionModel  # ✅ جديد للتكامل
 from data_intelligence_system.utils.logger import get_logger
 
 import matplotlib.pyplot as plt
