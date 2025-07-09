@@ -1,6 +1,5 @@
-import os
-import joblib
 import logging
+import joblib
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -11,7 +10,7 @@ from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.data.processed.scale_numericals import scale_numericals
-from data_intelligence_system.utils.timer import Timer  # ⏱️ تمت إضافة التكامل
+from data_intelligence_system.utils.timer import Timer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -22,7 +21,7 @@ class LassoRegressionModel(BaseModel):
         """
         نموذج Lasso Regression مع دعم التحجيم المسبق.
         """
-        super().__init__(model_name="lasso_regression", model_dir="ml_models/saved_models")
+        super().__init__(model_name="lasso_regression", model_dir="data_intelligence_system/ml_models/saved_models")
         self.alpha = alpha
         self.max_iter = max_iter
         self.tol = tol
@@ -33,7 +32,7 @@ class LassoRegressionModel(BaseModel):
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
-    @Timer("تدريب نموذج Lasso")  # ⏱️ لقياس زمن التدريب
+    @Timer("تدريب نموذج Lasso")
     def fit(self, X, y):
         """تدريب النموذج"""
         if isinstance(X, pd.DataFrame):
@@ -102,25 +101,25 @@ class LassoRegressionModel(BaseModel):
         logger.info(f"[📊] تقييم Lasso:\n - MAE: {mae:.4f}\n - MSE: {mse:.4f}\n - R²: {r2:.4f}")
         return {"mae": mae, "mse": mse, "r2": r2}
 
-    def save(self, filepath=None):
+    def save(self):
         """حفظ النموذج"""
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        if self.model is None:
+            raise ValueError("❌ لا يوجد نموذج لحفظه.")
+        self.model_path.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({
             "model": self.model,
             "preprocessor": self.preprocessor,
             "is_fitted": self.is_fitted
-        }, filepath)
-        logger.info(f"💾 تم حفظ النموذج في: {filepath}")
+        }, self.model_path)
+        logger.info(f"💾 تم حفظ النموذج في: {self.model_path}")
 
-    def load(self, filepath=None):
+    def load(self):
         """تحميل النموذج"""
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        data = joblib.load(filepath)
+        if not self.model_path.exists():
+            raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {self.model_path}")
+        data = joblib.load(self.model_path)
         self.model = data["model"]
         self.preprocessor = data.get("preprocessor", None)
         self.is_fitted = data.get("is_fitted", False)
-        logger.info(f"📥 تم تحميل النموذج من: {filepath}")
+        logger.info(f"📥 تم تحميل النموذج من: {self.model_path}")
         return self
