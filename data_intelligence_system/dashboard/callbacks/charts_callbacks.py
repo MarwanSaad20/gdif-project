@@ -17,7 +17,8 @@ from data_intelligence_system.data.external.external_data_utils import (
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.visualization.visuals_static import plot_distribution
-from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix  # ✅ جديد
+from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
+from data_intelligence_system.analysis.outlier_detection import detect_outliers_iqr  # ✅ جديد
 from data_intelligence_system.utils.logger import get_logger
 
 import matplotlib.pyplot as plt
@@ -64,6 +65,11 @@ def register_charts_callbacks(app):
             df = fill_missing_values(df)
             df = remove_duplicates(df)
 
+            # ✅ استخدام دالة اكتشاف القيم الشاذة
+            outliers_mask = detect_outliers_iqr(df)
+            outliers_count = outliers_mask.sum()
+            logger.info(f"✅ تم اكتشاف {outliers_count} صف شاذ باستخدام IQR")
+
             table_data = df.to_dict("records")
             table_columns = [{"name": str(col), "id": str(col)} for col in df.columns]
 
@@ -71,7 +77,6 @@ def register_charts_callbacks(app):
             if numeric_df.empty:
                 raise ValueError("❌ لا توجد أعمدة رقمية صالحة للتحليل.")
 
-            # ✅ مصفوفة الارتباط
             try:
                 corr_matrix = generate_correlation_matrix(df)
                 logger.info(f"✅ مصفوفة الارتباط المحسوبة:\n{corr_matrix}")
