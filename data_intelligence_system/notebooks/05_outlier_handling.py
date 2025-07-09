@@ -5,7 +5,8 @@
 تحسين أداء النموذج المختار باستخدام GridSearchCV و/أو RandomizedSearchCV
 """
 
-import os
+import sys
+from pathlib import Path
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import GridSearchCV, train_test_split
@@ -17,21 +18,30 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-# 📥 تحميل البيانات بشكل مرن عبر مسار نسبي
-data_path = os.path.join('..', 'data', 'processed', 'clean_data.csv')
-df = pd.read_csv(data_path)
+# ---------------------------
+# ضبط sys.path ليشمل جذر المشروع
+try:
+    PROJECT_ROOT = Path(__file__).resolve().parents[1]
+except NameError:
+    PROJECT_ROOT = Path.cwd().parents[0]
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+# ---------------------------
+# تحميل البيانات مع مسار ديناميكي من جذر المشروع
+DATA_PATH = PROJECT_ROOT / "data" / "processed" / "clean_data.csv"
+df = pd.read_csv(DATA_PATH)
 
 # --- تحديد عمود الهدف بشكل أكثر ذكاء ---
 target = None
 
-# محاولة إيجاد عمود هدف مباشر
 for col in df.columns:
     if col.lower() in ['target', 'label', 'y']:
         target = col
         print(f"🎯 تم التعرف على عمود الهدف تلقائيًا: '{target}'")
         break
 
-# إذا لم يتم العثور، محاولة اختيار أول عمود عدد قيمه الفريدة أقل من 10 (مناسب للتصنيف غالبًا)
 if target is None:
     possible_targets = [col for col in df.columns if df[col].nunique() <= 10]
     if possible_targets:
@@ -42,8 +52,6 @@ if target is None:
         print("📋 الأعمدة الموجودة:")
         for c in df.columns:
             print(f" - {c}")
-        # يمكن إلغاء التعليق أدناه لتمكين الإدخال اليدوي في بيئة تفاعلية
-        # target = input("📝 من فضلك أدخل اسم العمود الهدف يدويًا: ").strip()
         raise Exception("🚨 يرجى تحديد عمود الهدف في البيانات.")
 
 print(f"✅ استخدام العمود '{target}' كعمود هدف.")
