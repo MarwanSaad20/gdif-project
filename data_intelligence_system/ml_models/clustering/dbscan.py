@@ -5,10 +5,11 @@ from pathlib import Path
 import pandas as pd
 from sklearn.cluster import DBSCAN
 
+# استيرادات من جذر المشروع
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.feature_utils import generate_derived_features
-from data_intelligence_system.utils.timer import Timer  # ⏱️ استيراد التايمر الجديد
+from data_intelligence_system.utils.timer import Timer  # ⏱️ استيراد التايمر
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -18,24 +19,20 @@ class DBSCANClusteringModel(BaseModel):
     def __init__(self, model_params=None, scaler_type="standard"):
         """
         نموذج تجميع باستخدام DBSCAN.
-
-        Args:
-            model_params: dict - معلمات DBSCAN.
-            scaler_type: نوع التحجيم (standard, minmax, robust, None).
         """
-        super().__init__(model_name="dbscan_clustering", model_dir="ml_models/saved_models")
+        super().__init__(
+            model_name="dbscan_clustering",
+            model_dir="data_intelligence_system/ml_models/saved_models"
+        )
         self.model_params = model_params if model_params else {}
         self.model = DBSCAN(**self.model_params)
         self.scaler_type = scaler_type
         self.is_fitted = False
 
-    @Timer("تدريب نموذج DBSCAN")  # ⏱️ قياس وقت التدريب
+    @Timer("تدريب نموذج DBSCAN")
     def fit(self, X: pd.DataFrame):
         """
         تدريب نموذج DBSCAN.
-
-        Args:
-            X: بيانات التدريب (pd.DataFrame)
         """
         X = fill_missing_values(X)
         X = generate_derived_features(X)
@@ -46,12 +43,6 @@ class DBSCANClusteringModel(BaseModel):
     def predict(self, X: pd.DataFrame):
         """
         توقعات التجميع للمشاهد الجديدة.
-
-        Args:
-            X: بيانات جديدة (pd.DataFrame)
-
-        Returns:
-            Cluster labels
         """
         if not self.is_fitted:
             raise ValueError("❌ النموذج غير مدرب بعد.")
