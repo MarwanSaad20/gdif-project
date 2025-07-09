@@ -49,9 +49,7 @@ def plot_correlation_heatmap(corr_matrix: pd.DataFrame, method: str, filename: s
         ax=ax
     )
     ax.set_title(f"{method.capitalize()} Correlation Matrix", fontsize=16)
-    ensure_output_dir(output_dir)
     save_plot(fig, filename, output_dir)
-    plt.close(fig)
     logger.info(f"✅ تم حفظ خريطة الارتباط: {output_dir / filename}")
 
 
