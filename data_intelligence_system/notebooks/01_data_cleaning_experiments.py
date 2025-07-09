@@ -14,14 +14,16 @@ import sys
 # 🧩 استيراد معاينة البيانات والتحقق
 # ======================
 try:
-    project_root = Path(__file__).resolve().parents[2]  # ⬅️ تصحيح: نصعد لمجلد الجذر الحقيقي للمشروع
+    project_root = Path(__file__).resolve().parents[2]  # نصعد مرتين لجذر المشروع (PythonProject10)
 except NameError:
     project_root = Path.cwd().parents[1]
 
-sys.path.append(str(project_root))
+# أضف جذر المشروع إلى sys.path (للاستيراد من data_intelligence_system)
+if str(project_root / "data_intelligence_system") not in sys.path:
+    sys.path.insert(0, str(project_root / "data_intelligence_system"))
 
-from data_intelligence_system.data.processed.clean_preview import preview
-from data_intelligence_system.data.processed.validate_clean_data import validate  # ✅ مضاف حديثًا
+from data.processed.clean_preview import preview
+from data.processed.validate_clean_data import validate  # ✅ مضاف حديثًا
 
 
 # ======================
