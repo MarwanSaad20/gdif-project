@@ -1,13 +1,54 @@
+"""
+utils/preprocessing.py
+
+وصف:
+    دوال المعالجة الأولية للبيانات (Preprocessing)، تُستخدم قبل التحليل أو النمذجة.
+    تشمل:
+        - توحيد أسماء الأعمدة
+        - معالجة القيم المفقودة
+        - ترميز البيانات النوعية
+        - موازنة وتوحيد البيانات الرقمية
+
+الاستخدام:
+    from utils.preprocessing import (
+        normalize_column_names,
+        fill_missing_values,
+        encode_categoricals,
+        scale_numericals
+    )
+
+    df = normalize_column_names(df)
+"""
+
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-from typing import Optional
+from typing import Optional, Union
 from data_intelligence_system.utils.logger import get_logger
+
 
 logger = get_logger(name="Preprocessing")
 
 
 def normalize_column_names(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    توحيد أسماء الأعمدة لتكون صغيرة وخالية من الفراغات والرموز الخاصة.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        إطار بيانات الإدخال.
+
+    Returns
+    -------
+    pd.DataFrame
+        نسخة من DataFrame مع أسماء أعمدة موحدة.
+    
+    Raises
+    ------
+    ValueError
+        إذا كان df None أو فارغ.
+    """
     if df is None or df.empty:
         raise ValueError("Input DataFrame is None or empty.")
 
@@ -22,38 +63,37 @@ def normalize_column_names(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def fill_missing_values(df: Union[pd.DataFrame, pd.Series], strategy: str = "mean") -> Union[pd.DataFrame, pd.Series]:
-    if df is None or (isinstance(df, pd.DataFrame) and df.empty) or (isinstance(df, pd.Series) and df.empty):
-        raise ValueError("Input is None or empty.")
+def fill_missing_values(df: pd.DataFrame, strategy: str = "mean") -> pd.DataFrame:
+    """
+    معالجة القيم المفقودة باستخدام استراتيجية محددة.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        إطار بيانات الإدخال.
+    strategy : str, optional
+        استراتيجية الملء، الخيارات: 'mean', 'median', 'mode', 'zero' (الافتراضي 'mean').
+
+    Returns
+    -------
+    pd.DataFrame
+        نسخة من DataFrame بعد ملء القيم المفقودة.
+
+    Raises
+    ------
+    ValueError
+        إذا كانت الاستراتيجية غير مدعومة أو df None أو فارغ.
+    """
+    if df is None or df.empty:
+        raise ValueError("Input DataFrame is None or empty.")
 
     allowed_strategies = {"mean", "median", "mode", "zero"}
     if strategy not in allowed_strategies:
         raise ValueError(f"استراتيجية ملء غير مدعومة: {strategy}. الرجاء اختيار واحدة من {allowed_strategies}")
 
     logger.info(f"🧩 معالجة القيم المفقودة باستخدام: {strategy}")
-
-    if isinstance(df, pd.Series):
-        if df.isnull().sum() == 0:
-            return df
-        if strategy == "mean" and pd.api.types.is_numeric_dtype(df):
-            return df.fillna(df.mean())
-        elif strategy == "median" and pd.api.types.is_numeric_dtype(df):
-            return df.fillna(df.median())
-        elif strategy == "mode":
-            mode_vals = df.mode()
-            if not mode_vals.empty:
-                return df.fillna(mode_vals[0])
-            else:
-                logger.warning("⚠️ السلسلة لا تحتوي على قيم صالحة لحساب الوضع (mode).")
-                return df
-        elif strategy == "zero":
-            return df.fillna(0)
-        else:
-            logger.warning(f"⚠️ لا يمكن تطبيق استراتيجية {strategy} على السلسلة.")
-            return df
-
-    # التعامل مع DataFrame كالسابق
     df = df.copy()
+
     for col in df.columns:
         if df[col].isnull().sum() > 0:
             try:
@@ -84,6 +124,26 @@ def fill_missing_values(df: Union[pd.DataFrame, pd.Series], strategy: str = "mea
 
 
 def encode_categoricals(df: pd.DataFrame, method: str = "label") -> pd.DataFrame:
+    """
+    ترميز الأعمدة النوعية (Categorical) باستخدام إما LabelEncoder أو OneHotEncoding.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        إطار بيانات الإدخال.
+    method : str, optional
+        طريقة الترميز: 'label' أو 'onehot' (الافتراضي 'label').
+
+    Returns
+    -------
+    pd.DataFrame
+        نسخة من DataFrame بعد الترميز.
+
+    Raises
+    ------
+    ValueError
+        إذا لم توجد أعمدة نوعية أو طريقة الترميز غير مدعومة.
+    """
     if df is None or df.empty:
         raise ValueError("Input DataFrame is None or empty.")
 
@@ -92,7 +152,7 @@ def encode_categoricals(df: pd.DataFrame, method: str = "label") -> pd.DataFrame
 
     if len(cat_cols) == 0:
         logger.warning("⚠️ لا توجد أعمدة نوعية (categorical) في البيانات للترميز.")
-        return df
+        return df  # مرونة أفضل من رفع استثناء
 
     logger.info(f"🔠 ترميز الأعمدة النوعية باستخدام: {method}")
 
@@ -104,12 +164,14 @@ def encode_categoricals(df: pd.DataFrame, method: str = "label") -> pd.DataFrame
             except Exception as e:
                 logger.error(f"❌ فشل ترميز العمود '{col}': {e}")
                 raise
+
     elif method == "onehot":
         try:
             df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
         except Exception as e:
             logger.error(f"❌ فشل OneHot Encoding: {e}")
             raise
+
     else:
         logger.warning(f"⚠️ طريقة ترميز غير معروفة: {method}")
         raise ValueError("طريقة الترميز غير مدعومة. استخدم 'label' أو 'onehot'.")
@@ -118,6 +180,26 @@ def encode_categoricals(df: pd.DataFrame, method: str = "label") -> pd.DataFrame
 
 
 def scale_numericals(df: pd.DataFrame, scaler: Optional[object] = None) -> pd.DataFrame:
+    """
+    موازنة الأعمدة الرقمية باستخدام StandardScaler أو scaler مخصص.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        إطار بيانات الإدخال.
+    scaler : object, optional
+        كائن scaler (مثل StandardScaler)، إذا لم يُحدد يتم استخدام StandardScaler.
+
+    Returns
+    -------
+    pd.DataFrame
+        نسخة من DataFrame بعد الموازنة.
+
+    Raises
+    ------
+    Exception
+        في حالة فشل عملية الموازنة.
+    """
     if df is None or df.empty:
         raise ValueError("Input DataFrame is None or empty.")
 
