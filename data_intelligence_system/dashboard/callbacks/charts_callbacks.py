@@ -18,7 +18,8 @@ from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.visualization.visuals_static import plot_distribution
 from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
-from data_intelligence_system.analysis.outlier_detection import detect_outliers_iqr  # ✅ جديد
+from data_intelligence_system.analysis.outlier_detection import detect_outliers_iqr
+from data_intelligence_system.analysis.target_relation_analysis import analyze_target_relation  # ✅ جديد
 from data_intelligence_system.utils.logger import get_logger
 
 import matplotlib.pyplot as plt
@@ -69,6 +70,13 @@ def register_charts_callbacks(app):
             outliers_mask = detect_outliers_iqr(df)
             outliers_count = outliers_mask.sum()
             logger.info(f"✅ تم اكتشاف {outliers_count} صف شاذ باستخدام IQR")
+
+            # ✅ استخدام دالة تحليل العلاقة مع الهدف
+            try:
+                relation_summary = analyze_target_relation(df, target="target")
+                logger.info(f"📊 تحليل العلاقة مع الهدف:\n{relation_summary}")
+            except Exception as e:
+                logger.warning(f"⚠️ فشل تحليل العلاقة مع الهدف: {e}")
 
             table_data = df.to_dict("records")
             table_columns = [{"name": str(col), "id": str(col)} for col in df.columns]
