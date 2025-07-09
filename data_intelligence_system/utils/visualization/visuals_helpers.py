@@ -1,7 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from typing import Optional, List
-
 from data_intelligence_system.utils.logger import get_logger
 
 logger = get_logger("Visualization")
