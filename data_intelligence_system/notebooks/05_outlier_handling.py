@@ -1,131 +1,61 @@
-# 🔧 05 – Model Tuning
+# =============================
+# 05 - Outlier Handling Script
+# =============================
 
-"""
-الهدف:
-تحسين أداء النموذج المختار باستخدام GridSearchCV و/أو RandomizedSearchCV
-"""
-
-import sys
-from pathlib import Path
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.metrics import accuracy_score, classification_report, mean_squared_error, r2_score, confusion_matrix
-import seaborn as sns
 import matplotlib.pyplot as plt
-import warnings
+import seaborn as sns
+from pathlib import Path
+import sys
 
-warnings.filterwarnings('ignore')
-
-# ---------------------------
-# ضبط sys.path ليشمل جذر المشروع
+# ------------------------
+# ضبط مسار جذر المشروع بطريقة ديناميكية
 try:
-    PROJECT_ROOT = Path(__file__).resolve().parents[1]
+    PROJECT_ROOT = Path(__file__).resolve().parents[1]  # مجلد data_intelligence_system
 except NameError:
-    PROJECT_ROOT = Path.cwd().parents[0]
+    PROJECT_ROOT = Path.cwd().parents[0]  # إذا كان التنفيذ في بيئة لا تحتوي على __file__ (مثل Jupyter)
 
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-# ---------------------------
-# تحميل البيانات مع مسار ديناميكي من جذر المشروع
+# ------------------------
+# تحميل البيانات من المسار الصحيح داخل هيكل المشروع
 DATA_PATH = PROJECT_ROOT / "data" / "processed" / "clean_data.csv"
+if not DATA_PATH.exists():
+    raise FileNotFoundError(f"❌ الملف غير موجود في: {DATA_PATH}")
+
 df = pd.read_csv(DATA_PATH)
+print(f"✅ تم تحميل البيانات من: {DATA_PATH}")
+print(f"شكل البيانات: {df.shape}")
 
-# --- تحديد عمود الهدف بشكل أكثر ذكاء ---
-target = None
+# ------------------------
+# مثال على التعامل مع القيم الشاذة - رسم boxplot لأحد الأعمدة الرقمية
+num_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+if not num_cols:
+    raise ValueError("🚫 لا توجد أعمدة رقمية في البيانات")
 
-for col in df.columns:
-    if col.lower() in ['target', 'label', 'y']:
-        target = col
-        print(f"🎯 تم التعرف على عمود الهدف تلقائيًا: '{target}'")
-        break
+col_to_check = num_cols[0]
+plt.figure(figsize=(8, 5))
+sns.boxplot(x=df[col_to_check])
+plt.title(f"Boxplot لعمود {col_to_check}")
+plt.show()
 
-if target is None:
-    possible_targets = [col for col in df.columns if df[col].nunique() <= 10]
-    if possible_targets:
-        target = possible_targets[0]
-        print(f"🔍 تم اختيار العمود '{target}' كهدف محتمل (قليل القيم الفريدة).")
-    else:
-        print("⚠️ لم يتم العثور على عمود هدف واضح.")
-        print("📋 الأعمدة الموجودة:")
-        for c in df.columns:
-            print(f" - {c}")
-        raise Exception("🚨 يرجى تحديد عمود الهدف في البيانات.")
+# ------------------------
+# كشف القيم الشاذة باستخدام طريقة IQR
+Q1 = df[col_to_check].quantile(0.25)
+Q3 = df[col_to_check].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
 
-print(f"✅ استخدام العمود '{target}' كعمود هدف.")
+outliers = df[(df[col_to_check] < lower_bound) | (df[col_to_check] > upper_bound)]
+print(f"عدد القيم الشاذة في '{col_to_check}': {len(outliers)}")
 
-# فصل السمات الرقمية فقط وملء القيم الناقصة
-X = df.drop(columns=[target]).select_dtypes(include=['float64', 'int64']).fillna(0)
-y = df[target]
+# ------------------------
+# إزالة القيم الشاذة
+df_no_outliers = df[(df[col_to_check] >= lower_bound) & (df[col_to_check] <= upper_bound)]
+print(f"شكل البيانات بعد إزالة القيم الشاذة: {df_no_outliers.shape}")
 
-if X.shape[1] == 0:
-    raise Exception("🚫 لا توجد سمات رقمية قابلة للنمذجة.")
-
-# تقسيم البيانات إلى تدريب واختبار
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# تحديد نوع المسألة: تصنيف أم انحدار
-is_classification = y.nunique() <= 10
-
-# إعداد النموذج الأساسي بناءً على نوع المهمة
-model = RandomForestClassifier(random_state=42) if is_classification else RandomForestRegressor(random_state=42)
-
-# شبكة الهايبر باراميترز لضبطها
-param_grid = {
-    'n_estimators': [100, 200],
-    'max_depth': [None, 5, 10],
-    'min_samples_split': [2, 5],
-    'min_samples_leaf': [1, 2]
-}
-
-print("⏳ بدء البحث الشبكي لضبط الهايبر باراميترز...")
-search = GridSearchCV(
-    model,
-    param_grid,
-    cv=3,
-    n_jobs=-1,
-    scoring='accuracy' if is_classification else 'r2',
-    verbose=2
-)
-search.fit(X_train, y_train)
-
-# أفضل نموذج بعد الضبط
-best_model = search.best_estimator_
-print("✅ أفضل إعدادات:")
-print(search.best_params_)
-
-# التنبؤ بالاختبار
-y_pred = best_model.predict(X_test)
-
-# 📊 تقييم النموذج بعد الضبط
-if is_classification:
-    acc = accuracy_score(y_test, y_pred)
-    print(f"🔹 الدقة المحسّنة: {acc:.4f}\n")
-    print("🔹 تقرير التصنيف:")
-    print(classification_report(y_test, y_pred))
-
-    cm = confusion_matrix(y_test, y_pred)
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Oranges')
-    plt.title('مصفوفة الالتباس (محسن)')
-    plt.xlabel('Predicted')
-    plt.ylabel('Actual')
-    plt.tight_layout()
-    plt.savefig('confusion_matrix_tuned.png')
-    plt.show()
-
-else:
-    rmse = mean_squared_error(y_test, y_pred, squared=False)
-    r2 = r2_score(y_test, y_pred)
-    print(f"🔹 RMSE: {rmse:.4f}\n🔹 R²: {r2:.4f}")
-
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(x=y_test, y=y_pred, color='teal')
-    plt.title('Actual vs Predicted (محسن)')
-    plt.xlabel('Actual')
-    plt.ylabel('Predicted')
-    plt.tight_layout()
-    plt.savefig('regression_results_tuned.png')
-    plt.show()
+# ------------------------
+# حفظ نسخة جديدة من البيانات بعد التنظيف (اختياري)
+OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "clean_data_no_outliers.csv"
+df_no_outliers.to_csv(OUTPUT_PATH, index=False)
+print(f"[✓] تم حفظ البيانات بعد إزالة القيم الشاذة في: {OUTPUT_PATH}")
