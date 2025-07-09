@@ -1,13 +1,18 @@
 from pathlib import Path
+import sys
+
+# ✅ إضافة مسار الجذر لمشروعك إلى sys.path
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+sys.path.append(str(BASE_DIR))
+
 from ydata_profiling import ProfileReport
 from ydata_profiling.config import Settings  # استيراد إعدادات التهيئة
 
 # ✅ استيراد من جذر المشروع
 from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
-from data_intelligence_system.notebooks.eda_utils import load_clean_data, logger
+from data_intelligence_system.data_profiles.eda_utils import load_clean_data, logger
 
 # تحديد جذر المشروع
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEFAULT_DATA_PATH = BASE_DIR / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
 
 OUTPUT_DIR = BASE_DIR / "data_profiles" / "eda_output"
