@@ -36,7 +36,7 @@ class KMeansClusteringModel(BaseModel):
         random_state : int
             البذرة العشوائية لضمان التكرار.
         scaler_type : str
-            نوع التحجيم المستخدم.
+            نوع التحجيم المستخدم (مثلاً "standard").
         kwargs : dict
             معلمات إضافية لنموذج KMeans.
         """
@@ -69,7 +69,8 @@ class KMeansClusteringModel(BaseModel):
         if X is None or X.empty:
             raise ValueError("❌ بيانات الإدخال فارغة أو None.")
         X = fill_missing_values(X)
-        X_scaled = scale_numericals(X, method=self.scaler_type)
+        # التعديل الأساسي هنا: استخدم scaler وليس method
+        X_scaled = scale_numericals(X, scaler=self.scaler_type)
         self.model.fit(X_scaled)
         self.X_train_ = X_scaled
         self.is_fitted = True
@@ -94,7 +95,7 @@ class KMeansClusteringModel(BaseModel):
         if X is None or X.empty:
             raise ValueError("❌ بيانات الإدخال فارغة أو None.")
         X = fill_missing_values(X)
-        X_scaled = scale_numericals(X, method=self.scaler_type)
+        X_scaled = scale_numericals(X, scaler=self.scaler_type)
         return self.model.predict(X_scaled)
 
     def get_cluster_centers(self):
@@ -132,7 +133,7 @@ class KMeansClusteringModel(BaseModel):
             if X.empty:
                 raise ValueError("❌ بيانات التقييم فارغة.")
             X_eval = fill_missing_values(X)
-            X_eval = scale_numericals(X_eval, method=self.scaler_type)
+            X_eval = scale_numericals(X_eval, scaler=self.scaler_type)
         labels = self.model.predict(X_eval)
         score = silhouette_score(X_eval, labels)
         logger.info(f"📈 Silhouette Score: {score:.4f}")
