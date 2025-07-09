@@ -14,8 +14,9 @@ from sklearn.preprocessing import LabelEncoder  # ✅ جديد
 import joblib
 from pathlib import Path
 
-# استيراد من جذر المشروع للتكامل مع clustering_analysis.py
+# استيراد من جذر المشروع للتكامل مع clustering_analysis.py و DBSCANClusteringModel
 from data_intelligence_system.analysis.clustering_analysis import run_clustering
+from data_intelligence_system.ml_models.clustering.dbscan import DBSCANClusteringModel
 
 # ======= ضبط المسارات بناءً على مكان الدفتر =======
 try:
