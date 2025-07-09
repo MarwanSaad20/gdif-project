@@ -19,25 +19,26 @@ import seaborn as sns
 from scipy.stats import pearsonr, spearmanr, chi2_contingency
 from sklearn.linear_model import LinearRegression
 import warnings
+from pathlib import Path
 
 warnings.filterwarnings('ignore')
 
-# --- إعداد المسارات بشكل مرن ---
+# --- إعداد المسارات بشكل مرن باستخدام pathlib ---
 try:
-    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    SCRIPT_PATH = Path(__file__).resolve()
 except NameError:
-    SCRIPT_DIR = os.getcwd()
+    SCRIPT_PATH = Path.cwd()
 
-PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..'))
-DATA_PATH = os.path.join(PROJECT_ROOT, 'data', 'processed', 'clean_data.csv')
-OUTPUT_DIR = os.path.join(PROJECT_ROOT, 'reports', 'output')
-SUMMARY_OUTPUT_PATH = os.path.join(OUTPUT_DIR, 'target_relationship_summary.csv')
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+PROJECT_ROOT = SCRIPT_PATH.parent.parent
+DATA_PATH = PROJECT_ROOT / 'data' / 'processed' / 'clean_data.csv'
+OUTPUT_DIR = PROJECT_ROOT / 'reports' / 'output'
+SUMMARY_OUTPUT_PATH = OUTPUT_DIR / 'target_relationship_summary.csv'
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print(f"📁 DATA_PATH: {DATA_PATH}")
 print(f"📁 OUTPUT_DIR: {OUTPUT_DIR}")
 
-if not os.path.exists(DATA_PATH):
+if not DATA_PATH.exists():
     sys.exit(f"⚠️ لم يتم العثور على ملف البيانات: {DATA_PATH}")
 
 # --- تحميل البيانات ---
