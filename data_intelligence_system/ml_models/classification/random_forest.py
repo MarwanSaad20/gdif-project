@@ -65,6 +65,24 @@ class RandomForestModel(BaseModel):
         y_pred = self.model.predict(X_test)
         return ClassificationMetrics.all_metrics(y_test, y_pred, average="weighted")
 
+    def predict(self, X, categorical_cols: Optional[List[str]] = None) -> Any:
+        """
+        تنفيذ التنبؤ باستخدام النموذج المدرب.
+        """
+        if not self.is_fitted:
+            raise ValueError("❌ النموذج لم يتم تدريبه بعد. الرجاء استدعاء fit أولًا.")
+        X_prepared = self._prepare_features(X, categorical_cols)
+        return self.model.predict(X_prepared)
+
+    def evaluate(self, X, y, categorical_cols: Optional[List[str]] = None) -> dict:
+        """
+        تقييم النموذج وإرجاع مقاييس التقييم.
+        """
+        if not self.is_fitted:
+            raise ValueError("❌ النموذج لم يتم تدريبه بعد. الرجاء استدعاء fit أولًا.")
+        X_prepared = self._prepare_features(X, categorical_cols)
+        y_pred = self.model.predict(X_prepared)
+        return ClassificationMetrics.all_metrics(y, y_pred, average="weighted")
 
     def save(self, filepath: Optional[str] = None) -> None:
         if self.model is None:
