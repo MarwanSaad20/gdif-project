@@ -1,15 +1,15 @@
-import os
-import joblib
 import logging
+import joblib
 import numpy as np
 from pathlib import Path
 from statsmodels.tsa.arima.model import ARIMA
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
+# ✅ استيرادات من جذر المشروع
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
-from data_intelligence_system.utils.timer import Timer  # ⏱️ تم الاستيراد الجديد
+from data_intelligence_system.utils.timer import Timer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -20,7 +20,10 @@ class ARIMAForecastingModel(BaseModel):
         """
         نموذج ARIMA للتنبؤ بالسلاسل الزمنية مع دعم التحجيم.
         """
-        super().__init__(model_name="arima_forecast", model_dir="ml_models/saved_models")
+        super().__init__(
+            model_name="arima_forecast",
+            model_dir="data_intelligence_system/ml_models/saved_models"
+        )
         self.order = order
         self.model = None
         self.model_fit = None
@@ -29,7 +32,7 @@ class ARIMAForecastingModel(BaseModel):
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
-    @Timer("تدريب نموذج ARIMA")  # ⏱️ ديكور قياس الزمن
+    @Timer("تدريب نموذج ARIMA")
     def fit(self, series):
         """
         تدريب النموذج على بيانات زمنية أحادية البعد.
@@ -56,7 +59,6 @@ class ARIMAForecastingModel(BaseModel):
         """
         self._check_is_fitted()
         forecast = self.model_fit.get_forecast(steps=steps)
-
         predicted = np.array(forecast.predicted_mean)
 
         if inverse_transform and self.preprocessor:
@@ -82,34 +84,34 @@ class ARIMAForecastingModel(BaseModel):
         logger.info(f"📊 تقييم النموذج:\n - MSE: {mse:.4f}\n - MAE: {mae:.4f}")
         return {"mse": mse, "mae": mae}
 
-    def save(self, filepath=None):
+    def save(self):
         """
         حفظ النموذج ونتائجه باستخدام joblib.
         """
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        if self.model_fit is None:
+            raise ValueError("❌ لا يوجد نموذج لحفظه.")
+        self.model_path.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({
             'order': self.order,
             'model_fit': self.model_fit,
             'series': self.series_,
             'preprocessor': self.preprocessor,
             'is_fitted': self.is_fitted
-        }, filepath)
-        logger.info(f"💾 تم حفظ نموذج ARIMA في: {filepath}")
+        }, self.model_path)
+        logger.info(f"💾 تم حفظ نموذج ARIMA في: {self.model_path}")
 
-    def load(self, filepath=None):
+    def load(self):
         """
         تحميل النموذج من ملف محفوظ.
         """
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        data = joblib.load(filepath)
+        if not self.model_path.exists():
+            raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {self.model_path}")
+        data = joblib.load(self.model_path)
         self.order = data['order']
         self.series_ = data['series']
         self.preprocessor = data.get('preprocessor', None)
         self.model = ARIMA(self.series_, order=self.order)
         self.model_fit = data['model_fit']
         self.is_fitted = data['is_fitted']
-        logger.info(f"📥 تم تحميل نموذج ARIMA من: {filepath}")
+        logger.info(f"📥 تم تحميل نموذج ARIMA من: {self.model_path}")
         return self
