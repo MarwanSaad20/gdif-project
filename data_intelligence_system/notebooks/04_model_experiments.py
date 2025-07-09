@@ -6,7 +6,6 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.metrics import (
     accuracy_score, classification_report, confusion_matrix,
     mean_absolute_error, r2_score
@@ -19,6 +18,7 @@ import warnings
 from data_intelligence_system.ml_models.regression.lasso_regression import LassoRegressionModel
 from data_intelligence_system.ml_models.regression.ridge_regression import RidgeRegressionModel
 from data_intelligence_system.ml_models.classification.logistic_regression import LogisticRegressionModel
+from data_intelligence_system.ml_models.classification.random_forest import RandomForestModel  # ✅ جديد
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
@@ -84,7 +84,7 @@ def split_data(df, target_col):
 def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
     if y_full.nunique() <= 10:
         print("📌 نوع المسألة: تصنيف (Classification)")
-        model = RandomForestClassifier(random_state=42)
+        model = RandomForestModel()
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
 
