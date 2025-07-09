@@ -18,7 +18,7 @@ import warnings
 from data_intelligence_system.ml_models.regression.lasso_regression import LassoRegressionModel
 from data_intelligence_system.ml_models.regression.ridge_regression import RidgeRegressionModel
 from data_intelligence_system.ml_models.classification.logistic_regression import LogisticRegressionModel
-from data_intelligence_system.ml_models.classification.random_forest import RandomForestModel  # ✅ جديد
+from data_intelligence_system.ml_models.classification.random_forest import RandomForestModel
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
