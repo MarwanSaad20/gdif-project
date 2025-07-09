@@ -19,6 +19,7 @@ from data_intelligence_system.ml_models.regression.lasso_regression import Lasso
 from data_intelligence_system.ml_models.regression.ridge_regression import RidgeRegressionModel
 from data_intelligence_system.ml_models.classification.logistic_regression import LogisticRegressionModel
 from data_intelligence_system.ml_models.classification.random_forest import RandomForestModel
+from data_intelligence_system.ml_models.classification.xgboost_classifier import XGBoostClassifierModel
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
@@ -84,23 +85,46 @@ def split_data(df, target_col):
 def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
     if y_full.nunique() <= 10:
         print("📌 نوع المسألة: تصنيف (Classification)")
-        model = RandomForestModel()
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
 
-        acc = accuracy_score(y_test, y_pred)
-        print(f"✅ الدقة (Accuracy): {acc:.4f}\n")
-        print("🔎 تقرير التصنيف:")
-        print(classification_report(y_test, y_pred))
+        # مثال: تجربة نموذج XGBoost إلى جانب RandomForest
+        rf_model = RandomForestModel()
+        rf_model.fit(X_train, y_train)
+        y_pred_rf = rf_model.predict(X_test)
 
-        cm = confusion_matrix(y_test, y_pred)
+        xgb_model = XGBoostClassifierModel()
+        xgb_model.fit(X_train, y_train)
+        y_pred_xgb = xgb_model.predict(X_test)
+
+        # تقييم RandomForest
+        acc_rf = accuracy_score(y_test, y_pred_rf)
+        print(f"✅ RandomForest دقة (Accuracy): {acc_rf:.4f}\n")
+        print("🔎 تقرير التصنيف RandomForest:")
+        print(classification_report(y_test, y_pred_rf))
+
+        cm_rf = confusion_matrix(y_test, y_pred_rf)
         plt.figure(figsize=(6, 4))
-        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-        plt.title('Confusion Matrix')
+        sns.heatmap(cm_rf, annot=True, fmt='d', cmap='Blues')
+        plt.title('Confusion Matrix - RandomForest')
         plt.xlabel('Predicted')
         plt.ylabel('Actual')
         plt.tight_layout()
-        plt.savefig("confusion_matrix.png")
+        plt.savefig("confusion_matrix_random_forest.png")
+        plt.show()
+
+        # تقييم XGBoost
+        acc_xgb = accuracy_score(y_test, y_pred_xgb)
+        print(f"✅ XGBoost دقة (Accuracy): {acc_xgb:.4f}\n")
+        print("🔎 تقرير التصنيف XGBoost:")
+        print(classification_report(y_test, y_pred_xgb))
+
+        cm_xgb = confusion_matrix(y_test, y_pred_xgb)
+        plt.figure(figsize=(6, 4))
+        sns.heatmap(cm_xgb, annot=True, fmt='d', cmap='Greens')
+        plt.title('Confusion Matrix - XGBoost')
+        plt.xlabel('Predicted')
+        plt.ylabel('Actual')
+        plt.tight_layout()
+        plt.savefig("confusion_matrix_xgboost.png")
         plt.show()
 
     else:
