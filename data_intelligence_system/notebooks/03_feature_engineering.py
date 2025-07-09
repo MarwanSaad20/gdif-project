@@ -20,7 +20,8 @@ sns.set_theme(style="whitegrid")
 
 def load_data():
     try:
-        project_root = Path(__file__).resolve().parents[1]
+        # الصعود مرتين للوصول لجذر المشروع PythonProject10
+        project_root = Path(__file__).resolve().parents[2]
     except NameError:
         project_root = Path.cwd().parents[1]
 
