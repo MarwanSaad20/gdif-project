@@ -15,8 +15,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
 
-# استيراد نموذج LassoRegression المحسن من ml_models (تكامل مع lasso_regression.py)
+# استيراد نماذج الانحدار المحسّنة
 from data_intelligence_system.ml_models.regression.lasso_regression import LassoRegressionModel
+from data_intelligence_system.ml_models.regression.ridge_regression import RidgeRegressionModel
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
@@ -104,19 +105,18 @@ def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
     else:
         print("📌 نوع المسألة: انحدار (Regression)")
 
-        # تجربة نموذج LassoRegressionModel المحسن مع المعاملات الافتراضية
+        # تجربة LassoRegressionModel
         lasso_model = LassoRegressionModel()
         lasso_model.fit(X_train, y_train)
-        y_pred = lasso_model.predict(X_test)
+        y_pred_lasso = lasso_model.predict(X_test)
 
-        mae = mean_absolute_error(y_test, y_pred)
-        r2 = r2_score(y_test, y_pred)
-        print(f"✅ Lasso MAE: {mae:.4f}")
-        print(f"✅ Lasso R²: {r2:.4f}")
+        mae_lasso = mean_absolute_error(y_test, y_pred_lasso)
+        r2_lasso = r2_score(y_test, y_pred_lasso)
+        print(f"✅ Lasso MAE: {mae_lasso:.4f}")
+        print(f"✅ Lasso R²: {r2_lasso:.4f}")
 
-        # عرض النتائج للرسم
         plt.figure(figsize=(6, 4))
-        sns.scatterplot(x=y_test, y=y_pred, color='darkorange')
+        sns.scatterplot(x=y_test, y=y_pred_lasso, color='darkorange')
         plt.xlabel('Actual')
         plt.ylabel('Predicted')
         plt.title('Actual vs Predicted (Lasso)')
@@ -124,11 +124,24 @@ def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
         plt.savefig("lasso_regression_results.png")
         plt.show()
 
-        # يمكن إضافة تجربة نموذج RandomForestRegressor بشكل منفصل إذا أردت:
-        # model = RandomForestRegressor(random_state=42)
-        # model.fit(X_train, y_train)
-        # y_pred_rf = model.predict(X_test)
-        # ... تقييم ورسم النتائج
+        # تجربة RidgeRegressionModel
+        ridge_model = RidgeRegressionModel()
+        ridge_model.fit(X_train, y_train)
+        y_pred_ridge = ridge_model.predict(X_test)
+
+        mae_ridge = mean_absolute_error(y_test, y_pred_ridge)
+        r2_ridge = r2_score(y_test, y_pred_ridge)
+        print(f"✅ Ridge MAE: {mae_ridge:.4f}")
+        print(f"✅ Ridge R²: {r2_ridge:.4f}")
+
+        plt.figure(figsize=(6, 4))
+        sns.scatterplot(x=y_test, y=y_pred_ridge, color='seagreen')
+        plt.xlabel('Actual')
+        plt.ylabel('Predicted')
+        plt.title('Actual vs Predicted (Ridge)')
+        plt.tight_layout()
+        plt.savefig("ridge_regression_results.png")
+        plt.show()
 
 # ========================
 # 🚀 نقطة تشغيل السكربت
