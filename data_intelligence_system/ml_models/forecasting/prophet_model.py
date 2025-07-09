@@ -20,9 +20,10 @@ class ProphetForecastingModel(BaseModel):
     def __init__(self, growth='linear', daily_seasonality=True, yearly_seasonality=True,
                  weekly_seasonality=True, scaler_type="standard", **kwargs):
         """
-        نموذج Prophet للتنبؤ الزمني مع دعم التحجيم المسبق.
+        نموذج Prophet للتنبؤ الزمني مع دعم التحجيم.
         """
-        super().__init__(model_name="prophet_forecasting_model", model_dir="data_intelligence_system/ml_models/saved_models")
+        super().__init__(model_name="prophet_forecasting_model",
+                         model_dir="data_intelligence_system/ml_models/saved_models")
         self.model_params = {
             "growth": growth,
             "daily_seasonality": daily_seasonality,
@@ -35,47 +36,58 @@ class ProphetForecastingModel(BaseModel):
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
+    def _validate_df_columns(self, df: pd.DataFrame, required_cols=('ds', 'y')):
+        if not set(required_cols).issubset(df.columns):
+            raise ValueError(f"❌ يجب أن يحتوي DataFrame على الأعمدة: {required_cols}")
+
     @Timer("تدريب نموذج Prophet")
     def fit(self, df: pd.DataFrame):
-        if not {'ds', 'y'}.issubset(df.columns):
-            raise ValueError("❌ يجب أن يحتوي DataFrame على الأعمدة ['ds', 'y']")
+        self._validate_df_columns(df)
         df = df.copy()
         df['ds'] = pd.to_datetime(df['ds'])
         df['y'] = fill_missing_values(df['y'])
         if self.preprocessor:
             df['y'] = self.preprocessor.transform_scaler(df[['y']]).flatten()
-        self.fitted_model = self.model.fit(df)
-        self.is_fitted = True
-        logger.info("✅ تم تدريب نموذج Prophet بنجاح.")
+        try:
+            self.fitted_model = self.model.fit(df)
+            self.is_fitted = True
+            logger.info("✅ تم تدريب نموذج Prophet بنجاح.")
+        except Exception as e:
+            logger.exception(f"❌ فشل تدريب نموذج Prophet: {e}")
+            raise
         return self
 
     def predict(self, periods: int, freq: str = 'D', inverse_transform: bool = True) -> pd.DataFrame:
         self._check_is_fitted()
+        if periods <= 0:
+            raise ValueError("❌ يجب أن يكون عدد الفترات للتنبؤ أكبر من صفر.")
         future = self.model.make_future_dataframe(periods=periods, freq=freq)
         forecast = self.fitted_model.predict(future)
         if inverse_transform and self.preprocessor:
-            forecast['yhat'] = self.preprocessor.inverse_transform_scaler(forecast[['yhat']]).flatten()
-            forecast['yhat_upper'] = self.preprocessor.inverse_transform_scaler(forecast[['yhat_upper']]).flatten()
-            forecast['yhat_lower'] = self.preprocessor.inverse_transform_scaler(forecast[['yhat_lower']]).flatten()
+            for col in ['yhat', 'yhat_upper', 'yhat_lower']:
+                forecast[col] = self.preprocessor.inverse_transform_scaler(forecast[[col]]).flatten()
         return forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
 
     def evaluate(self, df: pd.DataFrame, inverse_transform: bool = True):
         self._check_is_fitted()
-        if not {'ds', 'y'}.issubset(df.columns):
-            raise ValueError("❌ بيانات التقييم يجب أن تحتوي الأعمدة ['ds', 'y']")
+        self._validate_df_columns(df)
         df = df.copy()
         df['ds'] = pd.to_datetime(df['ds'])
-        actual_y = df['y'].values
+        actual_y = fill_missing_values(df['y']).values
         if self.preprocessor and not inverse_transform:
             actual_y = self.preprocessor.transform_scaler(df[['y']]).flatten()
-        forecast = self.fitted_model.predict(df[['ds']])
-        predicted_y = forecast['yhat'].values
-        if inverse_transform and self.preprocessor:
-            predicted_y = self.preprocessor.inverse_transform_scaler(predicted_y.reshape(-1, 1)).flatten()
-        mse = mean_squared_error(actual_y, predicted_y)
-        mae = mean_absolute_error(actual_y, predicted_y)
-        logger.info(f"📊 تقييم النموذج: MSE={mse:.4f}, MAE={mae:.4f}")
-        return {'mse': mse, 'mae': mae}
+        try:
+            forecast = self.fitted_model.predict(df[['ds']])
+            predicted_y = forecast['yhat'].values
+            if inverse_transform and self.preprocessor:
+                predicted_y = self.preprocessor.inverse_transform_scaler(predicted_y.reshape(-1, 1)).flatten()
+            mse = mean_squared_error(actual_y, predicted_y)
+            mae = mean_absolute_error(actual_y, predicted_y)
+            logger.info(f"📊 تقييم النموذج: MSE={mse:.4f}, MAE={mae:.4f}")
+            return {'mse': mse, 'mae': mae}
+        except Exception as e:
+            logger.exception(f"❌ خطأ أثناء تقييم النموذج: {e}")
+            raise
 
     def save(self):
         if self.fitted_model is None:
@@ -102,25 +114,17 @@ class ProphetForecastingModel(BaseModel):
         return self
 
     def plot_forecast(self, forecast_df: pd.DataFrame) -> go.Figure:
-        if forecast_df is None or forecast_df.empty:
-            raise ValueError("❌ يجب توفير بيانات توقع صحيحة للرسم.")
+        if forecast_df is None or forecast_df.empty or not {'ds', 'yhat'}.issubset(forecast_df.columns):
+            raise ValueError("❌ يجب توفير DataFrame يحتوي على الأعمدة ['ds', 'yhat'].")
         fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=forecast_df['ds'], y=forecast_df['yhat'],
-            mode='lines', name='التوقع', line=dict(color='cyan')
-        ))
-        fig.add_trace(go.Scatter(
-            x=forecast_df['ds'], y=forecast_df['yhat_upper'],
-            mode='lines', line=dict(width=0), showlegend=False
-        ))
-        fig.add_trace(go.Scatter(
-            x=forecast_df['ds'], y=forecast_df['yhat_lower'],
-            mode='lines', fill='tonexty', fillcolor='rgba(30,144,255,0.2)',
-            line=dict(width=0), showlegend=False
-        ))
-        fig.update_layout(
-            title="توقعات زمنية باستخدام Prophet",
-            plot_bgcolor="#0A0F1A", paper_bgcolor="#0A0F1A",
-            font=dict(color="#FFFFFF"), margin=dict(l=40, r=40, t=40, b=40)
-        )
+        fig.add_trace(go.Scatter(x=forecast_df['ds'], y=forecast_df['yhat'],
+                                 mode='lines', name='التوقع', line=dict(color='cyan')))
+        fig.add_trace(go.Scatter(x=forecast_df['ds'], y=forecast_df['yhat_upper'],
+                                 mode='lines', line=dict(width=0), showlegend=False))
+        fig.add_trace(go.Scatter(x=forecast_df['ds'], y=forecast_df['yhat_lower'],
+                                 mode='lines', fill='tonexty', fillcolor='rgba(30,144,255,0.2)',
+                                 line=dict(width=0), showlegend=False))
+        fig.update_layout(title="توقعات زمنية باستخدام Prophet",
+                          plot_bgcolor="#0A0F1A", paper_bgcolor="#0A0F1A",
+                          font=dict(color="#FFFFFF"), margin=dict(l=40, r=40, t=40, b=40))
         return fig
