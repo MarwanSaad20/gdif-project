@@ -14,10 +14,10 @@ sns.set_palette('Set2')
 # حجم الرسومات الافتراضي
 DEFAULT_FIGSIZE = (12, 7)
 
-# مجلد البيانات الافتراضي (يمكن تعديله حسب هيكل مشروعك)
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-DATA_DIR = os.path.join(BASE_DIR, 'data', 'processed')
-REPORTS_DIR = os.path.join(BASE_DIR, 'reports', 'output')
+# تعديل المسارات لتكون من جذر المشروع (Pathlib مفضل لكن هنا نستخدم os لتوافق مع الهيكل)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+DATA_DIR = os.path.join(BASE_DIR, 'data_intelligence_system', 'data', 'processed')
+REPORTS_DIR = os.path.join(BASE_DIR, 'data_intelligence_system', 'reports', 'output')
 
 
 # === دوال تحميل البيانات ===
