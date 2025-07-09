@@ -1,17 +1,14 @@
-import os
-import joblib
 import logging
+import joblib
 from pathlib import Path
-import pandas as pd
 from xgboost import XGBClassifier
 
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.model_evaluation import ClassificationMetrics
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
-from data_intelligence_system.utils.data_loader import load_data
-from data_intelligence_system.utils.feature_utils import generate_derived_features  # ✅ جديد
-from data_intelligence_system.utils.timer import Timer  # ⏱️ تكامل التوقيت
+from data_intelligence_system.utils.feature_utils import generate_derived_features
+from data_intelligence_system.utils.timer import Timer
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -19,9 +16,6 @@ logging.basicConfig(level=logging.INFO)
 
 class XGBoostClassifierModel(BaseModel):
     def __init__(self, model_params=None, scaler_type="standard"):
-        """
-        نموذج XGBoost للتصنيف، مع دعم التحجيم والمعالجة.
-        """
         super().__init__(model_name="xgboost_classifier", model_dir="ml_models/saved_models")
         self.model_params = model_params if model_params else {}
         self.model = XGBClassifier(use_label_encoder=False, eval_metric='logloss', **self.model_params)
@@ -34,12 +28,10 @@ class XGBoostClassifierModel(BaseModel):
             X = self.preprocessor.encode_labels(X.copy(), categorical_cols)
         return self.preprocessor.transform_scaler(X)
 
-    @Timer("تدريب نموذج XGBoost")  # ⏱️ إضافة التوقيت على التدريب
+    @Timer("تدريب نموذج XGBoost")
     def fit(self, X, y, categorical_cols=None):
         assert len(X) == len(y), "❌ عدد العينات غير متطابق"
         X = fill_missing_values(X)
-
-        # ✅ توليد الميزات الاشتقاقية إن وجدت
         X = generate_derived_features(X)
 
         if categorical_cols:
@@ -58,40 +50,37 @@ class XGBoostClassifierModel(BaseModel):
         return ClassificationMetrics.all_metrics(y_test, y_pred, average="binary")
 
     def predict(self, X, categorical_cols=None):
-        if not self.is_fitted:
-            raise ValueError("❌ النموذج غير مدرب بعد.")
+        self._check_is_fitted()
         X = self._prepare_features(X, categorical_cols)
         return self.model.predict(X)
 
     def predict_proba(self, X, categorical_cols=None):
-        if not self.is_fitted:
-            raise ValueError("❌ النموذج غير مدرب بعد.")
+        self._check_is_fitted()
         X = self._prepare_features(X, categorical_cols)
         return self.model.predict_proba(X)
 
     def evaluate(self, X, y, categorical_cols=None):
-        if not self.is_fitted:
-            raise ValueError("❌ النموذج غير مدرب بعد.")
+        self._check_is_fitted()
         X = fill_missing_values(X)
         y_pred = self.predict(X, categorical_cols)
         return ClassificationMetrics.all_metrics(y, y_pred, average="binary")
 
-    def save(self, filepath=None):
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    def save(self):
+        if self.model is None:
+            raise ValueError("❌ لا يوجد نموذج لحفظه.")
+        self.model_path.parent.mkdir(parents=True, exist_ok=True)
         joblib.dump({
             "model": self.model,
             "preprocessor": self.preprocessor,
             "is_fitted": self.is_fitted
-        }, filepath)
-        logger.info(f"💾 تم حفظ النموذج في: {filepath}")
+        }, self.model_path)
+        logger.info(f"💾 تم حفظ النموذج في: {self.model_path}")
 
-    def load(self, filepath=None):
-        if not filepath:
-            filepath = Path(self.model_dir) / f"{self.model_name}.pkl"
-        data = joblib.load(filepath)
+    def load(self):
+        if not self.model_path.exists():
+            raise FileNotFoundError(f"❌ لم يتم العثور على ملف النموذج: {self.model_path}")
+        data = joblib.load(self.model_path)
         self.model = data["model"]
         self.preprocessor = data["preprocessor"]
         self.is_fitted = data["is_fitted"]
-        logger.info(f"📥 تم تحميل النموذج من: {filepath}")
+        logger.info(f"📥 تم تحميل النموذج من: {self.model_path}")
