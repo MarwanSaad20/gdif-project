@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from sklearn.cluster import KMeans, DBSCAN
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
@@ -19,7 +18,8 @@ from data_intelligence_system.analysis.analysis_utils import (
 )
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.timer import Timer
-from data_intelligence_system.ml_models.clustering.kmeans import KMeansClusteringModel  # تحديث الاستيراد لاستخدام الكلاس
+from data_intelligence_system.ml_models.clustering.kmeans import KMeansClusteringModel
+from data_intelligence_system.ml_models.clustering.dbscan import DBSCANClusteringModel
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
@@ -33,16 +33,8 @@ ensure_output_dir(CLUSTERING_RESULTS_DIR)
 
 
 def apply_kmeans(data: np.ndarray, n_clusters: int = 3) -> tuple[np.ndarray, float, float | None]:
-    """
-    تطبق خوارزمية KMeans على البيانات باستخدام كلاس KMeansClusteringModel.
-
-    Returns:
-        labels (np.ndarray): تسميات المجموعات.
-        inertia (float): مجموع المربعات داخل المجموعات.
-        silhouette (float | None): درجة السيلويت (None إذا كانت المجموعات أقل من 2).
-    """
     model = KMeansClusteringModel(n_clusters=n_clusters, random_state=42)
-    model.fit(pd.DataFrame(data))  # تحويل np.ndarray إلى DataFrame لاستخدام المعالجة الداخلية
+    model.fit(pd.DataFrame(data))
     labels = model.predict(pd.DataFrame(data))
     inertia = model.model.inertia_
     silhouette = model.evaluate(pd.DataFrame(data)) if n_clusters > 1 else None
@@ -50,38 +42,18 @@ def apply_kmeans(data: np.ndarray, n_clusters: int = 3) -> tuple[np.ndarray, flo
 
 
 def apply_dbscan(data: np.ndarray, eps: float = 0.5, min_samples: int = 5) -> np.ndarray:
-    """
-    تطبق خوارزمية DBSCAN على البيانات.
-
-    Returns:
-        labels (np.ndarray): تسميات المجموعات، -1 تعني ضوضاء.
-    """
-    model = DBSCAN(eps=eps, min_samples=min_samples)
-    labels = model.fit_predict(data)
+    model = DBSCANClusteringModel(model_params={'eps': eps, 'min_samples': min_samples})
+    model.fit(pd.DataFrame(data))
+    labels = model.predict(pd.DataFrame(data))
     return labels
 
 
 def reduce_dimensions(data: np.ndarray, n_components: int = 2) -> np.ndarray:
-    """
-    تقليل الأبعاد باستخدام PCA.
-
-    Returns:
-        data_2d (np.ndarray): بيانات منخفضة الأبعاد.
-    """
     pca = PCA(n_components=n_components)
     return pca.fit_transform(data)
 
 
 def plot_clusters(data_2d: np.ndarray, labels: np.ndarray, title: str, path: Path) -> None:
-    """
-    رسم المجموعات ثنائية الأبعاد وحفظ الرسم.
-
-    Args:
-        data_2d: بيانات ثنائية الأبعاد.
-        labels: تسميات المجموعات.
-        title: عنوان الرسم.
-        path: مسار حفظ الصورة.
-    """
     plt.figure(figsize=(8, 6))
     unique_labels = np.unique(labels)
     palette = sns.color_palette('Set2', n_colors=len(unique_labels))
@@ -102,12 +74,6 @@ def run_clustering(df: pd.DataFrame,
                    dbscan_eps: float = 0.5,
                    dbscan_min_samples: int = 5,
                    output_filename: str = "clustered_data.csv") -> dict:
-    """
-    تنفيذ تحليل التجميع على DataFrame وحفظ النتائج.
-
-    Returns:
-        dict: ملخص النتائج مع مسارات الملفات.
-    """
     try:
         log_basic_info(df, output_filename)
 
@@ -164,9 +130,6 @@ def run_clustering(df: pd.DataFrame,
 
 
 def run_batch_clustering() -> None:
-    """
-    تشغيل التجميع على دفعة من ملفات CSV في مجلد البيانات وحفظ الملخص.
-    """
     summary = []
     if not DATA_DIR.exists():
         logger.error(f"❌ مجلد البيانات غير موجود: {DATA_DIR}")
