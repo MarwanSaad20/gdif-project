@@ -15,6 +15,7 @@ from sklearn.metrics import (
 import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
+from pathlib import Path
 
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
@@ -24,7 +25,13 @@ sns.set_theme(style="whitegrid")
 # =====================
 
 def load_clean_data():
-    data_path = os.path.join("..", "data", "processed", "clean_data.csv")
+    try:
+        project_root = Path(__file__).resolve().parents[1]  # تصحيح المسار لجذر المشروع data_intelligence_system
+    except NameError:
+        project_root = Path.cwd().parents[0]
+    data_path = project_root / "data" / "processed" / "clean_data.csv"
+    if not data_path.exists():
+        raise FileNotFoundError(f"❌ الملف غير موجود: {data_path}")
     df = pd.read_csv(data_path)
     print(f"✅ تم تحميل البيانات: {df.shape}")
     return df
