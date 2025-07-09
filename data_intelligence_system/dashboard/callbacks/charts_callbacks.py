@@ -16,9 +16,9 @@ from data_intelligence_system.data.external.external_data_utils import (
 )
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.preprocessing import fill_missing_values
-
+from data_intelligence_system.utils.visualization.visuals_static import plot_distribution
+from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix  # ✅ جديد
 from data_intelligence_system.utils.logger import get_logger
-from data_intelligence_system.utils.visualization.visuals_static import plot_distribution  # ✅ جديد
 
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -70,6 +70,14 @@ def register_charts_callbacks(app):
             numeric_df = filter_numeric_df(df)
             if numeric_df.empty:
                 raise ValueError("❌ لا توجد أعمدة رقمية صالحة للتحليل.")
+
+            # ✅ مصفوفة الارتباط
+            try:
+                corr_matrix = generate_correlation_matrix(df)
+                logger.info(f"✅ مصفوفة الارتباط المحسوبة:\n{corr_matrix}")
+            except Exception as e:
+                logger.warning(f"⚠️ فشل في حساب مصفوفة الارتباط: {e}")
+                corr_matrix = pd.DataFrame()
 
             date_col = next((col for col in df.columns if str(col).lower() == "date"), None)
             if date_col:
