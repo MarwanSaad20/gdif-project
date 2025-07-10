@@ -13,10 +13,16 @@ logger = get_logger("ExportCallback")
 
 
 def is_json_empty(data_json: str | None) -> bool:
+    """
+    تحقق ما إذا كانت بيانات JSON فارغة أو None أو تمثل قيمة فارغة.
+    """
     return not data_json or str(data_json).strip() in ("", "{}", "null")
 
 
 def get_available_json_data(filtered_json: str | None, stored_json: str | None) -> str | None:
+    """
+    ترجيح البيانات المفلترة أولًا ثم العامة.
+    """
     if not is_json_empty(filtered_json):
         return filtered_json
     if not is_json_empty(stored_json):
@@ -25,6 +31,10 @@ def get_available_json_data(filtered_json: str | None, stored_json: str | None) 
 
 
 def register_export_callbacks(app):
+    """
+    تسجيل كولباك توليد وتحميل التقرير بناءً على البيانات المخزنة أو المفلترة.
+    """
+
     @app.callback(
         Output("download-report", "data"),
         Input("download-btn", "n_clicks"),
