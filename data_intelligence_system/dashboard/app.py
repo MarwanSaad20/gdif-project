@@ -23,13 +23,11 @@ def configure_sys_path():
         'dashboard', 'core', 'reports', 'config'
     ]
 
-    # إضافة المسارات اللازمة
     for sub in submodules:
         sub_path = project_root / 'data_intelligence_system' / sub
         if str(sub_path) not in sys.path:
             sys.path.insert(0, str(sub_path))
 
-    # إضافة الجذر والمجلد الأب
     for path in [project_root, project_parent]:
         if str(path) not in sys.path:
             sys.path.insert(0, str(path))
@@ -43,6 +41,7 @@ from data_intelligence_system.dashboard.callbacks.upload_callbacks import regist
 from data_intelligence_system.dashboard.callbacks.charts_callbacks import register_charts_callbacks
 from data_intelligence_system.dashboard.callbacks.export_callbacks import register_export_callbacks
 from data_intelligence_system.dashboard.callbacks.kpi_callbacks import register_kpi_callbacks
+from data_intelligence_system.dashboard.callbacks.filters_callbacks import register_filters_callbacks  # ✅ جديد
 
 # ========== إعداد سجل التشغيل (Logging) ========== #
 log_level = logging.DEBUG if os.getenv("ENV", "development").lower() == "development" else logging.INFO
@@ -86,6 +85,7 @@ register_upload_callbacks(app)
 register_charts_callbacks(app)
 register_kpi_callbacks(app)
 register_export_callbacks(app)
+register_filters_callbacks(app)  # ✅ جديد
 
 logger.info("✅ تم تسجيل جميع الكولباكات بنجاح.")
 
