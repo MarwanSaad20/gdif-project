@@ -1,12 +1,23 @@
 from dash import dcc
 import datetime
 
-from data_intelligence_system.utils.logger import get_logger  # ✅ استيراد اللوجر الموحد
+from data_intelligence_system.utils.logger import get_logger
 
-logger = get_logger("Filters")  # ✅ يمكن استخدامه لاحقًا لتسجيل تحذيرات أو معلومات
+logger = get_logger("Filters")
 
 
-def create_dropdown(id, options, value=None, multi=False, placeholder="اختر قيمة", style=None, disabled=False):
+def create_dropdown(
+    id: str,
+    options: list,
+    value=None,
+    multi: bool = False,
+    placeholder: str = "اختر قيمة",
+    style: dict = None,
+    disabled: bool = False
+):
+    """
+    إنشاء قائمة Dropdown قابلة للتخصيص.
+    """
     if options and isinstance(options[0], str):
         options = [{"label": opt, "value": opt} for opt in options]
 
@@ -47,8 +58,20 @@ def create_dropdown(id, options, value=None, multi=False, placeholder="اختر 
     )
 
 
-def create_slider(id, min_val, max_val, step=1, value=None, marks=None, tooltip=True,
-                  included=True, vertical=False):
+def create_slider(
+    id: str,
+    min_val: int,
+    max_val: int,
+    step: int = 1,
+    value: int = None,
+    marks: dict = None,
+    tooltip: bool = True,
+    included: bool = True,
+    vertical: bool = False
+):
+    """
+    إنشاء شريط تمرير Slider مع إعدادات قابلة للتخصيص.
+    """
     if min_val > max_val:
         raise ValueError("min_val يجب أن يكون أقل أو يساوي max_val.")
 
@@ -74,15 +97,18 @@ def create_slider(id, min_val, max_val, step=1, value=None, marks=None, tooltip=
 
 
 def create_date_picker(
-    id,
+    id: str,
     start_date=None,
     end_date=None,
     min_date=None,
     max_date=None,
-    style=None,
-    clearable=True,
-    display_format="YYYY-MM-DD"
+    style: dict = None,
+    clearable: bool = True,
+    display_format: str = "YYYY-MM-DD"
 ):
+    """
+    إنشاء مكون اختيار نطاق تاريخ DatePickerRange.
+    """
     def to_str(d):
         if d is None:
             return None
@@ -121,7 +147,3 @@ def create_date_picker(
         clearable=clearable,
         style=final_style,
     )
-
-
-def settings_panel():
-    return None
