@@ -52,8 +52,12 @@ def create_placeholder_chart(chart_type, chart_id, title):
         raise ValueError(f"نوع الرسم غير مدعوم: {chart_type}")
 
     fig = go.Figure(data=data, layout=get_base_layout(title))
-    return dcc.Graph(id=chart_id, figure=fig, config={"displayModeBar": SHOW_MODEBAR, "responsive": True},
-                     style={"height": "400px"})
+    return dcc.Graph(
+        id=chart_id,
+        figure=fig,
+        config={"displayModeBar": SHOW_MODEBAR, "responsive": True},
+        style={"height": "400px"}
+    )
 
 # 🧱 لف الرسوم في Card موحد
 def wrap_chart(title, chart):
