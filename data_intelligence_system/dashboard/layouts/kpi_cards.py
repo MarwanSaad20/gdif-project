@@ -1,14 +1,14 @@
 import logging
 import pandas as pd
-from dash import Input, Output, callback_context, html
+from dash import Input, Output, html
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.dashboard.components import indicators
 
 logger = logging.getLogger(__name__)
 
-def parse_data(data_json):
-    """تحويل JSON إلى DataFrame أو إيقاف التنفيذ."""
+def parse_data(data_json: str) -> pd.DataFrame:
+    """تحويل JSON إلى DataFrame أو إيقاف التنفيذ عند الفشل."""
     if not data_json:
         logger.warning("📭 لا توجد بيانات مخزنة")
         raise PreventUpdate
@@ -25,10 +25,9 @@ def parse_data(data_json):
 
 def register_kpi_callbacks(app):
     """
-    كولباك واحد موحد لتحديث جميع KPIs.
+    كولباك موحد لتحديث جميع KPIs.
     يحسن الأداء ويقلل عدد الكولباكات المنفصلة.
     """
-
     @app.callback(
         Output("kpi-total-samples-value", "children"),
         Output("kpi-null-values-value", "children"),
@@ -40,23 +39,16 @@ def register_kpi_callbacks(app):
     def update_kpi_cards(data_json):
         df = parse_data(data_json)
 
-        # إجمالي العينات
         total = len(df)
-
-        # القيم الفارغة
         nulls = df.isnull().sum().sum()
-
-        # متوسط القيم الرقمية
         numeric_df = df.select_dtypes(include="number")
         avg_val = numeric_df.mean().mean() if not numeric_df.empty else None
 
-        # معدل النمو الافتراضي
         try:
             growth_rate = ((len(df) - 1) / len(df)) * 100 if len(df) > 1 else 0
         except ZeroDivisionError:
             growth_rate = 0
 
-        # التنبؤ التالي (يتم ربطه لاحقًا بنموذج تنبؤ)
         forecast_status = "🔮 سيتم التنبؤ لاحقًا"
 
         return (
@@ -68,7 +60,7 @@ def register_kpi_callbacks(app):
         )
 
 
-def generate_kpi_cards_layout():
+def generate_kpi_cards_layout() -> html.Div:
     """
     إنشاء مكونات بطاقات KPI بشكل احترافي.
     """
