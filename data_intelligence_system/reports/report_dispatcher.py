@@ -6,8 +6,8 @@ import numpy as np
 
 # استيراد من جذر المشروع مع المسار الكامل
 from data_intelligence_system.reports.generators.pdf_report_generator import PDFReportGenerator
+from data_intelligence_system.reports.generators.excel_report_generator import ExcelReportGenerator
 from data_intelligence_system.reports.export_utils import (
-    save_dataframe_to_excel,
     save_dataframe_to_csv,
     df_to_html_table
 )
@@ -37,8 +37,18 @@ class ReportDispatcher:
         elif report_type == "excel":
             if not isinstance(data, pd.DataFrame):
                 raise TypeError("[ERROR] Excel report requires a pandas DataFrame.")
-            save_dataframe_to_excel(data, filename, self.output_dir)
-            return f"{full_path}.xlsx"
+            excel_path = f"{full_path}.xlsx"
+            excel_gen = ExcelReportGenerator(excel_path)
+            sections = [{
+                "title": "📊 البيانات",
+                "paragraphs": ["تقرير Excel تم توليده تلقائيًا."],
+                "tables": [{
+                    "headers": list(data.columns),
+                    "rows": data.values.tolist()
+                }]
+            }]
+            excel_gen.generate(title=config.get("title", "Data Report"), sections=sections)
+            return excel_path
 
         elif report_type == "csv":
             if not isinstance(data, pd.DataFrame):
@@ -120,7 +130,8 @@ def generate_reports(data: Union[pd.DataFrame, list], config: Dict[str, Any] = N
     })
 
     dispatcher.dispatch("excel", data, {
-        "filename": config.get("excel_filename", "report_excel")
+        "filename": config.get("excel_filename", "report_excel"),
+        "title": config.get("excel_title", "Data Report")
     })
 
     dispatcher.dispatch("html", data, {
