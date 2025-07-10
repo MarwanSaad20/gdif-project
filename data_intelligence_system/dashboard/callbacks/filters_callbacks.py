@@ -37,20 +37,13 @@ def register_filters_callbacks(app):
     def filter_by_category_and_date(category_value, start_date, end_date, stored_json):
         try:
             df = _validate_df(stored_json, required_columns=['category', 'date'])
-
-            # تصفية حسب الفئة
             if category_value:
                 df = df[df['category'].astype(str) == str(category_value)]
-
-            # تصفية حسب التاريخ
             df = filter_data_by_date(df, start_date=start_date, end_date=end_date, date_column='date')
-
             if df.empty:
                 logger.info("ℹ️ لا توجد بيانات بعد الفلترة.")
                 return df_to_dash_json(None)
-
             return df_to_dash_json(df)
-
         except PreventUpdate:
             raise
         except Exception as e:
@@ -66,7 +59,6 @@ def register_filters_callbacks(app):
         if df is None or 'category' not in df.columns:
             logger.warning("⚠️ عمود 'category' غير متاح.")
             return []
-
         categories = df['category'].dropna().unique()
         options = [{'label': str(cat), 'value': cat} for cat in sorted(set(map(str, categories)))]
         logger.info(f"✅ تم تحديث الفئات: {len(options)} خيار.")
