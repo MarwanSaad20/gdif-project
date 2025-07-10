@@ -9,29 +9,12 @@ from data_intelligence_system.data.external.external_data_utils import (
     drop_empty_columns,
     standardize_column_names,
     remove_duplicates,
-    convert_column_types,
-    filter_rows_by_condition,
-    sample_data,
-    describe_data,
 )
-from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.preprocessing import fill_missing_values
-from data_intelligence_system.utils.visualization.visuals_static import plot_distribution
 from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
 from data_intelligence_system.analysis.outlier_detection import detect_outliers_iqr
 from data_intelligence_system.analysis.target_relation_analysis import analyze_target_relation
-from data_intelligence_system.ml_models.regression.ridge_regression import RidgeRegressionModel
-from data_intelligence_system.ml_models.classification.logistic_regression import LogisticRegressionModel
-from data_intelligence_system.ml_models.classification.random_forest import RandomForestModel
-from data_intelligence_system.ml_models.classification.xgboost_classifier import XGBoostClassifierModel
-from data_intelligence_system.ml_models.clustering.dbscan import DBSCANClusteringModel
-from data_intelligence_system.ml_models.forecasting.arima_model import ARIMAForecastingModel
-from data_intelligence_system.ml_models.forecasting.prophet_model import ProphetForecastingModel
 from data_intelligence_system.utils.logger import get_logger
-
-import matplotlib.pyplot as plt
-from pathlib import Path
-import uuid
 
 logger = get_logger("ChartsCallback")
 
@@ -43,6 +26,49 @@ def filter_numeric_df(df: pd.DataFrame) -> pd.DataFrame:
 
 def sanitize_id(name: str) -> str:
     return name.strip().lower().replace(" ", "_").replace(".", "").replace("-", "_")
+
+
+def clean_data(df: pd.DataFrame) -> pd.DataFrame:
+    df = drop_empty_rows(df)
+    df = drop_empty_columns(df)
+    df = standardize_column_names(df)
+    df = fill_missing_values(df)
+    df = remove_duplicates(df)
+    return df
+
+
+def prepare_x_axis(df: pd.DataFrame):
+    date_col = next((col for col in df.columns if str(col).lower() == "date"), None)
+    if date_col:
+        df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+        df = df.dropna(subset=[date_col])
+        return df, df[date_col].dt.strftime('%Y-%m-%d').tolist()
+    return df, list(range(len(df)))
+
+
+def create_kpi_cards(numeric_df: pd.DataFrame):
+    palette = ["#00cc96", "#1E90FF", "#9932CC", "#ff6347", "#ffa500"]
+    kpi_cards = [
+        indicators.create_kpi_card(
+            id=f"kpi-{sanitize_id(col)}",
+            title=col,
+            value=f"{numeric_df[col].mean():,.2f}",
+            icon="fa fa-chart-bar",
+            color=palette[i % len(palette)],
+            style={"margin": "6px"}
+        )
+        for i, col in enumerate(numeric_df.columns)
+    ]
+    return html.Div(
+        children=kpi_cards,
+        style={
+            "display": "flex",
+            "flexWrap": "wrap",
+            "gap": "10px",
+            "padding": "10px",
+            "justifyContent": "center"
+        }
+    )
 
 
 def register_charts_callbacks(app):
@@ -67,11 +93,7 @@ def register_charts_callbacks(app):
             return [], [], {}, {}, {}, "", []
 
         try:
-            df = drop_empty_rows(df)
-            df = drop_empty_columns(df)
-            df = standardize_column_names(df)
-            df = fill_missing_values(df)
-            df = remove_duplicates(df)
+            df = clean_data(df)
 
             outliers_mask = detect_outliers_iqr(df)
             outliers_count = outliers_mask.sum()
@@ -88,23 +110,16 @@ def register_charts_callbacks(app):
 
             numeric_df = filter_numeric_df(df)
             if numeric_df.empty:
-                raise ValueError("❌ لا توجد أعمدة رقمية صالحة للتحليل.")
+                logger.warning("❌ لا توجد أعمدة رقمية صالحة للتحليل.")
+                return table_data, table_columns, {}, {}, {}, "", []
 
             try:
                 corr_matrix = generate_correlation_matrix(df)
                 logger.info(f"✅ مصفوفة الارتباط المحسوبة:\n{corr_matrix}")
             except Exception as e:
                 logger.warning(f"⚠️ فشل في حساب مصفوفة الارتباط: {e}")
-                corr_matrix = pd.DataFrame()
 
-            date_col = next((col for col in df.columns if str(col).lower() == "date"), None)
-            if date_col:
-                df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-                df = df.dropna(subset=[date_col])
-                x_axis = df[date_col].dt.strftime('%Y-%m-%d').tolist()
-            else:
-                x_axis = list(range(len(df)))
-
+            df, x_axis = prepare_x_axis(df)
             y_axis = numeric_df.columns[0]
 
             line_graph_figure = charts.create_line_chart(
@@ -136,31 +151,8 @@ def register_charts_callbacks(app):
                     height=400,
                 )
 
-            stats_summary = describe_data(df).to_string()
-
-            palette = ["#00cc96", "#1E90FF", "#9932CC", "#ff6347", "#ffa500"]
-            kpi_cards = [
-                indicators.create_kpi_card(
-                    id=f"kpi-{sanitize_id(col)}",
-                    title=col,
-                    value=f"{numeric_df[col].mean():,.2f}",
-                    icon="fa fa-chart-bar",
-                    color=palette[i % len(palette)],
-                    style={"margin": "6px"}
-                )
-                for i, col in enumerate(numeric_df.columns)
-            ]
-
-            kpi_div = html.Div(
-                children=kpi_cards,
-                style={
-                    "display": "flex",
-                    "flexWrap": "wrap",
-                    "gap": "10px",
-                    "padding": "10px",
-                    "justifyContent": "center"
-                }
-            )
+            stats_summary = df.describe(include="all").to_string()
+            kpi_div = create_kpi_cards(numeric_df)
 
             logger.info("✅ تم عرض الرسوم البيانية والبطاقات بنجاح.")
             return (
@@ -179,4 +171,3 @@ def register_charts_callbacks(app):
                 f"Numeric: {list(numeric_df.columns) if 'numeric_df' in locals() else 'N/A'}, Error: {e}"
             )
             return [], [], {}, {}, {}, "", []
-
