@@ -19,6 +19,16 @@ logger.info(f"📂 RAW_DATA_DIR مضبوط بنجاح: {RAW_DATA_DIR}")
 
 
 def upload_csv_component(component_id="upload-data", max_file_size_mb=5):
+    """
+    إنشاء مكون رفع ملف CSV للواجهة.
+
+    Args:
+        component_id (str): معرف المكون.
+        max_file_size_mb (int): الحد الأقصى لحجم الملف بالميجابايت.
+
+    Returns:
+        html.Div: مكون رفع ملفات.
+    """
     return html.Div([
         html.H4("📁 تحميل ملف البيانات (CSV)", style={
             "marginBottom": "10px",
@@ -65,7 +75,16 @@ def upload_csv_component(component_id="upload-data", max_file_size_mb=5):
     ])
 
 
-def is_csv_content_valid(decoded_bytes):
+def is_csv_content_valid(decoded_bytes: bytes) -> bool:
+    """
+    التحقق من صحة محتوى الملف بصيغة CSV.
+
+    Args:
+        decoded_bytes (bytes): البيانات المفكوكة من الترميز base64.
+
+    Returns:
+        bool: True إذا المحتوى صالح كـ CSV، False خلاف ذلك.
+    """
     try:
         sample = io.StringIO(decoded_bytes.decode('utf-8', errors='ignore'))
         pd.read_csv(sample, nrows=5)
@@ -74,7 +93,21 @@ def is_csv_content_valid(decoded_bytes):
         return False
 
 
-def save_uploaded_file(contents, filename, max_file_size_mb=5):
+def save_uploaded_file(contents: str, filename: str, max_file_size_mb=5) -> str:
+    """
+    حفظ ملف CSV المرفوع بعد التحقق من صيغته وحجمه.
+
+    Args:
+        contents (str): محتوى الملف مشفر base64.
+        filename (str): اسم الملف الأصلي.
+        max_file_size_mb (int): الحد الأقصى للحجم بالميجابايت.
+
+    Raises:
+        ValueError: في حال عدم توافق الملف أو أخطاء أخرى.
+
+    Returns:
+        str: المسار الكامل للملف المحفوظ.
+    """
     if not filename.lower().endswith(".csv"):
         raise ValueError("❌ الملف ليس من نوع CSV.")
 
@@ -119,4 +152,10 @@ def save_uploaded_file(contents, filename, max_file_size_mb=5):
 
 
 def upload_section():
+    """
+    تغليف مكون رفع الملف الأساسي.
+
+    Returns:
+        html.Div: مكون رفع ملف CSV.
+    """
     return upload_csv_component(component_id="upload-data")
