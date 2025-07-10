@@ -6,26 +6,33 @@ from dash.dcc import send_bytes
 
 from data_intelligence_system.reports.report_dispatcher import generate_report
 from data_intelligence_system.utils.logger import get_logger
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values
 
 logger = get_logger("ExportCallback")
+
+
+def is_json_empty(data_json: str | None) -> bool:
+    """
+    تحقق ما إذا كانت بيانات JSON فارغة أو None أو تمثل قيمة فارغة.
+    """
+    return not data_json or str(data_json).strip() in ("", "{}", "null")
+
+
+def get_available_json_data(filtered_json: str | None, stored_json: str | None) -> str | None:
+    """
+    ترجيح البيانات المفلترة أولًا ثم العامة.
+    """
+    if not is_json_empty(filtered_json):
+        return filtered_json
+    if not is_json_empty(stored_json):
+        return stored_json
+    return None
 
 
 def register_export_callbacks(app):
     """
     تسجيل كولباك توليد وتحميل التقرير بناءً على البيانات المخزنة أو المفلترة.
     """
-
-    def is_json_empty(data_json):
-        return not data_json or str(data_json).strip() in ("", "{}", "null")
-
-    def get_available_json_data(filtered_json, stored_json):
-        """ترجيح البيانات المفلترة أولًا ثم العامة."""
-        if not is_json_empty(filtered_json):
-            return filtered_json
-        if not is_json_empty(stored_json):
-            return stored_json
-        return None
 
     @app.callback(
         Output("download-report", "data"),
@@ -60,7 +67,6 @@ def register_export_callbacks(app):
                 logger.warning("⚠️ البيانات المحولة فارغة.")
                 raise PreventUpdate
 
-            # ✅ معالجة القيم المفقودة باستخدام النظام الجديد
             df = fill_missing_values(df)
 
         except Exception as e:
