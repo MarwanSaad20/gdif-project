@@ -4,17 +4,28 @@ from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.core.data_bindings import json_to_df, df_to_dash_json, filter_data_by_date
 from data_intelligence_system.utils.logger import get_logger
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ جديد
+from data_intelligence_system.utils.preprocessing import fill_missing_values
 
 logger = get_logger("FiltersCallbacks")
 
 
 def register_filters_callbacks(app):
     """
-    ✅ تسجيل كولباكات التصفية الديناميكية المتكاملة مع التخزين الموحد (stored-data).
+    تسجيل كولباكات التصفية الديناميكية المتكاملة مع التخزين الموحد (stored-data).
     """
 
-    # 1️⃣ فلترة حسب الفئة والتاريخ
+    def _validate_df(stored_json, required_columns=None):
+        df = json_to_df(stored_json)
+        if df is None or df.empty:
+            logger.warning("📭 البيانات الأصلية غير متوفرة أو فارغة.")
+            raise PreventUpdate
+        if required_columns:
+            missing = [col for col in required_columns if col not in df.columns]
+            if missing:
+                logger.warning(f"⚠️ الأعمدة المطلوبة غير موجودة: {missing}")
+                raise PreventUpdate
+        return fill_missing_values(df)
+
     @app.callback(
         Output('filtered-data-store', 'data'),
         Input('filter-dropdown-category', 'value'),
@@ -24,21 +35,15 @@ def register_filters_callbacks(app):
         prevent_initial_call=True
     )
     def filter_by_category_and_date(category_value, start_date, end_date, stored_json):
-        df = json_to_df(stored_json)
-        if df is None or df.empty:
-            logger.warning("📭 البيانات الأصلية غير متوفرة أو فارغة.")
-            raise PreventUpdate
-
         try:
-            df = fill_missing_values(df)  # ✅ معالجة القيم المفقودة
+            df = _validate_df(stored_json, required_columns=['category', 'date'])
 
             # تصفية حسب الفئة
-            if category_value and 'category' in df.columns:
+            if category_value:
                 df = df[df['category'].astype(str) == str(category_value)]
 
             # تصفية حسب التاريخ
-            if 'date' in df.columns:
-                df = filter_data_by_date(df, start_date=start_date, end_date=end_date, date_column='date')
+            df = filter_data_by_date(df, start_date=start_date, end_date=end_date, date_column='date')
 
             if df.empty:
                 logger.info("ℹ️ لا توجد بيانات بعد الفلترة.")
@@ -46,11 +51,12 @@ def register_filters_callbacks(app):
 
             return df_to_dash_json(df)
 
+        except PreventUpdate:
+            raise
         except Exception as e:
             logger.exception(f"❌ خطأ أثناء الفلترة حسب الفئة والتاريخ: {e}")
             return df_to_dash_json(None)
 
-    # 2️⃣ تحديث قائمة الفئات المتاحة
     @app.callback(
         Output('filter-dropdown-category', 'options'),
         Input('stored-data', 'data')
@@ -66,7 +72,6 @@ def register_filters_callbacks(app):
         logger.info(f"✅ تم تحديث الفئات: {len(options)} خيار.")
         return options
 
-    # 3️⃣ عرض عدد النتائج بعد التصفية بالفئة والتاريخ
     @app.callback(
         Output('filtered-count', 'children'),
         Input('filtered-data-store', 'data')
@@ -77,7 +82,6 @@ def register_filters_callbacks(app):
             return html.Span("عدد العناصر: 0", style={"color": "gray"})
         return html.Span(f"عدد العناصر بعد التصفية: {len(df):,}", style={"color": "#00cc96"})
 
-    # 4️⃣ تفعيل/تعطيل زر التصدير حسب نتائج الفلترة
     @app.callback(
         Output('export-btn', 'disabled'),
         Input('filtered-data-store', 'data')
@@ -88,7 +92,6 @@ def register_filters_callbacks(app):
         logger.debug(f"🧩 حالة زر التصدير: {'معطل' if disabled else 'مفعل'}")
         return disabled
 
-    # 5️⃣ فلترة متعددة حسب النوع (type)
     @app.callback(
         Output('filtered-data-multi', 'data'),
         Input('filter-multi-select', 'value'),
@@ -96,23 +99,22 @@ def register_filters_callbacks(app):
         prevent_initial_call=True
     )
     def filter_by_type_multi(selected, stored_json):
-        df = json_to_df(stored_json)
-        if df is None or not selected or 'type' not in df.columns:
-            logger.info("⚠️ لا توجد بيانات أو قيم محددة للنوع.")
+        if not selected:
+            logger.info("⚠️ لا توجد قيم محددة للنوع.")
             return df_to_dash_json(None)
-
         try:
-            df = fill_missing_values(df)  # ✅ معالجة القيم المفقودة
+            df = _validate_df(stored_json, required_columns=['type'])
             filtered = df[df['type'].isin(selected)]
             if filtered.empty:
                 logger.info("ℹ️ الفلترة حسب النوع لم تُرجع بيانات.")
                 return df_to_dash_json(None)
             return df_to_dash_json(filtered)
+        except PreventUpdate:
+            raise
         except Exception as e:
             logger.warning(f"⚠️ فشل الفلترة حسب النوع: {e}", exc_info=True)
             return df_to_dash_json(None)
 
-    # 6️⃣ عرض عدد النتائج المفلترة حسب النوع
     @app.callback(
         Output('filtered-multi-count', 'children'),
         Input('filtered-data-multi', 'data')
@@ -123,7 +125,6 @@ def register_filters_callbacks(app):
             return html.Span("عدد العناصر حسب النوع: 0", style={"color": "gray"})
         return html.Span(f"عدد العناصر حسب النوع: {len(df):,}", style={"color": "#1E90FF"})
 
-    # 7️⃣ إعادة تعيين الفلاتر إلى الحالة الأولية
     @app.callback(
         Output('filter-dropdown-category', 'value'),
         Output('filter-date-range', 'start_date'),
@@ -135,8 +136,3 @@ def register_filters_callbacks(app):
     def reset_all_filters(n_clicks):
         logger.info("🔄 تم إعادة تعيين جميع الفلاتر.")
         return None, None, None, []
-
-
-# للمرونة المستقبلية
-def register_filter_callbacks():
-    return None
