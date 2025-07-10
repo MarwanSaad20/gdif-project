@@ -4,6 +4,7 @@ from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.utils.preprocessing import fill_missing_values
+from data_intelligence_system.dashboard.components.indicators import create_kpi_card, create_kpi_container
 
 logger = get_logger("KPICallbacks")
 
