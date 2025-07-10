@@ -13,12 +13,12 @@ SIDEBAR_DEFAULT_STYLE = {'display': 'block', 'width': SIDEBAR_DEFAULT_WIDTH}
 def register_layout_callbacks(app):
     """
     تسجيل كولباكات التحكم بتخطيط الواجهة الموحدة (single-page app).
-    
+
     تشمل:
     - إظهار/إخفاء الشريط الجانبي.
     - تفعيل زر التحليل الكامل بعد رفع ملف.
     - إعادة تهيئة واجهة التخطيط (مسح الرسائل أو التفريغ) مستقبلًا.
-    
+
     Parameters:
         app (dash.Dash): كائن التطبيق الذي سيتم تسجيل الكولباكات عليه.
     """
@@ -32,11 +32,11 @@ def register_layout_callbacks(app):
     def toggle_sidebar(n_clicks: int, current_style: dict | None) -> dict:
         """
         تبديل حالة إظهار/إخفاء القائمة الجانبية باستخدام زر التنقل.
-        
+
         Args:
             n_clicks (int): عدد مرات النقر على زر التبديل.
             current_style (dict | None): النمط الحالي للشريط الجانبي.
-        
+
         Returns:
             dict: النمط الجديد للشريط الجانبي.
         """
@@ -61,10 +61,10 @@ def register_layout_callbacks(app):
     def enable_analysis_button_if_data_uploaded(path: str | None) -> bool:
         """
         تفعيل زر التحليل الكامل إذا تم رفع ملف وحفظ المسار بنجاح.
-        
+
         Args:
             path (str | None): مسار البيانات المرفوعة.
-        
+
         Returns:
             bool: False إذا تم تفعيل الزر، True إذا بقي معطلاً.
         """
@@ -81,10 +81,10 @@ def register_layout_callbacks(app):
     def clear_layout(n_clicks: int | None):
         """
         إعادة تهيئة واجهة التخطيط (مسح الرسائل أو تفريغ مكونات).
-        
+
         Args:
             n_clicks (int | None): عدد النقرات على زر إعادة التهيئة.
-        
+
         Returns:
             dash.no_update: لا يتم تحديث المكون الحالي.
         """
