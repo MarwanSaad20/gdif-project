@@ -8,10 +8,12 @@ from data_intelligence_system.dashboard.components.filters import (
 from data_intelligence_system.dashboard.components.upload_component import upload_section
 from data_intelligence_system.dashboard.layouts.charts_placeholders import forecast_chart
 from data_intelligence_system.dashboard.layouts.stats_summary import stats_summary_card
+from data_intelligence_system.dashboard.layouts.theme import Theme  # استيراد الثيم من الملف المحدث
 
-BACKGROUND_COLOR = "#0A0F1A"
-TEXT_COLOR = "#FFFFFF"
-PRIMARY_COLOR = "#1E90FF"
+
+BACKGROUND_COLOR = Theme.BACKGROUND_COLOR
+TEXT_COLOR = Theme.TEXT_COLOR
+PRIMARY_COLOR = Theme.PRIMARY_COLOR
 
 
 def build_title_section():
