@@ -1,8 +1,9 @@
-import pandas as pd
+import os
 import uuid
+import pandas as pd
 from dash import Input, Output, State
 from dash.exceptions import PreventUpdate
-from dash.dcc import send_bytes
+from dash.dcc import send_file
 
 from data_intelligence_system.reports.report_dispatcher import generate_report
 from data_intelligence_system.utils.logger import get_logger
@@ -12,16 +13,10 @@ logger = get_logger("ExportCallback")
 
 
 def is_json_empty(data_json: str | None) -> bool:
-    """
-    تحقق ما إذا كانت بيانات JSON فارغة أو None أو تمثل قيمة فارغة.
-    """
     return not data_json or str(data_json).strip() in ("", "{}", "null")
 
 
 def get_available_json_data(filtered_json: str | None, stored_json: str | None) -> str | None:
-    """
-    ترجيح البيانات المفلترة أولًا ثم العامة.
-    """
     if not is_json_empty(filtered_json):
         return filtered_json
     if not is_json_empty(stored_json):
@@ -30,10 +25,6 @@ def get_available_json_data(filtered_json: str | None, stored_json: str | None) 
 
 
 def register_export_callbacks(app):
-    """
-    تسجيل كولباك توليد وتحميل التقرير بناءً على البيانات المخزنة أو المفلترة.
-    """
-
     @app.callback(
         Output("download-report", "data"),
         Input("download-btn", "n_clicks"),
@@ -82,26 +73,18 @@ def register_export_callbacks(app):
                 "cover_image": None
             }
 
-            output_bytes, filename = generate_report(
+            file_path = generate_report(
                 data=df,
                 report_type=report_format,
                 config=config
             )
 
-            if not output_bytes or not filename:
-                logger.error("❌ الدالة generate_report لم تُرجع بيانات صالحة.")
+            if not file_path or not os.path.exists(file_path):
+                logger.error("❌ لم يتم توليد ملف التقرير بشكل صحيح.")
                 raise PreventUpdate
 
-            mime_types = {
-                "pdf": "application/pdf",
-                "excel": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "html": "text/html",
-                "csv": "text/csv"
-            }
-            mime_type = mime_types[report_format]
-
-            logger.info(f"📄 تم توليد التقرير بنجاح: {filename}")
-            return send_bytes(output_bytes, filename=filename, mime_type=mime_type)
+            logger.info(f"📄 تم توليد التقرير بنجاح: {file_path}")
+            return send_file(file_path)
 
         except Exception as e:
             logger.error(f"❌ خطأ أثناء توليد التقرير: {e}", exc_info=True)
