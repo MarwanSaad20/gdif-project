@@ -1,13 +1,13 @@
 import json
-import logging
 from pathlib import Path
 from typing import Optional
 
 import pandas as pd
 
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ صحيح الاستخدام
+from data_intelligence_system.utils.preprocessing import fill_missing_values
+from data_intelligence_system.utils.logger import get_logger  # ✅ توحيد نظام اللوجر
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # ======== المسارات الرئيسية ========
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,16 +16,6 @@ PROFILES_DIR = BASE_DIR / 'data_profiles'
 
 
 def df_to_dash_json(df: Optional[pd.DataFrame], orient: str = "split") -> str:
-    """
-    تحويل DataFrame إلى JSON مناسب لـ Dash.
-
-    Args:
-        df (Optional[pd.DataFrame]): إطار البيانات للتحويل.
-        orient (str): طريقة تنظيم JSON (default "split").
-
-    Returns:
-        str: سلسلة JSON.
-    """
     if df is None or df.empty:
         logger.warning("⚠️ DataFrame فارغ أو None عند التحويل إلى JSON.")
         return json.dumps({}, default=str)
@@ -45,16 +35,6 @@ def df_to_dash_json(df: Optional[pd.DataFrame], orient: str = "split") -> str:
 
 
 def json_to_df(data_json: Optional[str], parse_dates: bool = True) -> Optional[pd.DataFrame]:
-    """
-    تحويل JSON (بصيغة split) إلى DataFrame.
-
-    Args:
-        data_json (Optional[str]): نص JSON.
-        parse_dates (bool): محاولة تحويل الأعمدة إلى تواريخ (default True).
-
-    Returns:
-        Optional[pd.DataFrame]: DataFrame أو None إذا فشل.
-    """
     if not data_json or data_json.strip() in ('{}', ''):
         logger.warning("⚠️ JSON فارغ أو غير صالح.")
         return None
@@ -66,7 +46,6 @@ def json_to_df(data_json: Optional[str], parse_dates: bool = True) -> Optional[p
             return None
 
         if parse_dates:
-            # محاولة تحويل الأعمدة التي تحتوي على نصوص إلى تواريخ دفعة واحدة
             obj_cols = df.select_dtypes(include=['object']).columns
             for col in obj_cols:
                 converted = pd.to_datetime(df[col], errors='coerce')
@@ -87,18 +66,6 @@ def filter_data_by_date(
     end_date: Optional[str] = None,
     date_column: str = "date"
 ) -> pd.DataFrame:
-    """
-    تصفية DataFrame حسب نطاق زمني محدد.
-
-    Args:
-        df (pd.DataFrame): إطار البيانات.
-        start_date (Optional[str]): تاريخ البدء (ISO أو قابل للتحويل).
-        end_date (Optional[str]): تاريخ النهاية (ISO أو قابل للتحويل).
-        date_column (str): اسم عمود التاريخ (default "date").
-
-    Returns:
-        pd.DataFrame: نسخة مفلترة من DataFrame.
-    """
     if date_column not in df.columns:
         logger.warning(f"⚠️ عمود التاريخ '{date_column}' غير موجود في DataFrame، سيتم إرجاع البيانات بدون فلترة.")
         return df
@@ -124,20 +91,6 @@ def filter_data_by_date(
 
 
 def read_file(path: Path) -> pd.DataFrame:
-    """
-    قراءة ملف CSV أو Excel إلى DataFrame.
-
-    Args:
-        path (Path): مسار الملف.
-
-    Raises:
-        FileNotFoundError: إذا لم يوجد الملف.
-        ValueError: إذا كان الامتداد غير مدعوم.
-        Exception: أي خطأ آخر في القراءة.
-
-    Returns:
-        pd.DataFrame: البيانات المقروءة.
-    """
     if not path.exists():
         logger.error(f"❌ الملف غير موجود: {path}")
         raise FileNotFoundError(f"❌ الملف غير موجود: {path}")
@@ -159,26 +112,8 @@ def read_file(path: Path) -> pd.DataFrame:
 
 
 def load_raw_data(filename: str) -> pd.DataFrame:
-    """
-    تحميل بيانات خام من مجلد البيانات.
-
-    Args:
-        filename (str): اسم ملف البيانات.
-
-    Returns:
-        pd.DataFrame: البيانات المحملة.
-    """
     return read_file(DATA_DIR / filename)
 
 
 def load_saved_data(filename: str = "uploaded.csv") -> pd.DataFrame:
-    """
-    تحميل بيانات معالجة محفوظة مسبقًا.
-
-    Args:
-        filename (str): اسم الملف (افتراضي "uploaded.csv").
-
-    Returns:
-        pd.DataFrame: البيانات المحملة.
-    """
     return read_file(DATA_DIR / "processed" / filename)
