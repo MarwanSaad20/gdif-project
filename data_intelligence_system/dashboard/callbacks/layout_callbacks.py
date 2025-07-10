@@ -1,22 +1,26 @@
-from dash import Input, Output, State, html, no_update
+from dash import Input, Output, State, no_update
 from dash.exceptions import PreventUpdate
 
-from data_intelligence_system.utils.logger import get_logger  # ✅ نظام تسجيل موحد
+from data_intelligence_system.utils.logger import get_logger  # نظام تسجيل موحد
 
-logger = get_logger("LayoutCallbacks")  # ⬅️ تخصيص اسم للّوجر
+logger = get_logger("LayoutCallbacks")  # تخصيص اسم للوجر
 
-# القيم الافتراضية لتصميم الشريط الجانبي
+# الثوابت الافتراضية لتصميم الشريط الجانبي
 SIDEBAR_DEFAULT_WIDTH = "250px"
 SIDEBAR_DEFAULT_STYLE = {'display': 'block', 'width': SIDEBAR_DEFAULT_WIDTH}
 
 
 def register_layout_callbacks(app):
     """
-    ✅ تسجيل كولباكات التحكم بتخطيط الواجهة الموحدة (single-page app).
-    يشمل:
+    تسجيل كولباكات التحكم بتخطيط الواجهة الموحدة (single-page app).
+    
+    تشمل:
     - إظهار/إخفاء الشريط الجانبي.
     - تفعيل زر التحليل الكامل بعد رفع ملف.
     - إعادة تهيئة واجهة التخطيط (مسح الرسائل أو التفريغ) مستقبلًا.
+    
+    Parameters:
+        app (dash.Dash): كائن التطبيق الذي سيتم تسجيل الكولباكات عليه.
     """
 
     @app.callback(
@@ -25,9 +29,16 @@ def register_layout_callbacks(app):
         State('sidebar-col', 'style'),
         prevent_initial_call=True
     )
-    def toggle_sidebar(n_clicks, current_style):
+    def toggle_sidebar(n_clicks: int, current_style: dict | None) -> dict:
         """
-        إظهار/إخفاء القائمة الجانبية باستخدام زر التنقل العلوي.
+        تبديل حالة إظهار/إخفاء القائمة الجانبية باستخدام زر التنقل.
+        
+        Args:
+            n_clicks (int): عدد مرات النقر على زر التبديل.
+            current_style (dict | None): النمط الحالي للشريط الجانبي.
+        
+        Returns:
+            dict: النمط الجديد للشريط الجانبي.
         """
         if not isinstance(current_style, dict):
             current_style = SIDEBAR_DEFAULT_STYLE.copy()
@@ -39,33 +50,45 @@ def register_layout_callbacks(app):
         new_style['display'] = new_display
         new_style['width'] = SIDEBAR_DEFAULT_WIDTH if new_display == 'block' else '0px'
 
-        logger.info(f"✅ تبديل الشريط الجانبي إلى: {new_display}")
+        logger.info(f"تبديل الشريط الجانبي إلى: {new_display}")
         return new_style
 
-    # ✅ تفعيل زر التحليل الكامل تلقائيًا بعد رفع ملف صالح
     @app.callback(
         Output("run-full-analysis-btn", "disabled"),
         Input("store_raw_data_path", "data"),
         prevent_initial_call=True
     )
-    def enable_analysis_button_if_data_uploaded(path):
+    def enable_analysis_button_if_data_uploaded(path: str | None) -> bool:
         """
-        إذا تم رفع ملف وحُفظ المسار بنجاح → فعّل زر التحليل.
+        تفعيل زر التحليل الكامل إذا تم رفع ملف وحفظ المسار بنجاح.
+        
+        Args:
+            path (str | None): مسار البيانات المرفوعة.
+        
+        Returns:
+            bool: False إذا تم تفعيل الزر، True إذا بقي معطلاً.
         """
         if path:
-            logger.info("🟢 تم رفع ملف بنجاح - زر التحليل أصبح مفعلًا.")
-            return False  # الزر غير معطل
-        return True  # الزر يبقى معطلًا
+            logger.info("تم رفع ملف بنجاح - زر التحليل أصبح مفعلًا.")
+            return False
+        return True
 
-    # ✅ كولباك مستقبلي لإعادة ضبط التخطيط أو إفراغ مكونات معينة إن لزم
     @app.callback(
         Output('full-analysis-status', 'children', allow_duplicate=True),
         Input('clear-layout-btn', 'n_clicks'),
         prevent_initial_call=True
     )
-    def clear_layout(n_clicks):
+    def clear_layout(n_clicks: int | None):
         """
-        (اختياري) مسح الرسائل أو إعادة تعيين التخطيط – مخصص لتوسعة مستقبلية.
+        إعادة تهيئة واجهة التخطيط (مسح الرسائل أو تفريغ مكونات).
+        
+        Args:
+            n_clicks (int | None): عدد النقرات على زر إعادة التهيئة.
+        
+        Returns:
+            dash.no_update: لا يتم تحديث المكون الحالي.
         """
-        logger.info("🔄 تم تنفيذ إعادة التهيئة الجزئية للتخطيط.")
+        if not n_clicks:
+            raise PreventUpdate
+        logger.info("تم تنفيذ إعادة التهيئة الجزئية للتخطيط.")
         return no_update
