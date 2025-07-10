@@ -7,6 +7,11 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+# إضافة المسار الجذري للمشروع (حيث يوجد data_intelligence_system) لضمان التكامل مع الاستيرادات المطلقة
+PROJECT_PARENT = PROJECT_ROOT.parent
+if str(PROJECT_PARENT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_PARENT))
+
 # إدخال مسارات الوحدات الفرعية إلى sys.path
 for sub in ["data", "etl", "analysis", "dashboard", "core", "reports", "utils"]:
     path = PROJECT_ROOT / "data_intelligence_system" / sub
@@ -33,7 +38,7 @@ logger = logging.getLogger("GDIF")
 
 # ===== استيراد الوحدات الحيوية مع التعامل مع أخطاء الاستيراد =====
 try:
-    from etl.pipeline import run_full_pipeline
+    from data_intelligence_system.etl.pipeline import run_full_pipeline
 except ImportError as err:
     logger.critical(f"❌ تعذر استيراد run_full_pipeline من etl.pipeline: {err}", exc_info=True)
     def run_full_pipeline(*args, **kwargs):
