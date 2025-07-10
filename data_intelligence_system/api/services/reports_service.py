@@ -57,7 +57,6 @@ class ReportsService:
                 return True
 
             elif output_format == "pdf":
-                # استخدام dispatcher الجديد لتوليد PDF بدل التحويل من HTML
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
                 config = {
                     "filename": f"summary_report_{timestamp}",
