@@ -4,6 +4,7 @@ from dash import Input, Output, html
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.dashboard.components import indicators
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تم إضافته للتكامل
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,7 @@ def parse_data(data_json: str) -> pd.DataFrame:
         if df.empty:
             logger.warning("📭 بيانات مفرغة داخل DataFrame")
             raise PreventUpdate
+        df = fill_missing_values(df)  # ✅ معالجة القيم المفقودة قبل التحليل
         return df
     except Exception as e:
         logger.error(f"❌ فشل في فك تشفير البيانات: {e}", exc_info=True)
