@@ -5,9 +5,11 @@ from typing import List
 from datetime import datetime
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from weasyprint import HTML
+
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.analysis.descriptive_stats import generate_descriptive_stats
 from data_intelligence_system.utils.logger import get_logger
+from data_intelligence_system.reports.report_dispatcher import generate_report
 
 # استخدام اللوقر الموحد
 logger = get_logger("report.service")
@@ -17,11 +19,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 TEMPLATE_DIR = os.path.join(BASE_DIR, "reports", "templates")
 REPORTS_OUTPUT_DIR = os.path.join(BASE_DIR, "reports", "generated")
 
+
 def ensure_dir(path: str):
     """إنشاء مجلد إذا لم يكن موجودًا."""
     if not os.path.exists(path):
         os.makedirs(path)
         logger.info(f"📂 تم إنشاء المجلد: {path}")
+
 
 class ReportsService:
 
@@ -53,7 +57,17 @@ class ReportsService:
                 return True
 
             elif output_format == "pdf":
-                self._convert_html_to_pdf(html_path, output_dir)
+                # استخدام dispatcher الجديد لتوليد PDF بدل التحويل من HTML
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                config = {
+                    "filename": f"summary_report_{timestamp}",
+                    "title": title
+                }
+                generate_report(
+                    data=df,
+                    report_type="pdf",
+                    config=config
+                )
                 return True
 
             elif output_format == "excel":
@@ -141,6 +155,7 @@ class ReportsService:
             raise
 
         return output_path
+
 
 # ===========================
 # دوال خارج الكلاس للاستخدام الخارجي
