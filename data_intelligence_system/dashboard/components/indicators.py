@@ -1,10 +1,6 @@
 from dash import html
 from typing import Optional, Union, List
 
-from data_intelligence_system.utils.logger import get_logger  # ✅ إضافة اللوجر المخصص
-
-logger = get_logger("Indicators")  # جاهز للاستخدام عند الحاجة
-
 def create_kpi_card(
     id: str,
     title: str,
@@ -17,6 +13,24 @@ def create_kpi_card(
     value_style: Optional[dict] = None,
     class_name: Optional[Union[str, List[str]]] = None
 ) -> html.Div:
+    """
+    إنشاء بطاقة KPI لعرض عنوان وقيمة وأيقونة مع إمكانية تخصيص الأنماط والألوان.
+
+    Args:
+        id (str): معرف مميز للبطاقة.
+        title (str): عنوان البطاقة.
+        value (str|int|float, optional): القيمة المعروضة. الافتراضي "—".
+        icon (str, optional): اسم كلاس أيقونة FontAwesome أو مشابه.
+        tooltip (str, optional): نص التلميح عند المرور فوق القيمة.
+        color (str, optional): لون نص القيمة.
+        style (dict, optional): أنماط CSS إضافية للبطاقة.
+        title_style (dict, optional): أنماط CSS إضافية للعنوان.
+        value_style (dict, optional): أنماط CSS إضافية للقيمة.
+        class_name (str|List[str], optional): أسماء كلاسات CSS إضافية.
+
+    Returns:
+        html.Div: بطاقة KPI جاهزة للعرض.
+    """
     base_card_style = {
         "backgroundColor": "#1a1a1a",
         "color": "white",
@@ -86,6 +100,15 @@ def create_kpi_card(
 
 
 def create_kpi_container(kpi_cards: List[html.Div]) -> html.Div:
+    """
+    تغليف مجموعة بطاقات KPI داخل حاوية مرنة ومتجاوبة.
+
+    Args:
+        kpi_cards (List[html.Div]): قائمة بطاقات KPI.
+
+    Returns:
+        html.Div: حاوية تعرض بطاقات KPI.
+    """
     container_style = {
         "display": "flex",
         "flexWrap": "wrap",
@@ -103,6 +126,12 @@ def create_kpi_container(kpi_cards: List[html.Div]) -> html.Div:
 
 
 def dashboard_kpis_default() -> html.Div:
+    """
+    نموذج افتراضي لبطاقات KPI لعرض عدد المستخدمين، إجمالي المبيعات، ونسبة الأداء.
+
+    Returns:
+        html.Div: حاوية KPI الافتراضية.
+    """
     cards = [
         create_kpi_card(
             id="kpi-users",
