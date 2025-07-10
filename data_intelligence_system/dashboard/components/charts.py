@@ -1,11 +1,17 @@
 import plotly.graph_objects as go
 import numpy as np
+from typing import List, Optional, Dict, Any
 
-from data_intelligence_system.utils.logger import get_logger  # ✅ استيراد اللوجر الموحد
+from data_intelligence_system.utils.logger import get_logger
 
-logger = get_logger("Charts")  # يمكن استخدامه مستقبلًا لتتبع الأخطاء أو الحالات
+logger = get_logger("Charts")
 
-def create_empty_figure(message="⚠️ لا توجد بيانات كافية للرسم", height=400, width=None):
+
+def create_empty_figure(message: str = "⚠️ لا توجد بيانات كافية للرسم",
+                        height: int = 400, width: Optional[int] = None) -> go.Figure:
+    """
+    إنشاء شكل فارغ مع رسالة تنبيه.
+    """
     fig = go.Figure()
     fig.update_layout(
         height=height,
@@ -27,10 +33,15 @@ def create_empty_figure(message="⚠️ لا توجد بيانات كافية ل
     return fig
 
 
-def create_common_layout(title, height=400, width=None, margin=None, xaxis_style=None, yaxis_style=None, extra_layout=None):
+def create_common_layout(title: str, height: int = 400, width: Optional[int] = None,
+                         margin: Optional[Dict[str, int]] = None,
+                         xaxis_style: Optional[Dict[str, Any]] = None,
+                         yaxis_style: Optional[Dict[str, Any]] = None,
+                         extra_layout: Optional[Dict[str, Any]] = None) -> go.Layout:
+    """
+    إنشاء إعداد تخطيط مشترك لكل الرسومات.
+    """
     default_margin = dict(l=50, r=20, t=50, b=40)
-    margin = margin or default_margin
-
     default_xaxis = dict(showgrid=False, zeroline=False, color='lightblue')
     default_yaxis = dict(showgrid=True, gridcolor='rgba(255,255,255,0.1)', zeroline=False, color='lightblue')
 
@@ -41,7 +52,7 @@ def create_common_layout(title, height=400, width=None, margin=None, xaxis_style
         font=dict(color='white', family="Arial, sans-serif"),
         height=height,
         width=width,
-        margin=margin,
+        margin=margin or default_margin,
         xaxis=xaxis_style or default_xaxis,
         yaxis=yaxis_style or default_yaxis,
         hovermode='x unified',
@@ -54,7 +65,12 @@ def create_common_layout(title, height=400, width=None, margin=None, xaxis_style
     return go.Layout(**layout_dict)
 
 
-def create_line_chart(x_data, y_data, title="", colors=None, height=400, width=None, **kwargs):
+def create_line_chart(x_data: List[Any], y_data: List[Optional[float]], title: str = "",
+                      colors: Optional[Dict[str, str]] = None,
+                      height: int = 400, width: Optional[int] = None, **kwargs) -> go.Figure:
+    """
+    إنشاء رسم خطي.
+    """
     if not x_data or not y_data or len(x_data) != len(y_data):
         return create_empty_figure(message="⚠️ لا توجد بيانات كافية للرسم الخطي", height=height, width=width)
 
@@ -63,12 +79,11 @@ def create_line_chart(x_data, y_data, title="", colors=None, height=400, width=N
 
     x_clean = [str(x) if x is not None else '' for x in x_data]
     y_clean = [float(y) if y is not None else np.nan for y in y_data]
-
     line_color = colors.get('line', '#1f77b4') if colors else '#1f77b4'
 
     layout = create_common_layout(title, height, width, **kwargs)
 
-    fig = go.Figure(data=[go.Scatter(
+    return go.Figure(data=[go.Scatter(
         x=x_clean,
         y=y_clean,
         mode='lines+markers',
@@ -76,10 +91,13 @@ def create_line_chart(x_data, y_data, title="", colors=None, height=400, width=N
         hovertemplate='%{x}: %{y}<extra></extra>'
     )], layout=layout)
 
-    return fig
 
-
-def create_bar_chart(categories, values, title="", colors=None, height=400, width=None, **kwargs):
+def create_bar_chart(categories: List[str], values: List[Optional[float]], title: str = "",
+                     colors: Optional[Dict[str, str]] = None,
+                     height: int = 400, width: Optional[int] = None, **kwargs) -> go.Figure:
+    """
+    إنشاء رسم عمودي.
+    """
     if not categories or not values or len(categories) != len(values):
         return create_empty_figure(message="⚠️ لا توجد بيانات كافية للرسم العمودي", height=height, width=width)
 
@@ -87,20 +105,22 @@ def create_bar_chart(categories, values, title="", colors=None, height=400, widt
         raise ValueError("colors يجب أن يكون قاموسًا")
 
     bar_color = colors.get('bar', '#007ACC') if colors else '#007ACC'
-
     layout = create_common_layout(title, height, width, **kwargs)
 
-    fig = go.Figure(data=[go.Bar(
+    return go.Figure(data=[go.Bar(
         x=categories,
         y=values,
         marker_color=bar_color,
         hovertemplate='%{x}: %{y}<extra></extra>'
     )], layout=layout)
 
-    return fig
 
-
-def create_pie_chart(labels, values, title="", colors=None, height=400, width=None, **kwargs):
+def create_pie_chart(labels: List[str], values: List[Optional[float]], title: str = "",
+                     colors: Optional[Dict[str, Any]] = None,
+                     height: int = 400, width: Optional[int] = None, **kwargs) -> go.Figure:
+    """
+    إنشاء رسم دائري.
+    """
     if not labels or not values or len(labels) != len(values):
         return create_empty_figure(message="⚠️ لا توجد بيانات كافية للرسم الدائري", height=height, width=width)
 
@@ -115,10 +135,9 @@ def create_pie_chart(labels, values, title="", colors=None, height=400, width=No
     pie_colors = colors.get('pie_colors', default_pie_colors) if colors else default_pie_colors
 
     extra_layout = dict(margin=dict(l=20, r=20, t=50, b=20))
-
     layout = create_common_layout(title, height, width, extra_layout=extra_layout, **kwargs)
 
-    fig = go.Figure(data=[go.Pie(
+    return go.Figure(data=[go.Pie(
         labels=labels,
         values=values,
         marker=dict(colors=pie_colors),
@@ -126,5 +145,3 @@ def create_pie_chart(labels, values, title="", colors=None, height=400, width=No
         hoverinfo='label+percent+value',
         hovertemplate='%{label}: %{percent} (%{value})<extra></extra>'
     )], layout=layout)
-
-    return fig
