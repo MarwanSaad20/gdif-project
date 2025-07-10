@@ -1,4 +1,5 @@
 import os
+import logging
 from typing import Dict, Any, Union
 import pandas as pd
 import numpy as np
@@ -11,6 +12,8 @@ from data_intelligence_system.reports.export_utils import (
     df_to_html_table
 )
 from data_intelligence_system.reports.report_config import OUTPUT_PATH
+
+logging.basicConfig(level=logging.INFO)
 
 
 def ensure_dir(path: str):
@@ -68,16 +71,13 @@ class ReportDispatcher:
         if not isinstance(data, pd.DataFrame):
             raise TypeError("[ERROR] PDF report requires a DataFrame or pre-built sections list.")
 
-        # توليد المحتوى الديناميكي
         sections = []
         df = data.copy()
 
-        # معاينة عامة
         preview_data = [list(df.columns)] + df.head(10).values.tolist()
         preview_table = pdf_gen.create_table(preview_data)
         sections.append({"title": "📋 معاينة أولية للبيانات", "content": preview_table})
 
-        # تحليل الأعمدة
         for col in df.columns:
             series = df[col]
             section_title = f"🔎 تحليل العمود: {col}"
@@ -96,17 +96,13 @@ class ReportDispatcher:
 
             sections.append({"title": section_title, "content": content})
 
-        # ملاحظات عامة
         note = pdf_gen.create_paragraph("📌 تم توليد هذا التقرير بشكل ذكي بناءً على نوع كل عمود.")
         sections.append({"title": "📎 ملاحظات ختامية", "content": note})
 
-        # بناء التقرير
         pdf_gen.build_pdf(sections, cover_image_path=cover_image)
-        print(f"[INFO] PDF report created at: {pdf_path}")
+        logging.info(f"PDF report created at: {pdf_path}")
         return pdf_path
 
-
-# ===== واجهات مساعدة للتنفيذ السريع =====
 
 def generate_report(data: Union[pd.DataFrame, list], report_type: str = "pdf", config: Dict[str, Any] = None) -> str:
     dispatcher = ReportDispatcher()
