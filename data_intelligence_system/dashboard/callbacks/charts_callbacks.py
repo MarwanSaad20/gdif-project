@@ -179,3 +179,4 @@ def register_charts_callbacks(app):
                 f"Numeric: {list(numeric_df.columns) if 'numeric_df' in locals() else 'N/A'}, Error: {e}"
             )
             return [], [], {}, {}, {}, "", []
+
