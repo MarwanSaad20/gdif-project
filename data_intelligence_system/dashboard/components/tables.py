@@ -1,9 +1,6 @@
 from dash import dash_table, html
 from typing import List, Dict, Optional, Union
 
-from data_intelligence_system.utils.logger import get_logger  # ✅ إضافة الاستيراد الموحد للّوجر
-
-logger = get_logger("Tables")  # ✅ logger مخصص للملف
 
 def create_data_table(
     id: str,
@@ -22,6 +19,25 @@ def create_data_table(
     page_action: str = "native",
     sort_mode: str = "single",
 ) -> dash_table.DataTable:
+    """
+    إنشاء جدول بيانات تفاعلي باستخدام Dash DataTable.
+
+    المعاملات:
+    - id: معرف العنصر.
+    - columns: قائمة أسماء الأعمدة أو قائمة قواميس تحتوي 'id' و 'name'.
+    - data: بيانات الجدول كقائمة قواميس (اختياري).
+    - page_size: عدد الصفوف في الصفحة.
+    - style_*: أنماط CSS مخصصة للجدول، الرؤوس، الخلايا، والبيانات المشروطة.
+    - tooltip_data: بيانات تلميحات الأدوات لكل خلية.
+    - tooltip_duration: مدة عرض التلميحات (بالملي ثانية).
+    - row_selectable: نوع التحديد (single, multi أو None).
+    - selected_rows: الصفوف المحددة مسبقًا.
+    - editable: السماح بتحرير البيانات.
+    - page_action: نوع تصفح الصفحات.
+    - sort_mode: وضع الترتيب (single أو multi).
+
+    يعيد: عنصر Dash DataTable جاهز للعرض.
+    """
     if not columns or len(columns) == 0:
         raise ValueError("❌ يجب تمرير قائمة أعمدة تحتوي على عنصر واحد على الأقل.")
 
@@ -103,6 +119,9 @@ def create_data_table(
 
 
 def reports_table():
+    """
+    مكون بسيط لعرض رسالة نصية في قسم التقارير قيد التطوير.
+    """
     return html.Div(
         children=[
             html.H3("📊 قسم التقارير قيد التطوير", style={"color": "#888", "textAlign": "center", "marginTop": "50px"}),
