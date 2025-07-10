@@ -22,6 +22,15 @@ for sub in SUBMODULES:
         sys.path.insert(0, str(sub_path))
 
 # ========== استيراد التخطيط والكولباكات ========== #
+# تأكد من أن مجلد المشروع الجذري في sys.path قبل الاستيراد
+PROJECT_PARENT = PROJECT_ROOT.parent
+if str(PROJECT_PARENT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_PARENT))
+
+# إضافة المسار الجذري للمشروع (حيث يوجد data_intelligence_system) إلى sys.path
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from data_intelligence_system.dashboard.layouts.main_layout import get_layout
 from data_intelligence_system.dashboard.callbacks.layout_callbacks import register_layout_callbacks
 from data_intelligence_system.dashboard.callbacks.upload_callbacks import register_upload_callbacks
