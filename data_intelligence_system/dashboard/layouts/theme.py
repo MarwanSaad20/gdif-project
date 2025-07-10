@@ -1,68 +1,72 @@
 """
-ملف تعريف الثيم والمتغيرات اللونية العامة
-- يستخدم لألوان متناسقة عبر التطبيق
-- يمكن تعديل القيم بسهولة لتغيير الثيم العام
+ملف تعريف الثيم والمتغيرات اللونية العامة.
+يستخدم لألوان متناسقة وخطوط ومساحات في التطبيق.
+يمكن تعديل القيم بسهولة لتغيير الثيم العام.
 """
 
-# الألوان الأساسية للتطبيق
-PRIMARY_COLOR = "#1E90FF"       # أزرق سماوي - اللون الأساسي
-SECONDARY_COLOR = "#FF4500"     # برتقالي داكن - لون ثانوي/تنبيهي
-SECONDARY_BG_COLOR = "#1F2937"  # خلفية ثانوية داكنة
-HOVER_COLOR = "#374151"         # لون hover (مثلاً للأزرار أو الروابط عند المرور عليها)
+from typing import List, Dict
 
-BACKGROUND_COLOR = "#0A0F1A"    # خلفية داكنة جداً
-TEXT_COLOR = "#FFFFFF"          # نص أبيض واضح
-TEXT_MUTED_COLOR = "#A0A0A0"    # نص رمادي خافت للعناصر الثانوية
-TEXT_MUTED_COLOR_LIGHT = "#CCCCCC"  # نص رمادي فاتح (اختياري للاستخدامات الخفيفة)
 
-BORDER_COLOR = "#222E3D"        # حدود داكنة
+class Theme:
+    # الألوان الأساسية للتطبيق
+    PRIMARY_COLOR: str = "#1E90FF"       # أزرق سماوي - اللون الأساسي
+    SECONDARY_COLOR: str = "#FF4500"     # برتقالي داكن - لون ثانوي/تنبيهي
+    SECONDARY_BG_COLOR: str = "#1F2937"  # خلفية ثانوية داكنة
+    HOVER_COLOR: str = "#374151"         # لون hover (مثلاً للأزرار أو الروابط عند المرور عليها)
 
-# ألوان إضافية للرسومات والواجهات
-SUCCESS_COLOR = "#28a745"        # أخضر للنجاحات والإشعارات الإيجابية
-WARNING_COLOR = "#ffc107"        # أصفر تحذيري
-DANGER_COLOR = "#dc3545"         # أحمر للأخطاء والتنبيهات الخطيرة
-INFO_COLOR = "#17a2b8"           # أزرق فاتح للمعلومات
+    BACKGROUND_COLOR: str = "#0A0F1A"    # خلفية داكنة جداً
+    TEXT_COLOR: str = "#FFFFFF"          # نص أبيض واضح
+    TEXT_MUTED_COLOR: str = "#A0A0A0"    # نص رمادي خافت للعناصر الثانوية
+    TEXT_MUTED_COLOR_LIGHT: str = "#CCCCCC"  # نص رمادي فاتح (اختياري للاستخدامات الخفيفة)
 
-LINK_COLOR = PRIMARY_COLOR
-LINK_HOVER_COLOR = "#63b3ed"     # درجة أفتح من الأساسي للروابط عند المرور عليها
+    BORDER_COLOR: str = "#222E3D"        # حدود داكنة
 
-BUTTON_ACTIVE_BG = "#2563eb"     # خلفية الزر النشط
+    # ألوان إضافية للرسومات والواجهات
+    SUCCESS_COLOR: str = "#28a745"        # أخضر للنجاحات والإشعارات الإيجابية
+    WARNING_COLOR: str = "#ffc107"        # أصفر تحذيري
+    DANGER_COLOR: str = "#dc3545"         # أحمر للأخطاء والتنبيهات الخطيرة
+    INFO_COLOR: str = "#17a2b8"           # أزرق فاتح للمعلومات
 
-# ألوان درجات متدرجة يمكن استخدامها في الرسومات (Sequential و Diverging)
-COLOR_SCALE_SEQUENTIAL = [
-    "#0d47a1", "#1976d2", "#42a5f5", "#90caf9", "#bbdefb"
-]
+    LINK_COLOR: str = PRIMARY_COLOR
+    LINK_HOVER_COLOR: str = "#63b3ed"     # درجة أفتح من الأساسي للروابط عند المرور عليها
 
-COLOR_SCALE_DIVERGING = [
-    "#d32f2f", "#f44336", "#ffebee", "#bbdefb", "#1976d2", "#0d47a1"
-]
+    BUTTON_ACTIVE_BG: str = "#2563eb"     # خلفية الزر النشط
 
-# خطوط عامة للتطبيق
-FONT_FAMILY = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+    # ألوان درجات متدرجة يمكن استخدامها في الرسومات (Sequential و Diverging)
+    COLOR_SCALE_SEQUENTIAL: List[str] = [
+        "#0d47a1", "#1976d2", "#42a5f5", "#90caf9", "#bbdefb"
+    ]
 
-# الخطوط لأجزاء الكود أو النصوص المهيكلة (Monospace)
-MONOSPACE_FONT_FAMILY = "'Consolas', 'Courier New', monospace"
+    COLOR_SCALE_DIVERGING: List[str] = [
+        "#d32f2f", "#f44336", "#ffebee", "#bbdefb", "#1976d2", "#0d47a1"
+    ]
 
-# حجم الخطوط الشائع
-FONT_SIZES = {
-    "small": "0.8rem",
-    "normal": "1rem",
-    "large": "1.25rem",
-    "xlarge": "1.5rem"
-}
+    # خطوط عامة للتطبيق
+    FONT_FAMILY: str = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
 
-# ارتفاع الأسطر
-LINE_HEIGHT = 1.4
+    # الخطوط لأجزاء الكود أو النصوص المهيكلة (Monospace)
+    MONOSPACE_FONT_FAMILY: str = "'Consolas', 'Courier New', monospace"
 
-# مساحة الحشوة (Padding) و الهوامش (Margin) الافتراضية بمستويات متعددة
-SPACING = {
-    "padding_small": "0.5rem",
-    "padding_normal": "1rem",
-    "padding_large": "1.5rem",
-    "margin_small": "0.5rem",
-    "margin_normal": "1rem",
-    "margin_large": "1.5rem",
-}
+    # حجم الخطوط الشائع
+    FONT_SIZES: Dict[str, str] = {
+        "small": "0.8rem",
+        "normal": "1rem",
+        "large": "1.25rem",
+        "xlarge": "1.5rem"
+    }
 
-# ظلال خفيفة للأطر والبطاقات (مثال ظل أزرق شفاف)
-SHADOW_COLOR = "rgba(30, 144, 255, 0.25)"
+    # ارتفاع الأسطر
+    LINE_HEIGHT: float = 1.4
+
+    # مساحة الحشوة (Padding) و الهوامش (Margin) الافتراضية بمستويات متعددة
+    SPACING: Dict[str, str] = {
+        "padding_small": "0.5rem",
+        "padding_normal": "1rem",
+        "padding_large": "1.5rem",
+        "margin_small": "0.5rem",
+        "margin_normal": "1rem",
+        "margin_large": "1.5rem",
+    }
+
+    # ظلال خفيفة للأطر والبطاقات (مثال ظل أزرق شفاف)
+    SHADOW_COLOR: str = "rgba(30, 144, 255, 0.25)"
