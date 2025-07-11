@@ -4,7 +4,7 @@ from typing import Optional, Union
 from datetime import datetime
 import pandas as pd
 
-from data_intelligence_system.config.env_config import env_namespace  # ✅ استخدام إعدادات البيئة الموحدة من الجذر
+from data_intelligence_system.config.env_config import env_namespace
 from data_intelligence_system.etl.transform import transform_datasets
 from data_intelligence_system.analysis.descriptive_stats import (
     analyze_numerical_columns,
@@ -12,7 +12,7 @@ from data_intelligence_system.analysis.descriptive_stats import (
     analyze_datetime_columns
 )
 from data_intelligence_system.etl.extract import extract_file, extract_all_data
-from data_intelligence_system.utils.file_manager import save_file, extract_file_name  # تحديث الاستيراد ليتوافق مع التعديل في file_manager.py
+from data_intelligence_system.utils.file_manager import save_file, extract_file_name
 
 # 🛠️ إعداد نظام التسجيل
 LOG_FORMAT = "%(asctime)s — %(levelname)s — %(name)s — %(message)s"
@@ -73,7 +73,7 @@ def run_full_pipeline(
             filepath = Path(filepath)
             logger.info(f"📥 استخراج ملف واحد: {filepath.name}")
             df_dict = extract_file(filepath)
-            datasets = list(df_dict.items())  # extract_file returns Dict[str, DataFrame]
+            datasets = list(df_dict.items())
         else:
             logger.info(f"📥 استخراج جميع الملفات من مجلد: {RAW_DIR}")
             datasets = extract_all_data()
@@ -96,7 +96,7 @@ def run_full_pipeline(
 
             analyze_columns(df_clean, name)
 
-            clean_name = extract_file_name(name)  # إزالة الامتداد إن وجد
+            clean_name = extract_file_name(name)
             save_path = output_dir / f"cleaned_{clean_name}.csv"
             save_file(df_clean, str(save_path))
             logger.info(f"💾 تم حفظ البيانات المعالجة في: {save_path}")
