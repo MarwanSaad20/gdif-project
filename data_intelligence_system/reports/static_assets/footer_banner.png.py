@@ -1,24 +1,39 @@
+import logging
+from typing import Optional
 from PIL import Image, ImageDraw, ImageFont
 
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+
 def create_footer_banner(
-    width=1200,
-    height=100,
-    bg_color="#0d6efd",  # أزرق Bootstrap
-    text="© 2025 نظام تحليل البيانات الذكي",
-    text_color="white",
-    font_path=None,
-    font_size=28,
-    output_path="footer_banner.png"
-):
+    width: int = 1200,
+    height: int = 100,
+    bg_color: str = "#0d6efd",  # أزرق Bootstrap
+    text: str = "© 2025 نظام تحليل البيانات الذكي",
+    text_color: str = "white",
+    font_path: Optional[str] = None,
+    font_size: int = 28,
+    output_path: str = "footer_banner.png",
+    return_image: bool = False,
+) -> Optional[Image.Image]:
     """
     إنشاء بانر للفوتر بخلفية ملونة ونص في المنتصف.
-    - width, height: أبعاد الصورة.
-    - bg_color: لون الخلفية.
-    - text: نص الفوتر.
-    - text_color: لون النص.
-    - font_path: مسار الخط (اختياري).
-    - font_size: حجم الخط.
-    - output_path: مسار حفظ الصورة.
+
+    Args:
+        width (int): عرض الصورة بالبكسل.
+        height (int): ارتفاع الصورة بالبكسل.
+        bg_color (str): لون الخلفية (رمز HEX أو اسم لون).
+        text (str): نص الفوتر.
+        text_color (str): لون النص.
+        font_path (Optional[str]): مسار الخط (اختياري).
+        font_size (int): حجم الخط.
+        output_path (str): مسار حفظ الصورة.
+        return_image (bool): إذا كان True تعيد كائن PIL Image بدلاً من الحفظ.
+
+    Returns:
+        Optional[Image.Image]: كائن الصورة إذا تم التحديد، وإلا None.
     """
 
     # إنشاء صورة جديدة بخلفية اللون المحدد
@@ -26,14 +41,13 @@ def create_footer_banner(
     draw = ImageDraw.Draw(img)
 
     # تحميل الخط أو استخدام الافتراضي
+    font = None
     if font_path:
         try:
             font = ImageFont.truetype(font_path, font_size)
         except Exception as e:
-            print(f"[تحذير] تعذر تحميل الخط: {e} — سيتم استخدام الخط الافتراضي.")
-            font = ImageFont.load_default()
-    else:
-        # محاولة استخدام Arial أو الخط الافتراضي
+            logger.warning(f"تعذر تحميل الخط '{font_path}': {e} — سيتم استخدام الخط الافتراضي.")
+    if not font:
         try:
             font = ImageFont.truetype("arial.ttf", font_size)
         except Exception:
@@ -45,7 +59,7 @@ def create_footer_banner(
         text_width = bbox[2] - bbox[0]
         text_height = bbox[3] - bbox[1]
     except Exception as e:
-        print(f"[خطأ] تعذر حساب أبعاد النص: {e}")
+        logger.error(f"تعذر حساب أبعاد النص: {e}")
         text_width, text_height = font_size * len(text) // 2, font_size  # تقدير تقريبي
 
     # تموضع النص في مركز البانر
@@ -55,9 +69,18 @@ def create_footer_banner(
     # رسم النص
     draw.text((x, y), text, font=font, fill=text_color)
 
-    # حفظ الصورة النهائية
-    img.save(output_path)
-    print(f"[✓] تم إنشاء بانر الفوتر وحفظه في: {output_path}")
+    if return_image:
+        return img
+
+    # حفظ الصورة النهائية مع التعامل مع الأخطاء
+    try:
+        img.save(output_path)
+        logger.info(f"تم إنشاء بانر الفوتر وحفظه في: {output_path}")
+    except Exception as e:
+        logger.error(f"فشل حفظ الصورة: {e}")
+
+    return None
+
 
 if __name__ == "__main__":
     # ضع هنا مسار خط عربي إن أردت تخصيصه، مثال:
