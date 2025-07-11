@@ -152,11 +152,14 @@ class ReportsService:
 
 _service_instance = ReportsService()
 
+
 def generate_summary_report(*args, **kwargs):
     return _service_instance.generate_summary_report(*args, **kwargs)
 
+
 def convert_html_to_pdf(html_path: str, output_dir: str = REPORTS_OUTPUT_DIR):
     return _service_instance._convert_html_to_pdf(html_path, output_dir)
+
 
 def export_to_excel(
     dfs: List[pd.DataFrame],
