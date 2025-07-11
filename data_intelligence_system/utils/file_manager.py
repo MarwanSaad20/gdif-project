@@ -16,21 +16,22 @@ def read_file(filepath: str, encoding: str = "utf-8") -> pd.DataFrame:
     try:
         if ext == ".csv":
             return pd.read_csv(filepath, encoding=encoding)
+
         elif ext in [".xls", ".xlsx"]:
             return pd.read_excel(filepath)
+
         elif ext == ".json":
             with open(filepath, "r", encoding=encoding) as f:
                 data = json.load(f)
 
             if isinstance(data, dict):
                 # محاولة تفكيك JSON معقد يحتوي على بيانات داخل قائمة ضمن قيم المفاتيح
-                # نحاول إيجاد أول قائمة في القيم وتحويلها إلى DataFrame
                 for key, value in data.items():
                     if isinstance(value, list):
                         # إذا القائمة تحتوي dicts أو قوائم، نستخدمها مباشرة
                         if all(isinstance(item, (dict, list)) for item in value):
                             return pd.DataFrame(value)
-                # إن لم نجد قائمة مناسبة، نستخدم normalize كخيار أخير
+                # إن لم نجد قائمة مناسبة، نستخدم json_normalize
                 return pd.json_normalize(data)
 
             elif isinstance(data, list):
@@ -41,12 +42,16 @@ def read_file(filepath: str, encoding: str = "utf-8") -> pd.DataFrame:
                     raise RuntimeError(f"⚠️ JSON contains unsupported list elements → type: {type(data[0])}")
             else:
                 raise RuntimeError(f"⚠️ Unsupported JSON root type: {type(data)}")
+
         elif ext == ".parquet":
             return pd.read_parquet(filepath)
+
         elif ext == ".tsv":
             return pd.read_csv(filepath, sep="\t", encoding=encoding)
+
         elif ext == ".feather":
             return pd.read_feather(filepath)
+
         else:
             raise ValueError(f"❌ Unsupported file format: {ext}")
 
