@@ -2,11 +2,15 @@ import os
 import pandas as pd
 from typing import Dict, Any, Optional
 from datetime import datetime
+import logging
 
 from data_intelligence_system.reports.report_config import REPORT_CONFIG
 from data_intelligence_system.analysis.descriptive_stats import generate_descriptive_stats
 from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
 from data_intelligence_system.data.processed.validate_clean_data import validate  # ✅ مضاف حديثًا
+
+logger = logging.getLogger("ReportDataLoader")
+
 
 class ReportDataLoader:
     """
@@ -36,21 +40,22 @@ class ReportDataLoader:
                 try:
                     df = pd.read_csv(filepath)
                     if df.empty:
-                        print(f"[تحذير] الملف فارغ: {file} -- تم تخطيه")
+                        logger.warning(f"[تحذير] الملف فارغ: {file} -- تم تخطيه")
                         continue
 
-                    # ✅ التحقق من جودة البيانات بعد التحميل
+                    # التحقق من جودة البيانات بعد التحميل
                     try:
                         validate(df)
                     except Exception as ve:
-                        print(f"[تحذير] فشل التحقق من الملف {file}: {ve}")
+                        logger.warning(f"[تحذير] فشل التحقق من الملف {file}: {ve}")
 
                     self.loaded_datasets[file] = df
+                    logger.info(f"تم تحميل الملف بنجاح: {file}")
 
                 except pd.errors.EmptyDataError:
-                    print(f"[تحذير] لا يمكن قراءة الملف (فارغ): {file} -- تم تخطيه")
+                    logger.warning(f"[تحذير] لا يمكن قراءة الملف (فارغ): {file} -- تم تخطيه")
                 except Exception as e:
-                    print(f"[خطأ] فشل قراءة الملف {file}: {e} -- تم تخطيه")
+                    logger.error(f"[خطأ] فشل قراءة الملف {file}: {e} -- تم تخطيه")
         return self.loaded_datasets
 
     def get_dataset(self, filename: str) -> pd.DataFrame:
@@ -65,13 +70,17 @@ class ReportDataLoader:
         if not os.path.exists(path):
             raise FileNotFoundError(f"الملف غير موجود: {path}")
 
-        df = pd.read_csv(path)
+        try:
+            df = pd.read_csv(path)
+        except Exception as e:
+            logger.error(f"فشل في قراءة الملف {filename}: {e}")
+            raise
 
-        # ✅ التحقق من جودة البيانات بعد التحميل الفردي
+        # التحقق من جودة البيانات بعد التحميل الفردي
         try:
             validate(df)
         except Exception as ve:
-            print(f"[تحذير] فشل التحقق من الملف {filename}: {ve}")
+            logger.warning(f"[تحذير] فشل التحقق من الملف {filename}: {ve}")
 
         self.loaded_datasets[filename] = df
         return df
@@ -81,16 +90,28 @@ class ReportDataLoader:
         استدعاء دالة التحليل الوصفي لتوليد إحصائيات ملف معين.
         """
         full_path = os.path.join(self.data_path, filename)
-        generate_descriptive_stats(full_path, output_dir=REPORT_CONFIG["output_dir"])
-        return {"status": "generated", "file": filename}
+        if not os.path.exists(full_path):
+            logger.error(f"الملف غير موجود لتحليل الإحصائيات: {filename}")
+            raise FileNotFoundError(f"الملف غير موجود: {full_path}")
+
+        try:
+            generate_descriptive_stats(full_path, output_dir=REPORT_CONFIG["output_dir"])
+            return {"status": "generated", "file": filename}
+        except Exception as e:
+            logger.error(f"فشل توليد الإحصائيات للملف {filename}: {e}")
+            raise
 
     def generate_correlation(self, filename: str, method: str = "pearson") -> pd.DataFrame:
         """
         توليد مصفوفة الارتباط من ملف معين باستخدام دالة generate_correlation_matrix.
         """
-        df = self.get_dataset(filename)
-        corr_matrix = generate_correlation_matrix(df, method=method)
-        return corr_matrix
+        try:
+            df = self.get_dataset(filename)
+            corr_matrix = generate_correlation_matrix(df, method=method)
+            return corr_matrix
+        except Exception as e:
+            logger.error(f"فشل توليد مصفوفة الارتباط للملف {filename}: {e}")
+            raise
 
     def load_summary_for_report(self, filename: str) -> Dict[str, Any]:
         """
@@ -122,7 +143,8 @@ class ReportDataLoader:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     loader = ReportDataLoader()
     datasets = loader.load_all_csvs()
     for name, df in datasets.items():
-        print(f"🔹 Dataset: {name} | Shape: {df.shape}")
+        logger.info(f"🔹 Dataset: {name} | Shape: {df.shape}")
