@@ -23,8 +23,18 @@ def read_file(filepath: str, encoding: str = "utf-8") -> pd.DataFrame:
                 data = json.load(f)
 
             if isinstance(data, dict):
+                # محاولة تفكيك JSON معقد يحتوي على بيانات داخل قائمة ضمن قيم المفاتيح
+                # نحاول إيجاد أول قائمة في القيم وتحويلها إلى DataFrame
+                for key, value in data.items():
+                    if isinstance(value, list):
+                        # إذا القائمة تحتوي dicts أو قوائم، نستخدمها مباشرة
+                        if all(isinstance(item, (dict, list)) for item in value):
+                            return pd.DataFrame(value)
+                # إن لم نجد قائمة مناسبة، نستخدم normalize كخيار أخير
                 return pd.json_normalize(data)
+
             elif isinstance(data, list):
+                # تأكد أن القائمة تحتوي dicts أو قوائم
                 if all(isinstance(item, (dict, list)) for item in data):
                     return pd.DataFrame(data)
                 else:
