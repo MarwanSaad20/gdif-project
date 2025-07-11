@@ -15,8 +15,8 @@ from data_intelligence_system.reports.generators.html_report_generator import HT
 logger = get_logger("report.service")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-TEMPLATE_DIR = os.path.join(BASE_DIR, "reports", "templates")
-REPORTS_OUTPUT_DIR = os.path.join(BASE_DIR, "reports", "generated")
+TEMPLATE_DIR = os.path.join(BASE_DIR, "reports", "generators", "templates")
+REPORTS_OUTPUT_DIR = os.path.join(BASE_DIR, "reports", "output")
 
 
 def ensure_dir(path: str):
