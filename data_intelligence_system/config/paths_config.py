@@ -100,3 +100,7 @@ def ensure_directories_exist():
     ]
     for directory in dirs_to_create:
         directory.mkdir(parents=True, exist_ok=True)
+
+# ===================== ثوابت مختصرة للتكامل مع باقي النظام =====================
+RAW_DIR = str(RAW_DATA_DIR)                # مسار raw كـ string
+PROCESSED_DIR = str(PROCESSED_DATA_DIR)    # مسار processed كـ string
