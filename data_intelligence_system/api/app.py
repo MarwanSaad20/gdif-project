@@ -10,6 +10,7 @@ import uvicorn
 import os
 
 from data_intelligence_system.utils.logger import get_logger
+from data_intelligence_system.config.config_loader import CONFIG  # ✅ جديد
 
 logger = get_logger("api.app")
 
