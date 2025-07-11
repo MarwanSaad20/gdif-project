@@ -1,10 +1,9 @@
 import logging
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, List, Tuple
 from datetime import datetime
 import pandas as pd
 
-from data_intelligence_system.config.config_loader import CONFIG
 from data_intelligence_system.etl.transform import transform_datasets
 from data_intelligence_system.analysis.descriptive_stats import (
     analyze_numerical_columns,
@@ -23,8 +22,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger("etl.pipeline")
 
-RAW_DIR = Path(CONFIG.paths.RAW_DIR)
-PROCESSED_DIR = Path(CONFIG.paths.PROCESSED_DIR)
+RAW_DIR = Path(__file__).resolve().parents[1] / "data" / "raw"
+PROCESSED_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
 
 
 def analyze_columns(df: pd.DataFrame, name: str):
