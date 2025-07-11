@@ -12,17 +12,14 @@ from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.reports.report_dispatcher import generate_report
 from data_intelligence_system.reports.generators.html_report_generator import HTMLReportGenerator
 
-# استخدام اللوقر الموحد
 logger = get_logger("report.service")
 
-# مسارات ثابتة
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "reports", "templates")
 REPORTS_OUTPUT_DIR = os.path.join(BASE_DIR, "reports", "generated")
 
 
 def ensure_dir(path: str):
-    """إنشاء مجلد إذا لم يكن موجودًا."""
     if not os.path.exists(path):
         os.makedirs(path)
         logger.info(f"📂 تم إنشاء المجلد: {path}")
@@ -37,9 +34,6 @@ class ReportsService:
         output_format: str = "html",
         title: str = "Data Summary Report"
     ) -> bool:
-        """
-        توليد تقرير ملخص للبيانات بصيغ HTML أو PDF أو Excel.
-        """
         try:
             df = load_data(file_path)
             if df.empty:
@@ -51,7 +45,6 @@ class ReportsService:
                 logger.warning("⚠️ لم يتم حساب الإحصائيات بنجاح.")
                 return False
 
-            # توليد تقرير HTML أولاً
             html_path = self._generate_html(file_path, stats, title, output_dir)
 
             if output_format == "html":
@@ -156,10 +149,6 @@ class ReportsService:
 
         return output_path
 
-
-# ===========================
-# دوال خارج الكلاس للاستخدام الخارجي
-# ===========================
 
 _service_instance = ReportsService()
 
