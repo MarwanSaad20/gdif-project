@@ -10,6 +10,7 @@ from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.analysis.descriptive_stats import generate_descriptive_stats
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.reports.report_dispatcher import generate_report
+from data_intelligence_system.reports.generators.html_report_generator import HTMLReportGenerator
 
 # استخدام اللوقر الموحد
 logger = get_logger("report.service")
