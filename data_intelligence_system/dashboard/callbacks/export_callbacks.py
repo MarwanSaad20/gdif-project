@@ -6,7 +6,6 @@ from dash.exceptions import PreventUpdate
 from dash.dcc import send_file
 
 from data_intelligence_system.reports.report_dispatcher import generate_report
-from data_intelligence_system.reports.generators.html_report_generator import HTMLReportGenerator
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 
@@ -14,16 +13,10 @@ logger = get_logger("ExportCallback")
 
 
 def is_json_empty(data_json: str | None) -> bool:
-    """
-    تحقق ما إذا كانت بيانات JSON فارغة أو None أو تمثل قيمة فارغة.
-    """
     return not data_json or str(data_json).strip() in ("", "{}", "null")
 
 
 def get_available_json_data(filtered_json: str | None, stored_json: str | None) -> str | None:
-    """
-    ترجيح البيانات المفلترة أولًا ثم العامة.
-    """
     if not is_json_empty(filtered_json):
         return filtered_json
     if not is_json_empty(stored_json):
@@ -32,9 +25,6 @@ def get_available_json_data(filtered_json: str | None, stored_json: str | None) 
 
 
 def register_export_callbacks(app):
-    """
-    تسجيل كولباك توليد وتحميل التقرير بناءً على البيانات المخزنة أو المفلترة.
-    """
     @app.callback(
         Output("download-report", "data"),
         Input("download-btn", "n_clicks"),
