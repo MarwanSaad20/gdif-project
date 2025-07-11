@@ -7,6 +7,7 @@ import numpy as np
 # استيراد من جذر المشروع مع المسار الكامل
 from data_intelligence_system.reports.generators.pdf_report_generator import PDFReportGenerator
 from data_intelligence_system.reports.generators.excel_report_generator import ExcelReportGenerator
+from data_intelligence_system.reports.generators.html_report_generator import HTMLReportGenerator
 from data_intelligence_system.reports.export_utils import (
     save_dataframe_to_csv,
     df_to_html_table
@@ -59,10 +60,14 @@ class ReportDispatcher:
         elif report_type == "html":
             if not isinstance(data, pd.DataFrame):
                 raise TypeError("[ERROR] HTML report requires a pandas DataFrame.")
-            html_table = df_to_html_table(data, classes="table table-striped", index=False)
             html_path = f"{full_path}.html"
-            with open(html_path, "w", encoding="utf-8") as f:
-                f.write(html_table)
+            html_gen = HTMLReportGenerator(output_path=html_path)
+            sections = [{
+                "title": "📊 البيانات",
+                "content": "تقرير HTML تم توليده تلقائيًا.",
+                "dataframe": data
+            }]
+            html_gen.build_report(title=config.get("title", "Data Report"), sections=sections)
             return html_path
 
         else:
@@ -135,7 +140,8 @@ def generate_reports(data: Union[pd.DataFrame, list], config: Dict[str, Any] = N
     })
 
     dispatcher.dispatch("html", data, {
-        "filename": config.get("html_filename", "report_html")
+        "filename": config.get("html_filename", "report_html"),
+        "title": config.get("html_title", "Data Report")
     })
 
     if config.get("include_csv", True):
