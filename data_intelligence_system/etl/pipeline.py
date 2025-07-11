@@ -4,7 +4,7 @@ from typing import Optional, Union
 from datetime import datetime
 import pandas as pd
 
-from data_intelligence_system.config.config_loader import CONFIG
+from data_intelligence_system.config.env_config import env_namespace  # ✅ تعديل: استخدام إعدادات البيئة الموحدة
 from data_intelligence_system.etl.transform import transform_datasets
 from data_intelligence_system.analysis.descriptive_stats import (
     analyze_numerical_columns,
@@ -23,8 +23,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger("etl.pipeline")
 
-RAW_DIR = Path(CONFIG.paths.RAW_DIR)
-PROCESSED_DIR = Path(CONFIG.paths.PROCESSED_DIR)
+RAW_DIR = env_namespace.RAW_DATA_PATH
+PROCESSED_DIR = env_namespace.PROCESSED_DATA_PATH
 
 
 def analyze_columns(df: pd.DataFrame, name: str):
