@@ -12,6 +12,9 @@ from pathlib import Path
 import dash
 import dash_bootstrap_components as dbc
 
+# ✅ استيراد إعدادات النظام المركزية
+from data_intelligence_system.config.config_loader import CONFIG
+
 # ========== إعداد المسارات الأساسية ========== #
 def configure_sys_path():
     current_file = Path(__file__).resolve()
