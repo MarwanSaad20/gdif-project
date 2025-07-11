@@ -6,6 +6,7 @@ from dash.exceptions import PreventUpdate
 from dash.dcc import send_file
 
 from data_intelligence_system.reports.report_dispatcher import generate_report
+from data_intelligence_system.reports.generators.html_report_generator import HTMLReportGenerator
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 
@@ -34,7 +35,6 @@ def register_export_callbacks(app):
     """
     تسجيل كولباك توليد وتحميل التقرير بناءً على البيانات المخزنة أو المفلترة.
     """
-
     @app.callback(
         Output("download-report", "data"),
         Input("download-btn", "n_clicks"),
