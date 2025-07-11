@@ -10,7 +10,7 @@ from data_intelligence_system.api.services import reports_service
 
 logger = logging.getLogger("api.reports")
 
-SAFE_REPORTS_DIR = os.path.abspath("reports/output")
+SAFE_REPORTS_DIR = os.path.abspath("reports/generated")  # تم تحديث المسار ليطابق مجلد التقارير الفعلي
 
 router = APIRouter(
     prefix="/reports",
