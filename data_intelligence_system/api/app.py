@@ -10,7 +10,7 @@ import uvicorn
 import os
 
 from data_intelligence_system.utils.logger import get_logger
-from data_intelligence_system.config.config_loader import CONFIG  # ✅ جديد
+from data_intelligence_system.config.env_config import env_namespace  # ✅ جديد لتحميل الإعدادات البيئية
 
 logger = get_logger("api.app")
 
@@ -35,7 +35,8 @@ def create_app() -> FastAPI:
 
     app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-    secret_key = os.getenv("SESSION_SECRET_KEY", "development-session-key")
+    # استخدم SECRET_KEY من env_config بدلاً من متغير بيئة مباشر
+    secret_key = os.getenv("SESSION_SECRET_KEY", env_namespace.SECRET_KEY or "development-session-key")
     app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
     class TimingMiddleware(BaseHTTPMiddleware):
