@@ -2,7 +2,6 @@ import os
 import logging
 from typing import Dict, Any, Union
 import pandas as pd
-import numpy as np
 
 from data_intelligence_system.reports.generators.pdf_report_generator import PDFReportGenerator
 from data_intelligence_system.reports.generators.excel_report_generator import ExcelReportGenerator
