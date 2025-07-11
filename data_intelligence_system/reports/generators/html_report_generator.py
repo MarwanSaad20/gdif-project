@@ -1,23 +1,28 @@
 import os
-import pandas as pd
-import matplotlib.pyplot as plt
+import logging
 import base64
 from io import BytesIO
+from typing import List, Dict, Optional, Callable
+
+import pandas as pd
+import matplotlib.pyplot as plt
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 class HTMLReportGenerator:
-    def __init__(self, output_path: str, template_dir: str = None):
+    def __init__(self, output_path: str, template_dir: Optional[str] = None):
         """
         مولد تقرير HTML باستخدام Jinja2.
 
-        :param output_path: المسار الكامل لحفظ التقرير (مثلاً reports/output/report.html)
+        :param output_path: المسار الكامل لحفظ التقرير.
         :param template_dir: مجلد القوالب (افتراضي داخل reports/templates)
         """
         self.output_path = output_path
 
         if template_dir is None:
-            # تحديد المسار الجذري للمشروع بناءً على موقع الملف الحالي
             project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
             template_dir = os.path.join(project_root, "reports", "templates")
 
@@ -27,9 +32,6 @@ class HTMLReportGenerator:
         )
 
     def _plot_to_base64(self, plt_figure) -> str:
-        """
-        تحويل رسم matplotlib إلى صورة base64 لتضمينها في HTML.
-        """
         buf = BytesIO()
         plt_figure.savefig(buf, format="png", bbox_inches='tight')
         plt.close(plt_figure)
@@ -38,61 +40,50 @@ class HTMLReportGenerator:
         return f"data:image/png;base64,{img_base64}"
 
     def _render_table(self, df: pd.DataFrame) -> str:
-        """
-        تحويل DataFrame إلى جدول HTML منسق باستخدام pandas.
-        """
         return df.to_html(classes="table table-striped table-hover", border=0, index=False)
 
-    def build_report(self, title: str, sections: list, additional_css: str = None, cover_image_path: str = None):
-        """
-        توليد تقرير HTML من الأقسام.
+    def _render_section(self, section: Dict) -> Dict[str, str]:
+        html_parts = []
 
-        :param title: عنوان التقرير
-        :param sections: قائمة أقسام التقرير، كل قسم dict يحتوي على:
-                         - title (str): عنوان القسم
-                         - content (str, optional): نص أو HTML
-                         - dataframe (pd.DataFrame, optional): جدول بيانات
-                         - plot_func (callable, optional): دالة رسم matplotlib
-        :param additional_css: نص CSS إضافي (اختياري)
-        :param cover_image_path: مسار صورة الغلاف (اختياري)
-        """
-        # التحقق من وجود قالب التقرير
+        content = section.get("content")
+        if content:
+            html_parts.append(f"<p>{content}</p>")
+
+        df = section.get("dataframe")
+        if isinstance(df, pd.DataFrame):
+            html_parts.append(self._render_table(df))
+
+        plot_func: Optional[Callable] = section.get("plot_func")
+        if callable(plot_func):
+            fig = plot_func()
+            img_html = self._plot_to_base64(fig)
+            html_parts.append(f'<img src="{img_html}" alt="Plot" style="max-width: 100%; height: auto;">')
+
+        return {
+            "title": section.get("title", ""),
+            "html_content": "".join(html_parts)
+        }
+
+    def build_report(
+        self,
+        title: str,
+        sections: List[Dict],
+        additional_css: Optional[str] = None,
+        cover_image_path: Optional[str] = None
+    ):
         template_name = "base_report.html"
         try:
             template = self.env.get_template(template_name)
         except Exception as e:
             raise FileNotFoundError(
-                f"قالب التقرير '{template_name}' غير موجود في المسار: {self.env.loader.searchpath}. الخطأ: {e}"
+                f"قالب التقرير '{template_name}' غير موجود في: {self.env.loader.searchpath}. الخطأ: {e}"
             )
 
-        # التحقق من وجود صورة الغلاف إذا تم تحديدها
         if cover_image_path and not os.path.exists(cover_image_path):
-            print(f"[WARNING] صورة الغلاف غير موجودة: {cover_image_path}")
+            logger.warning(f"صورة الغلاف غير موجودة: {cover_image_path}")
             cover_image_path = None
 
-        rendered_sections = []
-
-        for sec in sections:
-            section_html = ""
-
-            content = sec.get("content", "")
-            if content:
-                section_html += f"<p>{content}</p>"
-
-            df = sec.get("dataframe")
-            if isinstance(df, pd.DataFrame):
-                section_html += self._render_table(df)
-
-            plot_func = sec.get("plot_func")
-            if callable(plot_func):
-                fig = plot_func()
-                img_html = self._plot_to_base64(fig)
-                section_html += f'<img src="{img_html}" alt="Plot" style="max-width: 100%; height: auto;">'
-
-            rendered_sections.append({
-                "title": sec.get("title", ""),
-                "html_content": section_html
-            })
+        rendered_sections = [self._render_section(sec) for sec in sections]
 
         html_content = template.render(
             title=title,
@@ -102,10 +93,13 @@ class HTMLReportGenerator:
         )
 
         os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
-        with open(self.output_path, "w", encoding="utf-8") as f:
-            f.write(html_content)
-
-        print(f"[INFO] تم إنشاء تقرير HTML: {self.output_path}")
+        try:
+            with open(self.output_path, "w", encoding="utf-8") as f:
+                f.write(html_content)
+            logger.info(f"تم إنشاء تقرير HTML: {self.output_path}")
+        except Exception as e:
+            logger.error(f"فشل في حفظ تقرير HTML: {e}", exc_info=True)
+            raise
 
 
 if __name__ == "__main__":
