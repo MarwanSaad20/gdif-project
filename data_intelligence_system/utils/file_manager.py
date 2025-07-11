@@ -25,21 +25,19 @@ def read_file(filepath: str, encoding: str = "utf-8") -> pd.DataFrame:
                 data = json.load(f)
 
             if isinstance(data, dict):
-                # محاولة تفكيك JSON معقد يحتوي على بيانات داخل قائمة ضمن قيم المفاتيح
+                # إذا كان dict ونجد داخله قائمة مناسبة للتحويل
                 for key, value in data.items():
-                    if isinstance(value, list):
-                        # إذا القائمة تحتوي dicts أو قوائم، نستخدمها مباشرة
-                        if all(isinstance(item, (dict, list)) for item in value):
-                            return pd.DataFrame(value)
-                # إن لم نجد قائمة مناسبة، نستخدم json_normalize
+                    if isinstance(value, list) and all(isinstance(item, dict) for item in value):
+                        return pd.DataFrame(value)
+                # fallback: تحويل dict نفسه إلى DataFrame (صف واحد)
                 return pd.json_normalize(data)
 
             elif isinstance(data, list):
-                # تأكد أن القائمة تحتوي dicts أو قوائم
-                if all(isinstance(item, (dict, list)) for item in data):
+                # إذا كانت القائمة تحتوي dicts → نحول مباشرة
+                if all(isinstance(item, dict) for item in data):
                     return pd.DataFrame(data)
                 else:
-                    raise RuntimeError(f"⚠️ JSON contains unsupported list elements → type: {type(data[0])}")
+                    raise RuntimeError(f"⚠️ JSON list elements are not dictionaries → type: {type(data[0])}")
             else:
                 raise RuntimeError(f"⚠️ Unsupported JSON root type: {type(data)}")
 
