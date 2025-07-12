@@ -22,14 +22,14 @@ sns.set(style="whitegrid")
 
 # 📂 تحديد جذر المشروع وضبط sys.path
 try:
-    PROJECT_ROOT = Path(__file__).resolve().parents[2]  # ✅ تصحيح المستوى
+    PROJECT_ROOT = Path(__file__).resolve().parents[2]
 except NameError:
     PROJECT_ROOT = Path.cwd().parents[1]
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-# 📂 تحميل البيانات المنظفة
+# 📂 تحميل البيانات المنظفة من المسار المحدث وفق config/paths_config.py
 DATA_PATH = PROJECT_ROOT / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
 print(f"مسار الملف المستخدم: {DATA_PATH}")
 if not DATA_PATH.exists():
@@ -71,7 +71,6 @@ for col in categorical_cols[:5]:
     print(f"\n🎯 العمود النوعي: {col}")
     print(df[col].value_counts().head(10))
 
-    # رسم التوزيع
     plt.figure(figsize=(8, 4))
     sns.countplot(data=df, x=col, order=df[col].value_counts().index[:10])
     plt.title(f"Top 10 Values in '{col}'", fontsize=12)
