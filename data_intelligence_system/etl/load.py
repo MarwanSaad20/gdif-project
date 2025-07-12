@@ -153,8 +153,9 @@ def save_uploaded_data(df: pd.DataFrame, filename: str = "uploaded.csv") -> str:
     """
     base_dir = Path(__file__).resolve().parents[1]
     processed_dir = base_dir / "data" / "processed"
-    path = processed_dir / filename
     os.makedirs(processed_dir, exist_ok=True)
+
+    path = processed_dir / filename
 
     try:
         df.to_csv(path, index=False, encoding='utf-8')
