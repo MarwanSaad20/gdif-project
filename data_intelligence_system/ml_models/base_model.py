@@ -5,6 +5,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 import logging
 
+# ✅ استيراد من جذر المشروع
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.timer import Timer
 
@@ -22,7 +24,7 @@ class BaseModel(ABC):
     يوفر واجهة موحدة تشمل التدريب، التنبؤ، التقييم، الحفظ والتحميل.
     """
 
-    def __init__(self, model_name: str, model_dir: str = "ml_models/saved_models"):
+    def __init__(self, model_name: str, model_dir: Path = ML_MODELS_DIR):
         self.model_name = model_name
         self.model_dir = Path(model_dir)
         self.model_path = self.model_dir / f"{self.model_name}.pkl"
