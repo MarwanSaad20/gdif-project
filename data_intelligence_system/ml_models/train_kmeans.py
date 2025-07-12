@@ -22,7 +22,7 @@ def main():
     model.fit(X)
 
     # تحديد مسار حفظ النموذج
-    model_path = Path("data_intelligence_system/ml_models/trained_model.pkl")
+    model_path = Path("data_intelligence_system/ml_models/saved_models/kmeans_model.pkl")
     model_path.parent.mkdir(parents=True, exist_ok=True)  # إنشاء المجلدات إذا لم تكن موجودة
 
     # حفظ النموذج
