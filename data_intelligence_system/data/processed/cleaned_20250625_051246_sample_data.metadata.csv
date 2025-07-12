@@ -1,3 +1,7 @@
-id,age,salary,name_Sara,department_Sales,join_date_2020-01-15
--1.0,1.0,-1.0,False,True,True
-1.0,-1.0,1.0,True,False,False
+columns_department,columns_id,columns_join_date,columns_name,columns_salary
+False,True,False,False,False
+False,False,False,True,False
+False,False,False,False,False
+False,False,False,False,True
+True,False,False,False,False
+False,False,True,False,False

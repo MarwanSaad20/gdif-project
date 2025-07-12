@@ -1,0 +1,54 @@
+2025-07-11 09:56:38 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 09:56:38 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 09:56:39 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 09:56:41 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 09:56:41 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 09:56:43 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-11 10:08:01 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 10:08:01 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 10:08:01 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 10:08:04 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 10:08:04 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 10:08:06 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-11 10:13:04 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 10:13:04 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 10:13:04 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 10:13:06 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 10:13:06 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 10:13:08 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-11 10:14:54 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 10:14:54 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 10:14:54 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 10:14:57 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 10:14:57 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 10:14:59 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-11 10:19:17 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 10:19:17 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 10:19:17 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 10:19:20 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 10:19:20 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 10:19:22 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-11 10:22:56 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 10:22:56 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 10:22:56 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 10:22:59 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 10:22:59 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 10:23:01 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-11 10:26:09 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 10:26:09 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 10:26:09 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 10:26:12 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 10:26:12 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 10:26:13 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-11 10:41:08 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 10:41:08 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 10:41:08 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 10:41:10 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 10:41:10 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 10:41:12 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-11 10:46:43 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-11 10:46:43 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في data_intelligence_system\data\raw
+2025-07-11 10:46:43 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-11 10:46:47 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-11 10:46:47 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-11 10:46:50 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets

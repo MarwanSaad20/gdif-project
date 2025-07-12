@@ -25,25 +25,31 @@ def read_file(filepath: str, encoding: str = "utf-8") -> pd.DataFrame:
                 data = json.load(f)
 
             if isinstance(data, dict):
-                # محاولة إيجاد أول قيمة من نوع list
                 for key, value in data.items():
                     if isinstance(value, list):
+                        logger.info(f"✅ JSON: found list under key '{key}', first items types: {[type(item) for item in value[:5]]}")
                         if all(isinstance(item, dict) for item in value):
                             return pd.DataFrame(value)
                         elif all(isinstance(item, list) for item in value):
                             return pd.DataFrame(value)
-                        else:
+                        elif all(not isinstance(item, (dict, list)) for item in value):
                             return pd.DataFrame({key: value})
-                # fallback
+                        else:
+                            logger.warning(f"⚠️ Mixed types in list under key '{key}': {[type(item) for item in value[:5]]}")
+                            return pd.DataFrame({key: value})
+                logger.info("ℹ️ JSON dict fallback: using pd.json_normalize")
                 return pd.json_normalize(data)
 
             elif isinstance(data, list):
+                logger.info(f"✅ JSON root is list, first items types: {[type(item) for item in data[:5]]}")
                 if all(isinstance(item, dict) for item in data):
                     return pd.DataFrame(data)
                 elif all(isinstance(item, list) for item in data):
                     return pd.DataFrame(data)
+                elif all(not isinstance(item, (dict, list)) for item in data):
+                    return pd.DataFrame({"value": data})
                 else:
-                    # قائمة عناصرها نصوص أو أرقام → عمود واحد
+                    logger.warning(f"⚠️ Mixed types in root list: {[type(item) for item in data[:5]]}")
                     return pd.DataFrame({"value": data})
 
             else:
@@ -64,6 +70,7 @@ def read_file(filepath: str, encoding: str = "utf-8") -> pd.DataFrame:
     except Exception as e:
         logger.exception(f"⚠️ Failed to read file '{filepath}': {e}")
         raise RuntimeError(f"⚠️ Failed to read file '{filepath}': {e}")
+
 
 def save_file(df: pd.DataFrame, filepath: str, encoding: str = "utf-8", compress: bool = False):
     ext = Path(filepath).suffix.lower()
