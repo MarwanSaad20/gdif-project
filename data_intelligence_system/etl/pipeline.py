@@ -114,7 +114,7 @@ if __name__ == "__main__":
     success = run_full_pipeline(
         output_dir=PROCESSED_DIR,
         encode_type='onehot',
-        scale_type='minmax',                                             
+        scale_type='minmax',
     )
     if success:
         logger.info("✅ ETL pipeline انتهت بنجاح 🚀")
