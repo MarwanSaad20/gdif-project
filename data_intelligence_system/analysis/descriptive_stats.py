@@ -119,8 +119,9 @@ def generate_descriptive_stats(df_or_path: Union[pd.DataFrame, str, Path], filen
     for col in object_cols:
         try:
             with warnings.catch_warnings():
-                warnings.simplefilter("ignore", ParserWarning)
+                warnings.simplefilter("ignore", UserWarning)
                 converted = pd.to_datetime(df[col], errors='coerce')
+
             if not converted.isnull().all():
                 df[col] = converted
         except Exception:
