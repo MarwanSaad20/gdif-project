@@ -11,12 +11,12 @@ from data_intelligence_system.analysis.descriptive_stats import generate_descrip
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.reports.report_dispatcher import generate_report
 from data_intelligence_system.reports.generators.html_report_generator import HTMLReportGenerator
+from data_intelligence_system.config.paths_config import REPORTS_OUTPUT_DIR, REPORT_GENERATORS_DIR
 
 logger = get_logger("report.service")
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-TEMPLATE_DIR = os.path.join(BASE_DIR, "reports", "generators", "templates")
-REPORTS_OUTPUT_DIR = os.path.join(BASE_DIR, "reports", "output")
+TEMPLATE_DIR = REPORT_GENERATORS_DIR / "templates"
+REPORTS_OUTPUT_DIR = REPORTS_OUTPUT_DIR
 
 
 def ensure_dir(path: str):
@@ -30,7 +30,7 @@ class ReportsService:
     def generate_summary_report(
         self,
         file_path: str,
-        output_dir: str = REPORTS_OUTPUT_DIR,
+        output_dir: str = str(REPORTS_OUTPUT_DIR),
         output_format: str = "html",
         title: str = "Data Summary Report"
     ) -> bool:
@@ -84,7 +84,7 @@ class ReportsService:
     def _generate_html(self, data_path: str, stats: dict, title: str, output_dir: str) -> str:
         ensure_dir(output_dir)
         try:
-            env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
+            env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
             template = env.get_template("base_report.html")
         except TemplateNotFound:
             logger.error(f"❌ قالب التقرير غير موجود في المسار: {TEMPLATE_DIR}")
@@ -157,7 +157,7 @@ def generate_summary_report(*args, **kwargs):
     return _service_instance.generate_summary_report(*args, **kwargs)
 
 
-def convert_html_to_pdf(html_path: str, output_dir: str = REPORTS_OUTPUT_DIR):
+def convert_html_to_pdf(html_path: str, output_dir: str = str(REPORTS_OUTPUT_DIR)):
     return _service_instance._convert_html_to_pdf(html_path, output_dir)
 
 
@@ -165,6 +165,6 @@ def export_to_excel(
     dfs: List[pd.DataFrame],
     sheet_names: List[str],
     output_filename: str,
-    output_dir: str = REPORTS_OUTPUT_DIR
+    output_dir: str = str(REPORTS_OUTPUT_DIR)
 ):
     return _service_instance._export_to_excel(dfs, sheet_names, output_filename, output_dir)
