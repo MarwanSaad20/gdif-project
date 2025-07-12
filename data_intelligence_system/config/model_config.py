@@ -1,8 +1,6 @@
-# config/model_config.py
-
+from pathlib import Path
 from data_intelligence_system.utils.config_handler import ConfigHandler
 from data_intelligence_system.utils.logger import get_logger
-from pathlib import Path
 
 logger = get_logger("model_config")
 
