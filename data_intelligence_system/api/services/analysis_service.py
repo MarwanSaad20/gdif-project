@@ -13,8 +13,7 @@ from data_intelligence_system.analysis.clustering_analysis import run_clustering
 from data_intelligence_system.analysis.target_relation_analysis import run_target_relation_analysis
 
 # ✅ استيراد المسارات من config
-from data_intelligence_system.config.paths_config import CLEAN_DATA_PATH
-
+from data_intelligence_system.config.paths_config import CLEAN_DATA_FILE
 logger = get_logger("analysis.service")
 
 
