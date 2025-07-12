@@ -5,16 +5,16 @@ import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 
 from data_intelligence_system.utils.logger import get_logger
+# ✅ استيراد المسار الصحيح من paths_config
+from data_intelligence_system.config.paths_config import PROCESSED_DATA_DIR
 
 logger = get_logger("dashboard.service")
 
-# مسار مجلد البيانات المعالجة بناءً على جذر المشروع
-DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "processed"
 DEFAULT_FILE = "clean_data.csv"
 
 
 def load_processed_data(filename: Optional[str] = DEFAULT_FILE) -> pd.DataFrame:
-    path = DATA_DIR / filename
+    path = PROCESSED_DATA_DIR / filename
     if not path.exists():
         logger.error(f"❌ ملف البيانات غير موجود: {path}")
         raise FileNotFoundError(f"الملف غير موجود: {path}")
