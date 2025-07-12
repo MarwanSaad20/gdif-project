@@ -3,6 +3,8 @@ import joblib
 import logging
 from sklearn.linear_model import LogisticRegression
 
+# ✅ استيرادات من جذر المشروع
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.model_evaluation import ClassificationMetrics
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
@@ -20,7 +22,7 @@ class LogisticRegressionModel(BaseModel):
     """
 
     def __init__(self, model_params=None, scaler_type="standard"):
-        super().__init__(model_name="logistic_regression", model_dir="ml_models/saved_models")
+        super().__init__(model_name="logistic_regression", model_dir=ML_MODELS_DIR)
         self.model_params = model_params if model_params else {}
         self.model = LogisticRegression(**self.model_params)
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type)
