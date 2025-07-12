@@ -9,16 +9,17 @@ from pathlib import Path
 from dotenv import load_dotenv
 from types import SimpleNamespace
 from typing import Optional
-
 from data_intelligence_system.utils.config_handler import ConfigHandler
 from data_intelligence_system.utils.logger import get_logger
 
 logger = get_logger("env_config")
 
+# === إعداد المسارات ===
 BASE_DIR = Path(__file__).resolve().parent.parent
 ENV_PATH = BASE_DIR / ".env"
 CONFIG_PATH = BASE_DIR / "config" / "config.yaml"
 
+# === تحميل ملفات البيئة ===
 if ENV_PATH.exists():
     load_dotenv(dotenv_path=ENV_PATH)
 else:
@@ -42,10 +43,34 @@ def get_env_var(key: str, default: Optional[str] = None, config_key: Optional[st
 
 
 def ensure_path_exists(path: Path):
+    """
+    التأكد من وجود مجلد وإنشاؤه إذا لزم الأمر.
+    """
+    if not isinstance(path, Path):
+        path = Path(path)
     try:
         path.mkdir(parents=True, exist_ok=True)
     except Exception as e:
         logger.error(f"❌ فشل إنشاء المسار: {path} - {e}")
+
+
+def get_email_port() -> int:
+    """
+    جلب قيمة منفذ البريد وتحويلها إلى int مع قيمة افتراضية.
+    """
+    port_str = get_env_var("EMAIL_PORT", default="587")
+    try:
+        return int(port_str)
+    except ValueError:
+        logger.warning(f"⚠️ قيمة EMAIL_PORT غير صالحة '{port_str}'، سيتم استخدام 587 كافتراضي.")
+        return 587
+
+
+def determine_language(app_lang: str, default_lang: str) -> str:
+    """
+    تحديد اللغة المعتمدة (ar/en) أو استخدام الافتراضية.
+    """
+    return app_lang.lower() if app_lang.lower() in ["ar", "en"] else default_lang.lower()
 
 
 ENV_MODE = get_env_var("ENV_MODE", default="development", config_key="project.env_mode").lower()
@@ -66,16 +91,6 @@ REPORTS_OUTPUT_PATH = Path(get_env_var("REPORTS_OUTPUT_PATH", config_key="paths.
 for p in [RAW_DATA_PATH, PROCESSED_DATA_PATH, REPORTS_OUTPUT_PATH]:
     ensure_path_exists(p)
 
-
-def get_email_port() -> int:
-    port_str = get_env_var("EMAIL_PORT", default="587")
-    try:
-        return int(port_str)
-    except ValueError:
-        logger.warning(f"⚠️ قيمة EMAIL_PORT غير صالحة '{port_str}'، سيتم استخدام 587 كافتراضي.")
-        return 587
-
-
 EMAIL_CONFIG = {
     "sender": get_env_var("EMAIL_SENDER", default="your@email.com"),
     "password": get_env_var("EMAIL_PASSWORD", default=""),
@@ -85,12 +100,6 @@ EMAIL_CONFIG = {
 
 if not EMAIL_CONFIG["password"]:
     logger.warning("⚠️ تحذير: لم يتم تعيين كلمة مرور البريد الإلكتروني. لن تتمكن من إرسال تقارير عبر البريد.")
-
-
-def determine_language(app_lang: str, default_lang: str) -> str:
-    lang = app_lang.lower()
-    return lang if lang in ["ar", "en"] else default_lang.lower()
-
 
 APP_LANGUAGE = os.getenv("APP_LANGUAGE", DEFAULT_LANG)
 LANGUAGE = determine_language(APP_LANGUAGE, DEFAULT_LANG)
@@ -113,7 +122,10 @@ env_namespace = SimpleNamespace(
 )
 
 
-if __name__ == "__main__":
+def print_summary():
+    """
+    طباعة ملخص إعدادات النظام.
+    """
     print("📌 إعدادات النظام الحالية:")
     print(f"📍 نمط البيئة: {ENV_MODE}")
     print(f"🧪 وضع التصحيح: {DEBUG_MODE}")
@@ -125,3 +137,7 @@ if __name__ == "__main__":
     print(f"📧 بريد الإرسال: {EMAIL_CONFIG['sender']} (مفتاح مفقود: {'نعم' if not EMAIL_CONFIG['password'] else 'لا'})")
     print(f"🌐 اللغة الحالية: {LANGUAGE}")
     print(f"🗄️ DATABASE_URL: {DATABASE_URL}")
+
+
+if __name__ == "__main__":
+    print_summary()
