@@ -10,7 +10,6 @@
 - ملف CSV ملخص للنتائج التحليلية
 """
 
-import os
 import sys
 import pandas as pd
 import numpy as np
@@ -26,13 +25,13 @@ from data_intelligence_system.analysis.target_relation_analysis import analyze_t
 
 warnings.filterwarnings('ignore')
 
-# --- إعداد المسارات ---
+# --- إعداد المسارات باستخدام بنية المشروع ---
 try:
     SCRIPT_PATH = Path(__file__).resolve()
 except NameError:
     SCRIPT_PATH = Path.cwd()
 
-PROJECT_ROOT = SCRIPT_PATH.parent.parent
+PROJECT_ROOT = SCRIPT_PATH.parents[1]  # التحديث لجعل الاستيرادات والمسارات تبدأ من جذر المشروع
 DATA_PATH = PROJECT_ROOT / 'data' / 'processed' / 'clean_data.csv'
 OUTPUT_DIR = PROJECT_ROOT / 'reports' / 'output'
 SUMMARY_OUTPUT_PATH = OUTPUT_DIR / 'target_relationship_summary.csv'
