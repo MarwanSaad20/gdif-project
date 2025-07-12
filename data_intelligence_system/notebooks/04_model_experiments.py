@@ -5,6 +5,7 @@
 import pandas as pd
 import numpy as np
 from pathlib import Path
+import sys
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
     accuracy_score, classification_report, confusion_matrix,
@@ -33,11 +34,15 @@ sns.set_theme(style="whitegrid")
 
 def load_clean_data():
     try:
-        project_root = Path(__file__).resolve().parents[1]
+        project_root = Path(__file__).resolve().parents[2]
     except NameError:
-        project_root = Path.cwd().parents[0]
+        project_root = Path.cwd().parents[1]
 
-    data_path = project_root / "data" / "processed" / "clean_data.csv"
+    # ✅ إضافة جذر المشروع إلى sys.path للتكامل الكامل
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+
+    data_path = project_root / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
     if not data_path.exists():
         raise FileNotFoundError(f"❌ الملف غير موجود: {data_path}")
     df = pd.read_csv(data_path)
@@ -89,7 +94,6 @@ def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
     if y_full.nunique() <= 10:
         print("📌 نوع المسألة: تصنيف (Classification)")
 
-        # تدريب وتقييم RandomForest كما هو
         rf_model = RandomForestModel()
         rf_model.fit(X_train, y_train)
         y_pred_rf = rf_model.predict(X_test)
@@ -108,7 +112,6 @@ def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
         plt.savefig("confusion_matrix_random_forest.png")
         plt.show()
 
-        # ترميز الهدف لـ XGBoost
         le = LabelEncoder()
         y_train_enc = le.fit_transform(y_train)
         y_test_enc = le.transform(y_test)
@@ -135,7 +138,6 @@ def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
     else:
         print("📌 نوع المسألة: انحدار (Regression)")
 
-        # تجربة LassoRegressionModel
         lasso_model = LassoRegressionModel()
         lasso_model.fit(X_train, y_train)
         y_pred_lasso = lasso_model.predict(X_test)
@@ -154,7 +156,6 @@ def run_model_experiment(X_train, X_test, y_train, y_test, y_full):
         plt.savefig("lasso_regression_results.png")
         plt.show()
 
-        # تجربة RidgeRegressionModel
         ridge_model = RidgeRegressionModel()
         ridge_model.fit(X_train, y_train)
         y_pred_ridge = ridge_model.predict(X_test)
