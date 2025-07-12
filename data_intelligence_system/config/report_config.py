@@ -64,3 +64,6 @@ TABLE_STYLE = {
 # 📄 إعدادات الحفظ
 DEFAULT_FORMAT = "pdf"  # يمكن أن تكون: "pdf", "excel", "html"
 OUTPUT_DIR = Path(get_config_value("paths.reports", "data_intelligence_system/reports/output"))
+
+# ✅ تعريف OUTPUT_PATH المطلوب لاستيراده
+OUTPUT_PATH = OUTPUT_DIR
