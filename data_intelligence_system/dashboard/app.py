@@ -12,10 +12,10 @@ from pathlib import Path
 import dash
 import dash_bootstrap_components as dbc
 
-# ✅ استيراد إعدادات النظام المركزية
+# ✅ استيراد إعدادات النظام المركزية والمسارات من جذر المشروع
 from data_intelligence_system.config.config_loader import CONFIG
 
-# ========== إعداد المسارات الأساسية ========== #
+# ========== إعداد مسارات النظام وإضافتها إلى sys.path بطريقة مركزية ==========
 def configure_sys_path():
     current_file = Path(__file__).resolve()
     project_root = current_file.parents[1]
@@ -37,7 +37,7 @@ def configure_sys_path():
 
 configure_sys_path()
 
-# ========== استيراد التخطيط والكولباكات ========== #
+# ========== استيراد التخطيط والكولباكات من جذر المشروع ==========
 from data_intelligence_system.dashboard.layouts.main_layout import get_layout
 from data_intelligence_system.dashboard.callbacks.layout_callbacks import register_layout_callbacks
 from data_intelligence_system.dashboard.callbacks.upload_callbacks import register_upload_callbacks
@@ -46,7 +46,7 @@ from data_intelligence_system.dashboard.callbacks.export_callbacks import regist
 from data_intelligence_system.dashboard.callbacks.kpi_callbacks import register_kpi_callbacks
 from data_intelligence_system.dashboard.callbacks.filters_callbacks import register_filters_callbacks  # ✅ جديد
 
-# ========== إعداد سجل التشغيل (Logging) ========== #
+# ========== إعداد سجل التشغيل (Logging) ==========
 env_mode = CONFIG.env.ENV_MODE or "development"
 log_level = logging.DEBUG if env_mode == "development" else logging.INFO
 logger = logging.getLogger("GDIF")
@@ -62,7 +62,7 @@ logger.addHandler(stream_handler)
 
 logger.info("🚀 بدء تشغيل تطبيق GDIF - نظام تحليل البيانات العام")
 
-# ========== إنشاء تطبيق Dash ========== #
+# ========== إنشاء تطبيق Dash ==========
 external_stylesheets = [dbc.themes.DARKLY]
 
 app = dash.Dash(
@@ -80,10 +80,10 @@ app = dash.Dash(
 
 server = app.server
 
-# ========== تعيين التخطيط الرئيسي ========== #
+# ========== تعيين التخطيط الرئيسي ==========
 app.layout = get_layout()
 
-# ========== تسجيل جميع الكولباكات ========== #
+# ========== تسجيل جميع الكولباكات ==========
 register_layout_callbacks(app)
 register_upload_callbacks(app)
 register_charts_callbacks(app)
@@ -93,7 +93,7 @@ register_filters_callbacks(app)  # ✅ جديد
 
 logger.info("✅ تم تسجيل جميع الكولباكات بنجاح.")
 
-# ========== تشغيل التطبيق محليًا ========== #
+# ========== تشغيل التطبيق محليًا ==========
 if __name__ == "__main__":
     port = int(getattr(CONFIG.env, "DASHBOARD_PORT", 8050))
     is_dev = env_mode == "development"
