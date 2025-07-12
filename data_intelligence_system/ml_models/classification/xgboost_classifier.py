@@ -5,6 +5,8 @@ from typing import Optional, List
 
 from xgboost import XGBClassifier
 
+# ✅ استيراد من جذر المشروع
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.model_evaluation import ClassificationMetrics
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
@@ -26,7 +28,7 @@ class XGBoostClassifierModel(BaseModel):
         model_params: Optional[dict] = None,
         scaler_type: str = "standard"
     ):
-        super().__init__(model_name="xgboost_classifier", model_dir="ml_models/saved_models")
+        super().__init__(model_name="xgboost_classifier", model_dir=ML_MODELS_DIR)
         self.model_params = model_params if model_params else {}
         self.model = XGBClassifier(use_label_encoder=False, eval_metric='logloss', **self.model_params)
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type)
@@ -78,7 +80,6 @@ class XGBoostClassifierModel(BaseModel):
 
         y_pred = self.model.predict(X_test)
 
-        # ضبط average تلقائيًا حسب نوع المهمة (binary/multiclass)
         avg_method = "binary" if len(set(y)) == 2 else "weighted"
 
         return ClassificationMetrics.all_metrics(y_test, y_pred, average=avg_method)
