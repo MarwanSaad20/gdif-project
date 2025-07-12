@@ -20,17 +20,18 @@ CONFIG_MODULE_PATHS = {
 }
 
 def dictify(obj: Any) -> Dict[str, Any]:
-    """تحويل كائن module أو Namespace إلى dict قابل للعرض والتعديل."""
-    if isinstance(obj, dict):
-        return obj
-    return {
-        key: getattr(obj, key)
-        for key in dir(obj)
-        if not key.startswith("__") and not callable(getattr(obj, key))
-    }
+    """تحويل module أو Namespace إلى dict."""
+    try:
+        return vars(obj)
+    except TypeError:
+        return {
+            key: getattr(obj, key)
+            for key in dir(obj)
+            if not key.startswith("__") and not callable(getattr(obj, key))
+        }
 
 def namespaceify(d: Dict[str, Any]) -> SimpleNamespace:
-    """تحويل dict إلى كائن يمكن الوصول له بالنقطة dot access."""
+    """تحويل dict إلى Namespace لإتاحة dot access."""
     return SimpleNamespace(**d)
 
 def safe_import(module_name: str) -> Any:
@@ -40,26 +41,25 @@ def safe_import(module_name: str) -> Any:
         logger.info(f"✅ تم تحميل إعدادات: {module_name}")
         return module
     except Exception as e:
-        logger.warning(f"⚠️ فشل تحميل إعدادات {module_name}: {e}")
-        return SimpleNamespace()  # كائن فارغ لتفادي الانهيار
+        logger.warning(f"⚠️ فشل تحميل إعدادات {module_name}: {e}", exc_info=True)
+        return SimpleNamespace()
 
-def setup_app_language(config_env: SimpleNamespace) -> None:
-    """تعيين لغة التطبيق بناءً على متغير البيئة."""
-    app_lang = os.getenv("APP_LANGUAGE", "ar").lower()
-    if app_lang not in ["ar", "en"]:
+def setup_defaults(config: SimpleNamespace) -> None:
+    """تعيين الإعدادات الافتراضية العامة."""
+    # لغة التطبيق
+    app_lang = os.getenv("APP_LANGUAGE", "ar").strip().lower()
+    if app_lang not in {"ar", "en"}:
         app_lang = "ar"
-    setattr(config_env, "LANGUAGE", app_lang)
+    setattr(config.env, "LANGUAGE", app_lang)
 
-def setup_database_url(config_env: SimpleNamespace) -> None:
-    """تعيين رابط قاعدة البيانات إذا لم يكن موجودًا."""
-    if not hasattr(config_env, "DATABASE_URL"):
-        default_db_url = os.getenv("DATABASE_URL", "sqlite:///default.db")
-        setattr(config_env, "DATABASE_URL", default_db_url)
+    # قاعدة البيانات
+    db_url = os.getenv("DATABASE_URL", "sqlite:///default.db").strip()
+    if not getattr(config.env, "DATABASE_URL", "").strip():
+        setattr(config.env, "DATABASE_URL", db_url)
 
-def setup_default_report_formats(config_reports: SimpleNamespace) -> None:
-    """تعيين صيغ التقارير الافتراضية إذا لم تكن موجودة."""
-    if not hasattr(config_reports, "OUTPUT_FORMATS"):
-        setattr(config_reports, "OUTPUT_FORMATS", ["pdf", "html", "excel"])
+    # صيغ التقارير
+    if not hasattr(config.reports, "OUTPUT_FORMATS"):
+        setattr(config.reports, "OUTPUT_FORMATS", ["pdf", "html", "excel"])
 
 # 📦 تحميل جميع الإعدادات في كائن مركزي CONFIG
 CONFIG = SimpleNamespace()
@@ -68,9 +68,7 @@ for key, module_path in CONFIG_MODULE_PATHS.items():
     setattr(CONFIG, key, namespaceify(dictify(module_obj)))
 
 # ⚙️ إعدادات إضافية
-setup_app_language(CONFIG.env)
-setup_database_url(CONFIG.env)
-setup_default_report_formats(CONFIG.reports)
+setup_defaults(CONFIG)
 
 # 📌 للاستخدام المباشر:
 # from config.config_loader import CONFIG
