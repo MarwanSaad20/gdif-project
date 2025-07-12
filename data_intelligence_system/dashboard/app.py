@@ -47,7 +47,8 @@ from data_intelligence_system.dashboard.callbacks.kpi_callbacks import register_
 from data_intelligence_system.dashboard.callbacks.filters_callbacks import register_filters_callbacks  # ✅ جديد
 
 # ========== إعداد سجل التشغيل (Logging) ========== #
-log_level = logging.DEBUG if os.getenv("ENV", "development").lower() == "development" else logging.INFO
+env_mode = CONFIG.env.ENV_MODE or "development"
+log_level = logging.DEBUG if env_mode == "development" else logging.INFO
 logger = logging.getLogger("GDIF")
 logger.setLevel(log_level)
 
@@ -94,8 +95,8 @@ logger.info("✅ تم تسجيل جميع الكولباكات بنجاح.")
 
 # ========== تشغيل التطبيق محليًا ========== #
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8050))
-    is_dev = os.getenv("ENV", "development").lower() == "development"
+    port = int(getattr(CONFIG.env, "DASHBOARD_PORT", 8050))
+    is_dev = env_mode == "development"
 
     logger.info(f"🌐 التطبيق يعمل على: http://127.0.0.1:{port} | الوضع: {'تطوير' if is_dev else 'إنتاج'}")
 
