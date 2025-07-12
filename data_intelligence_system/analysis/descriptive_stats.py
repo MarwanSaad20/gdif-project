@@ -36,9 +36,13 @@ def compute_general_stats(df: pd.DataFrame) -> Dict[str, Union[int, float]]:
 
 
 def compute_numeric_summary(df: pd.DataFrame) -> Dict[str, Dict[str, Any]]:
-    numeric_summary = df.describe(include=[np.number]).T
-    numeric_summary["missing_values"] = df.isnull().sum()
-    numeric_summary["missing_%"] = (df.isnull().mean() * 100).round(2)
+    numeric_df = df.select_dtypes(include=[np.number])
+    if numeric_df.empty:
+        logger.warning("⚠️ لا توجد أعمدة رقمية لحساب الإحصائيات.")
+        return {}
+    numeric_summary = numeric_df.describe().T
+    numeric_summary["missing_values"] = numeric_df.isnull().sum()
+    numeric_summary["missing_%"] = (numeric_df.isnull().mean() * 100).round(2)
     return numeric_summary.to_dict(orient="index")
 
 
@@ -135,8 +139,9 @@ def generate_descriptive_stats(df_or_path: Union[pd.DataFrame, str, Path], filen
         )
         logger.info(f"📄 تم حفظ المعلومات العامة.")
 
-        pd.DataFrame(numeric_summary).T.to_csv(output_dir / f"{filename_prefix}_numeric_stats.csv")
-        logger.info(f"📄 تم حفظ الإحصائيات الرقمية.")
+        if numeric_summary:
+            pd.DataFrame(numeric_summary).T.to_csv(output_dir / f"{filename_prefix}_numeric_stats.csv")
+            logger.info(f"📄 تم حفظ الإحصائيات الرقمية.")
 
         for col, counts in categorical_summary.items():
             counts.to_csv(output_dir / f"{filename_prefix}_value_counts_{col}.csv")
