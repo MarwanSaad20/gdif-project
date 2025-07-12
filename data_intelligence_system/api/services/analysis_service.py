@@ -12,6 +12,9 @@ from data_intelligence_system.analysis.outlier_detection import run_outlier_dete
 from data_intelligence_system.analysis.clustering_analysis import run_clustering
 from data_intelligence_system.analysis.target_relation_analysis import run_target_relation_analysis
 
+# ✅ استيراد المسارات من config
+from data_intelligence_system.config.paths_config import CLEAN_DATA_PATH
+
 logger = get_logger("analysis.service")
 
 
@@ -90,7 +93,8 @@ if __name__ == "__main__":
     from data_intelligence_system.utils.logger import get_logger
     logger = get_logger("analysis.cli", reset=True)
 
-    data_file_path = r"C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\processed\clean_data.csv"
+    # ✅ استخدام CLEAN_DATA_PATH بدلاً من كتابة المسار مباشرةً
+    data_file_path = str(CLEAN_DATA_PATH)
 
     if not os.path.exists(data_file_path):
         logger.error(f"ملف البيانات غير موجود: {data_file_path}")
