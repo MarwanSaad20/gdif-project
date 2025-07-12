@@ -17,19 +17,17 @@ except Exception:
 
 warnings.filterwarnings("ignore")
 
-# 🛠️ ضبط جذر المشروع بشكل صحيح من pathlib
+# 🛠️ ضبط جذر المشروع بشكل صحيح
 try:
-    # نصعد مرتين من موقع السكربت للوصول لجذر المشروع PythonProject10
-    project_root = Path(__file__).resolve().parents[2]
+    project_root = Path(__file__).resolve().parents[2]  # نصعد مرتين للوصول لجذر المشروع
 except NameError:
-    # داخل بيئة غير تدعم __file__ مثل Jupyter
     project_root = Path.cwd().parents[1]
 
-# أضف جذر المشروع إلى sys.path ليتمكن من استيراد data_intelligence_system utils
+# إضافة جذر المشروع إلى sys.path للاستيراد
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-# ✅ استيراد الأدوات من جذر المشروع
+# ✅ استيراد الأدوات من جذر المشروع بعد تحديث المسارات
 from data_intelligence_system.utils.visualization import (
     plot_box,
     plot_distribution,
