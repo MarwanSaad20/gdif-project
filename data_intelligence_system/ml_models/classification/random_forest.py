@@ -4,6 +4,8 @@ import joblib
 from typing import Optional, List, Any
 from sklearn.ensemble import RandomForestClassifier
 
+# ✅ استيرادات من جذر المشروع
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.model_evaluation import ClassificationMetrics
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
@@ -14,8 +16,6 @@ from data_intelligence_system.utils.timer import Timer
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-MODEL_DIR = "ml_models/saved_models"
-
 
 class RandomForestModel(BaseModel):
     """
@@ -23,7 +23,7 @@ class RandomForestModel(BaseModel):
     """
 
     def __init__(self, model_params: Optional[dict] = None, scaler_type: str = "standard") -> None:
-        super().__init__(model_name="random_forest", model_dir=MODEL_DIR)
+        super().__init__(model_name="random_forest", model_dir=ML_MODELS_DIR)
         self.model_params = model_params or {}
         self.model = RandomForestClassifier(**self.model_params)
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type)
