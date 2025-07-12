@@ -1,0 +1,1113 @@
+2025-07-11 09:56:41 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_141510.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 09:56:41 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_161944.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 09:56:41 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162106.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 09:56:41 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162232.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 09:56:41 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_002738.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 09:56:41 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005004.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 09:56:41 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005626.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:08:04 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_141510.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:08:04 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_161944.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:08:04 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162106.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:08:04 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162232.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:08:04 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_002738.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:08:04 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005004.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:08:04 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005626.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 29, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:13:06 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_141510.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:13:06 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_161944.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:13:06 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162106.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:13:06 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162232.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:13:06 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_002738.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:13:06 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005004.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:13:06 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005626.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:14:57 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_141510.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:14:57 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_161944.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:14:57 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162106.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:14:57 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162232.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:14:57 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_002738.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:14:57 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005004.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:14:57 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005626.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:19:20 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_141510.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:19:20 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_161944.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:19:20 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162106.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:19:20 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162232.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:19:20 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_002738.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:19:20 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005004.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:19:20 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005626.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 39, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:22:59 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_141510.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:22:59 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_161944.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:22:59 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162106.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:22:59 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162232.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:22:59 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_002738.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:22:59 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005004.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:22:59 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005626.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:26:12 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_141510.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:26:12 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_161944.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:26:12 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162106.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:26:12 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162232.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:26:12 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_002738.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:26:12 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005004.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:26:12 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005626.json': 'list' object has no attribute 'keys'
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    return pd.DataFrame(data)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\frame.py", line 851, in __init__
+    arrays, columns, index = nested_data_to_arrays(
+                             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 520, in nested_data_to_arrays
+    arrays, columns = to_arrays(data, columns, dtype=dtype)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 837, in to_arrays
+    arr, columns = _list_of_dict_to_arrays(data, columns)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 917, in _list_of_dict_to_arrays
+    pre_cols = lib.fast_unique_multiple_list_gen(gen, sort=sort)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/lib.pyx", line 367, in pandas._libs.lib.fast_unique_multiple_list_gen
+  File "C:\Users\PC\PycharmProjects\PythonProject10\.venv\Lib\site-packages\pandas\core\internals\construction.py", line 915, in <genexpr>
+    gen = (list(x.keys()) for x in data)
+                ^^^^^^
+AttributeError: 'list' object has no attribute 'keys'
+2025-07-11 10:41:10 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_141510.json': ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    raise RuntimeError(f"⚠️ JSON list elements are not dictionaries → type: {type(data[0])}")
+RuntimeError: ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+2025-07-11 10:41:10 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_161944.json': ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    raise RuntimeError(f"⚠️ JSON list elements are not dictionaries → type: {type(data[0])}")
+RuntimeError: ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+2025-07-11 10:41:10 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162106.json': ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    raise RuntimeError(f"⚠️ JSON list elements are not dictionaries → type: {type(data[0])}")
+RuntimeError: ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+2025-07-11 10:41:10 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250624_162232.json': ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    raise RuntimeError(f"⚠️ JSON list elements are not dictionaries → type: {type(data[0])}")
+RuntimeError: ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+2025-07-11 10:41:10 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_002738.json': ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    raise RuntimeError(f"⚠️ JSON list elements are not dictionaries → type: {type(data[0])}")
+RuntimeError: ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+2025-07-11 10:41:10 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005004.json': ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    raise RuntimeError(f"⚠️ JSON list elements are not dictionaries → type: {type(data[0])}")
+RuntimeError: ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+2025-07-11 10:41:10 — [ERROR] — FileManager — ⚠️ Failed to read file 'C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded\world_bank_gdp_20250706_005626.json': ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
+Traceback (most recent call last):
+  File "C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\utils\file_manager.py", line 40, in read_file
+    raise RuntimeError(f"⚠️ JSON list elements are not dictionaries → type: {type(data[0])}")
+RuntimeError: ⚠️ JSON list elements are not dictionaries → type: <class 'dict'>
