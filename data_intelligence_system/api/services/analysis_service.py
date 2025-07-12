@@ -12,8 +12,9 @@ from data_intelligence_system.analysis.outlier_detection import run_outlier_dete
 from data_intelligence_system.analysis.clustering_analysis import run_clustering
 from data_intelligence_system.analysis.target_relation_analysis import run_target_relation_analysis
 
-# ✅ استيراد المسارات من config
+# ✅ استيراد المسار الصحيح من paths_config
 from data_intelligence_system.config.paths_config import CLEAN_DATA_FILE
+
 logger = get_logger("analysis.service")
 
 
@@ -35,8 +36,6 @@ class AnalysisService:
     def load_data(self, force_reload: bool = False) -> pd.DataFrame:
         """
         تحميل أو إعادة تحميل البيانات المنظفة من المسار.
-        :param force_reload: فرض إعادة تحميل البيانات حتى لو كانت محملة مسبقًا.
-        :return: DataFrame المحمل
         """
         if self.data is None or force_reload:
             if not os.path.exists(self.data_path):
@@ -73,10 +72,6 @@ class AnalysisService:
         return run_clustering(df, algorithm=algorithm, n_clusters=n_clusters)
 
     def target_relationship(self, target_column: Optional[str] = None) -> Dict[str, Any]:
-        """
-        تحليل العلاقة مع المتغير الهدف المحدد، وإذا لم يتم تحديده، يُستخدم آخر عمود.
-        إذا لم يكن العمود موجودًا، يتم التحذير ويتم تجاوز التحليل.
-        """
         df = self.load_data()
         target = target_column if target_column else df.columns[-1]
 
@@ -89,11 +84,10 @@ class AnalysisService:
 
 
 if __name__ == "__main__":
-    from data_intelligence_system.utils.logger import get_logger
     logger = get_logger("analysis.cli", reset=True)
 
-    # ✅ استخدام CLEAN_DATA_PATH بدلاً من كتابة المسار مباشرةً
-    data_file_path = str(CLEAN_DATA_PATH)
+    # ✅ استخدام CLEAN_DATA_FILE مباشرةً
+    data_file_path = str(CLEAN_DATA_FILE)
 
     if not os.path.exists(data_file_path):
         logger.error(f"ملف البيانات غير موجود: {data_file_path}")
