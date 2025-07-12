@@ -5,6 +5,7 @@ from pathlib import Path
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
@@ -23,7 +24,7 @@ class LinearRegressionModel(BaseModel):
     def __init__(
         self,
         model_name="linear_regression",
-        model_dir=Path("data_intelligence_system/ml_models/saved_models"),
+        model_dir=ML_MODELS_DIR,
         scaler_type="standard",
     ):
         super().__init__(model_name, model_dir)
