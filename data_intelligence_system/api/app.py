@@ -36,7 +36,7 @@ def create_app() -> FastAPI:
     app.add_middleware(GZipMiddleware, minimum_size=1000)
 
     # استخدم SECRET_KEY من env_config بدلاً من متغير بيئة مباشر
-    secret_key = os.getenv("SESSION_SECRET_KEY", env_namespace.SECRET_KEY or "development-session-key")
+    secret_key = env_namespace.SECRET_KEY or os.getenv("SESSION_SECRET_KEY", "development-session-key")
     app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
     class TimingMiddleware(BaseHTTPMiddleware):
