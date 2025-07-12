@@ -1,14 +1,13 @@
 import uvicorn
 import os
-from dotenv import load_dotenv
 
-# تحميل متغيرات البيئة من ملف .env إن وجد
-load_dotenv()
+# ✅ استيراد الإعدادات البيئية المركزية بدلًا من التحميل اليدوي
+from data_intelligence_system.config.env_config import env_namespace
 
 def main():
     """
     نقطة تشغيل تطبيق FastAPI باستخدام Uvicorn.
-    يدعم التهيئة الديناميكية عبر متغيرات البيئة.
+    يدعم التهيئة الديناميكية عبر env_namespace أو متغيرات البيئة مباشرة.
     """
     try:
         # إعدادات التشغيل مع قيم افتراضية
@@ -18,9 +17,8 @@ def main():
         log_level = os.getenv("API_LOG_LEVEL", "info")
         workers = int(os.getenv("API_WORKERS", 1))
 
-        # تشغيل خادم Uvicorn مع الإعدادات
         uvicorn.run(
-            "data_intelligence_system.api.app:app",  # مسار الاستيراد من جذر المشروع
+            "data_intelligence_system.api.app:app",  # مسار الاستيراد المطلق
             host=host,
             port=port,
             reload=reload,
