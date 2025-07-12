@@ -6,6 +6,7 @@ from scipy import stats
 from pathlib import Path
 
 # استيرادات من جذر المشروع
+from data_intelligence_system.config.paths_config import BASE_DIR, DATA_DIR_PROCESSED, ANALYSIS_OUTPUT_DIR
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
     get_numerical_columns,
@@ -17,9 +18,8 @@ from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.timer import Timer
 
 # ===================== إعداد المسارات =====================
-BASE_DIR = Path(__file__).resolve().parents[2]
-DATA_DIR = BASE_DIR / "data_intelligence_system" / "data" / "processed"
-OUTPUT_DIR = BASE_DIR / "data_intelligence_system" / "analysis" / "analysis_output"
+DATA_DIR = DATA_DIR_PROCESSED
+OUTPUT_DIR = ANALYSIS_OUTPUT_DIR
 OUTLIER_REPORT_PATH = OUTPUT_DIR / "outliers_summary_report.csv"
 
 # ===================== إعداد التسجيل =====================
@@ -28,7 +28,6 @@ logger = logging.getLogger(__name__)
 
 
 def detect_outliers_zscore(df: pd.DataFrame, threshold=3) -> pd.Series:
-    """Detect outliers using Z-Score method."""
     logger.info("🧮 اكتشاف القيم الشاذة باستخدام Z-Score")
     df = fill_missing_values(df)
     numeric_cols = get_numerical_columns(df)
@@ -41,7 +40,6 @@ def detect_outliers_zscore(df: pd.DataFrame, threshold=3) -> pd.Series:
 
 
 def detect_outliers_iqr(df: pd.DataFrame, factor=1.5) -> pd.Series:
-    """Detect outliers using IQR method."""
     logger.info("🧮 اكتشاف القيم الشاذة باستخدام IQR")
     df = fill_missing_values(df)
     numeric_cols = get_numerical_columns(df)
@@ -56,7 +54,6 @@ def detect_outliers_iqr(df: pd.DataFrame, factor=1.5) -> pd.Series:
 
 
 def detect_outliers_isolation_forest(df: pd.DataFrame, contamination=0.05) -> pd.Series:
-    """Detect outliers using Isolation Forest."""
     logger.info("🌲 اكتشاف القيم الشاذة باستخدام Isolation Forest")
     df = fill_missing_values(df)
     numeric_cols = get_numerical_columns(df)
@@ -71,7 +68,6 @@ def detect_outliers_isolation_forest(df: pd.DataFrame, contamination=0.05) -> pd
 
 @Timer("تحليل القيم الشاذة الفردي")
 def run_outlier_detection(df: pd.DataFrame, method: str = "iqr", output_dir: Path = OUTPUT_DIR) -> dict:
-    """Run outlier detection using the specified method."""
     ensure_output_dir(output_dir)
     log_basic_info(df, "outlier_detection")
 
@@ -100,7 +96,6 @@ def run_outlier_detection(df: pd.DataFrame, method: str = "iqr", output_dir: Pat
 
 @Timer("تحليل القيم الشاذة - دفعة كاملة")
 def run_batch_detection():
-    """Run outlier detection on all processed CSV files."""
     ensure_output_dir(OUTPUT_DIR)
     if not DATA_DIR.exists():
         logger.error(f"❌ مجلد البيانات غير موجود: {DATA_DIR}")
