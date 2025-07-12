@@ -8,12 +8,10 @@ logger = get_logger("PathsConfig")
 CONFIG_FILE = Path(__file__).resolve().parent / "config.yaml"
 try:
     config = ConfigHandler(str(CONFIG_FILE))
-    config_cache = config._config if config else {}  # Cache loaded dict
     logger.info(f"✅ Loaded config from: {CONFIG_FILE}")
 except Exception as e:
     logger.warning(f"⚠️ Failed to load config from {CONFIG_FILE}: {e}")
     config = None
-    config_cache = {}
 
 # ===================== Project root =====================
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -24,10 +22,14 @@ def get_path_from_config(key: str, fallback: Path) -> Path:
     """
     Get a path from config by key; fallback to default if missing.
     """
-    value = config_cache.get(key) if config_cache else None
-    if value is None:
-        logger.warning(f"⚠️ Missing config key: {key}, using fallback: {fallback}")
-    return Path(value) if value else fallback
+    try:
+        value = config.get(key) if config else None
+        if value is None:
+            logger.warning(f"⚠️ Missing config key: {key}, using fallback: {fallback}")
+        return Path(value) if value else fallback
+    except Exception as e:
+        logger.warning(f"⚠️ Error reading config key '{key}': {e}; using fallback: {fallback}")
+        return fallback
 
 # ===================== Data paths =====================
 DATA_DIR = SYSTEM_ROOT / "data"
