@@ -6,7 +6,6 @@ from scipy import stats
 from pathlib import Path
 
 # استيرادات من جذر المشروع
-from data_intelligence_system.config.paths_config import BASE_DIR, DATA_DIR_PROCESSED, ANALYSIS_OUTPUT_DIR
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
     get_numerical_columns,
@@ -17,9 +16,13 @@ from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.timer import Timer
 
-# ===================== إعداد المسارات =====================
-DATA_DIR = DATA_DIR_PROCESSED
-OUTPUT_DIR = ANALYSIS_OUTPUT_DIR
+# استيراد المسارات المحدثة من config
+from data_intelligence_system.config.paths_config import (
+    PROCESSED_DATA_DIR as DATA_DIR,
+    ANALYSIS_DIR,
+)
+
+OUTPUT_DIR = ANALYSIS_DIR / "analysis_output"
 OUTLIER_REPORT_PATH = OUTPUT_DIR / "outliers_summary_report.csv"
 
 # ===================== إعداد التسجيل =====================
