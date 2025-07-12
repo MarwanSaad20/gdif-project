@@ -5,6 +5,7 @@ from pathlib import Path
 from statsmodels.tsa.arima.model import ARIMA
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
@@ -21,7 +22,7 @@ class ARIMAForecastingModel(BaseModel):
         """
         super().__init__(
             model_name="arima_forecast",
-            model_dir="data_intelligence_system/ml_models/saved_models"
+            model_dir=ML_MODELS_DIR
         )
         self.order = order
         self.model = None
