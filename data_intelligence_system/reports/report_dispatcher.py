@@ -9,7 +9,7 @@ from data_intelligence_system.reports.export_utils import (
     save_dataframe_to_csv,
     df_to_html_table
 )
-from data_intelligence_system.reports.report_config import OUTPUT_PATH
+from data_intelligence_system.config.report_config import OUTPUT_PATH
 
 logging.basicConfig(level=logging.INFO)
 
