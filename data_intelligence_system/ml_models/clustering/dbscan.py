@@ -4,6 +4,8 @@ from pathlib import Path
 import pandas as pd
 from sklearn.cluster import DBSCAN
 
+# ✅ استيراد من جذر المشروع
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.feature_utils import generate_derived_features
@@ -28,7 +30,7 @@ class DBSCANClusteringModel(BaseModel):
         """
         super().__init__(
             model_name="dbscan_clustering",
-            model_dir="data_intelligence_system/ml_models/saved_models"
+            model_dir=ML_MODELS_DIR
         )
         self.model_params = model_params or {}
         self.model = DBSCAN(**self.model_params)
