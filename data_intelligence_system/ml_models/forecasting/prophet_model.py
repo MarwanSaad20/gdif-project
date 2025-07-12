@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 from prophet import Prophet
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-# ✅ استيرادات من جذر المشروع
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
@@ -23,7 +23,7 @@ class ProphetForecastingModel(BaseModel):
         نموذج Prophet للتنبؤ الزمني مع دعم التحجيم.
         """
         super().__init__(model_name="prophet_forecasting_model",
-                         model_dir="data_intelligence_system/ml_models/saved_models")
+                         model_dir=ML_MODELS_DIR)
         self.model_params = {
             "growth": growth,
             "daily_seasonality": daily_seasonality,
