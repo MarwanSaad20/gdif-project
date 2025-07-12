@@ -4,6 +4,7 @@ from pathlib import Path
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
+from data_intelligence_system.config.paths_config import ML_MODELS_DIR
 from data_intelligence_system.utils.preprocessing import fill_missing_values, scale_numericals
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.utils.timer import Timer
@@ -40,7 +41,7 @@ class KMeansClusteringModel(BaseModel):
         kwargs : dict
             معلمات إضافية لنموذج KMeans.
         """
-        super().__init__(model_name="kmeans_clustering", model_dir="data_intelligence_system/ml_models/saved_models")
+        super().__init__(model_name="kmeans_clustering", model_dir=ML_MODELS_DIR)
         self.model = KMeans(
             n_clusters=n_clusters,
             init=init,
@@ -69,7 +70,6 @@ class KMeansClusteringModel(BaseModel):
         if X is None or X.empty:
             raise ValueError("❌ بيانات الإدخال فارغة أو None.")
         X = fill_missing_values(X)
-        # التعديل الأساسي هنا: استخدم scaler وليس method
         X_scaled = scale_numericals(X, scaler=self.scaler_type)
         self.model.fit(X_scaled)
         self.X_train_ = X_scaled
