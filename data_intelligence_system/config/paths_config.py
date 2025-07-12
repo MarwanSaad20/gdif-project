@@ -1,3 +1,8 @@
+"""
+paths_config.py
+Define and resolve all important project paths.
+"""
+
 from pathlib import Path
 from data_intelligence_system.utils.config_handler import ConfigHandler
 from data_intelligence_system.utils.logger import get_logger
@@ -23,13 +28,14 @@ def get_path_from_config(key: str, fallback: Path) -> Path:
     Get a path from config by key; fallback to default if missing.
     """
     try:
-        value = config.get(key) if config else None
-        if value is None:
-            logger.warning(f"⚠️ Missing config key: {key}, using fallback: {fallback}")
-        return Path(value) if value else fallback
+        value = config.get(key).strip() if config else None
+        if value:
+            return Path(value).expanduser().resolve()
+        logger.warning(f"⚠️ Missing config key: {key}, using fallback: {fallback}")
     except Exception as e:
         logger.warning(f"⚠️ Error reading config key '{key}': {e}; using fallback: {fallback}")
-        return fallback
+    return fallback
+
 
 # ===================== Data paths =====================
 DATA_DIR = SYSTEM_ROOT / "data"
@@ -72,7 +78,7 @@ REQUIREMENTS_FILE = PROJECT_ROOT.parent / "requirements.txt"
 DOCKERFILE = PROJECT_ROOT.parent / "Dockerfile"
 
 # ===================== Ensure directories exist =====================
-def ensure_directories_exist():
+def ensure_directories_exist() -> None:
     """
     Create main directories if missing.
     """
@@ -86,10 +92,13 @@ def ensure_directories_exist():
         REPORT_OUTPUT_DIR, STATIC_ASSETS_DIR,
         NOTEBOOKS_DIR, UTILS_DIR, CONFIG_DIR, TESTS_DIR,
     ]
+    created = []
     for directory in dirs_to_create:
         if not directory.exists():
             directory.mkdir(parents=True, exist_ok=True)
-            logger.info(f"📁 Created directory: {directory}")
+            created.append(str(directory))
+    if created:
+        logger.info(f"📁 Created directories: {created}")
 
 # ===================== Shortcuts for string paths =====================
 RAW_DIR = str(RAW_DATA_DIR)
