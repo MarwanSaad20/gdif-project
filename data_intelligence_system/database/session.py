@@ -1,10 +1,10 @@
-# database/session.py
+# data_intelligence_system/database/session.py
 
-import os
 import logging
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
+
+from data_intelligence_system.config.env_config import env_namespace
 
 # ======================== إعدادات تسجيل الدخول ==========================
 logger = logging.getLogger(__name__)
@@ -17,8 +17,7 @@ if not logger.hasHandlers():
     logger.addHandler(handler)
 
 # ======================== إعداد رابط قاعدة البيانات ==========================
-# من الأفضل الاعتماد على ملف .env أو ملف إعدادات مركزي
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5432/gdif_db")
+DATABASE_URL = env_namespace.DATABASE_URL
 
 # ======================== إنشاء محرك قاعدة البيانات ==========================
 try:
