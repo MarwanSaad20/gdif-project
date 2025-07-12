@@ -19,12 +19,14 @@ from data_intelligence_system.analysis.analysis_utils import (
 )
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.timer import Timer
+from data_intelligence_system.config.paths_config import (
+    PROCESSED_DATA_DIR as DATA_DIR,
+    ANALYSIS_DIR
+)
 
 # إعداد المسارات
-BASE_DIR = Path(__file__).resolve().parents[2]
-DATA_DIR = BASE_DIR / "data_intelligence_system" / "data" / "processed"
 FILE_PATH = DATA_DIR / "clean_data.csv"
-OUTPUT_DIR = BASE_DIR / "data_intelligence_system" / "analysis" / "analysis_output"
+OUTPUT_DIR = ANALYSIS_DIR / "analysis_output"
 SUMMARY_PATH = OUTPUT_DIR / "target_relation_summary.csv"
 
 # إعداد السجل
@@ -33,9 +35,6 @@ logger = logging.getLogger(__name__)
 
 
 def anova_test(df, target, numerical_cols):
-    """
-    تنفيذ اختبار ANOVA بين الأعمدة الرقمية والمتغير الهدف.
-    """
     logger.info("🔍 تحليل ANOVA بين الأعمدة الرقمية والمتغير الهدف")
     results = []
     groups = df[target].dropna().unique()
@@ -55,9 +54,6 @@ def anova_test(df, target, numerical_cols):
 
 
 def chi_square_test(df, target, categorical_cols):
-    """
-    تنفيذ اختبار Chi-Square بين الأعمدة الفئوية والمتغير الهدف.
-    """
     logger.info("🔍 تحليل Chi-Square بين الأعمدة الفئوية والمتغير الهدف")
     results = []
     for col in categorical_cols:
@@ -74,9 +70,6 @@ def chi_square_test(df, target, categorical_cols):
 
 
 def encode_target(df, target):
-    """
-    ترميز المتغير الهدف إذا كان نصيًا أو بعدد فئات قليل.
-    """
     if df[target].dtype == 'object' or df[target].nunique() < 15:
         le = LabelEncoder()
         df[target] = le.fit_transform(df[target])
@@ -85,9 +78,6 @@ def encode_target(df, target):
 
 @Timer("تحليل العلاقة مع الهدف")
 def run_target_relation_analysis(df=None, target_col=None):
-    """
-    تحليل العلاقة بين المتغير الهدف وبقية الأعمدة باستخدام ANOVA وChi-Square.
-    """
     ensure_output_dir(OUTPUT_DIR)
 
     if df is None:
@@ -149,9 +139,6 @@ def run_target_relation_analysis(df=None, target_col=None):
 
 
 def analyze_target_relation(df: pd.DataFrame, target: str = "target"):
-    """
-    واجهة رسمية للتحليل عبر الاستدعاء الخارجي.
-    """
     return run_target_relation_analysis(df, target_col=target)
 
 
