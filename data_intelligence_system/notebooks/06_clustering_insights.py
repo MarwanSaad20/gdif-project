@@ -14,19 +14,22 @@ from sklearn.preprocessing import LabelEncoder  # ✅ جديد
 import joblib
 from pathlib import Path
 
-# استيراد من جذر المشروع للتكامل مع clustering_analysis.py و DBSCANClusteringModel
+# ✅ استيراد من جذر المشروع للتكامل
 from data_intelligence_system.analysis.clustering_analysis import run_clustering
 from data_intelligence_system.ml_models.clustering.dbscan import DBSCANClusteringModel
 
-# ======= ضبط المسارات بناءً على مكان الدفتر =======
+# ======= ضبط المسارات بناءً على مكان الدفتر مع sys.path
 try:
-    PROJECT_ROOT = Path(__file__).resolve().parents[1]
+    PROJECT_ROOT = Path(__file__).resolve().parents[2]
 except NameError:
-    PROJECT_ROOT = Path.cwd().parents[0]
+    PROJECT_ROOT = Path.cwd().parents[1]
 
-DATA_PATH = PROJECT_ROOT / "data" / "processed" / "clean_data.csv"
-MODEL_PATH = PROJECT_ROOT / "ml_models" / "trained_model.pkl"
-EXPORT_DIR = PROJECT_ROOT / "reports" / "output"
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+DATA_PATH = PROJECT_ROOT / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
+MODEL_PATH = PROJECT_ROOT / "data_intelligence_system" / "ml_models" / "trained_model.pkl"
+EXPORT_DIR = PROJECT_ROOT / "data_intelligence_system" / "reports" / "output"
 EXPORT_PATH = EXPORT_DIR / "predictions_output.csv"
 
 print(f"🔍 تحميل البيانات من: {DATA_PATH}")
@@ -69,7 +72,6 @@ y_pred = model.predict(X)
 is_classification = y.nunique() <= 10
 
 if is_classification:
-    # ✅ ترميز القيم الفعلية إلى أرقام للتوافق مع y_pred
     le = LabelEncoder()
     y_encoded = le.fit_transform(y)
 
