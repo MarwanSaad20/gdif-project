@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from data_intelligence_system.data.processed.fill_missing import fill_missing
 from data_intelligence_system.data.processed.scale_numericals import scale_numericals
-from data_intelligence_system.etl.etl_utils import log_step  # ✅ تحديث استيراد من جذر المشروع
+from data_intelligence_system.etl.etl_utils import log_step  # استيراد مطلق من جذر المشروع
 
 logger = logging.getLogger(__name__)
 
