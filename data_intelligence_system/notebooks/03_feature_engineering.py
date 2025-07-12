@@ -9,6 +9,7 @@ import seaborn as sns
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from pathlib import Path
+import sys
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -20,10 +21,14 @@ sns.set_theme(style="whitegrid")
 
 def load_data():
     try:
-        # الصعود مرتين للوصول لجذر المشروع PythonProject10
+        # نصعد مرتين للوصول لجذر المشروع PythonProject10
         project_root = Path(__file__).resolve().parents[2]
     except NameError:
         project_root = Path.cwd().parents[1]
+
+    # ✅ إضافة جذر المشروع إلى sys.path للتكامل مع config/paths_config.py
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
 
     data_path = project_root / "data_intelligence_system" / "data" / "processed" / "clean_data.csv"
     if not data_path.exists():
