@@ -4,6 +4,8 @@ from typing import List, Optional, Union
 
 # ✅ استيراد لوجر موحد من النظام
 from data_intelligence_system.utils.logger import get_logger
+# ✅ استيراد الثوابت المطلوبة للتكامل مع paths_config.py
+from data_intelligence_system.config.paths_config import SUPPORTED_EXTENSIONS, RAW_DATA_PATHS
 
 logger = get_logger(name="ETLUtils")
 
