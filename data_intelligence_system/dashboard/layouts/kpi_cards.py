@@ -4,7 +4,8 @@ from dash import Input, Output, html
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.dashboard.components import indicators
-from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ تم إضافته للتكامل
+from data_intelligence_system.utils.preprocessing import fill_missing_values  # ✅ للتكامل
+from data_intelligence_system.config.dashboard_config import KPI_SETTINGS  # ✅ جديد لاستخدام الإعدادات المركزية
 
 logger = logging.getLogger(__name__)
 
