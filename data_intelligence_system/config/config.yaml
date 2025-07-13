@@ -22,22 +22,22 @@ kpis:
   - name: revenue
     label: "الإيرادات"
     unit: "$"
-    color: "#27AE60"
+    color: &green "#27AE60"
     icon: "💰"
   - name: growth
     label: "معدل النمو"
     unit: "%"
-    color: "#2980B9"
+    color: &blue "#2980B9"
     icon: "📈"
   - name: churn_rate
     label: "معدل التسرب"
     unit: "%"
-    color: "#E74C3C"
+    color: &red "#E74C3C"
     icon: "⚠️"
   - name: customer_count
     label: "عدد العملاء"
     unit: ""
-    color: "#8E44AD"
+    color: &purple "#8E44AD"
     icon: "👥"
 
 database:
@@ -46,12 +46,11 @@ database:
     host: localhost
     port: 5432
     user: postgres
-    password: password
+    password: ${DB_PASSWORD}  # تحميل من متغير بيئة
     database: data_system
   sqlite:
     path: data_intelligence_system/data/processed/clean_data.db
 
-# ✅ إعدادات النماذج
 model:
   random_state: 42
   test_size: 0.2
