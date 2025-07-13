@@ -9,7 +9,7 @@ from data_intelligence_system.reports.export_utils import (
     save_dataframe_to_csv,
     df_to_html_table
 )
-from data_intelligence_system.config.paths_config import REPORT_OUTPUT_DIR  # ✅ تحديث الاستيراد من paths_config
+from data_intelligence_system.config.report_config import OUTPUT_PATH  # ✅ تعديل الاستيراد ليتوافق مع التحديث الجديد
 
 logging.basicConfig(level=logging.INFO)
 
@@ -20,7 +20,7 @@ def ensure_dir(path: str):
 
 
 class ReportDispatcher:
-    def __init__(self, output_dir: str = str(REPORT_OUTPUT_DIR)):
+    def __init__(self, output_dir: str = str(OUTPUT_PATH)):
         self.output_dir = output_dir
         ensure_dir(self.output_dir)
 
