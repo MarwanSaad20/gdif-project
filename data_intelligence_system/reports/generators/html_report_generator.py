@@ -7,8 +7,9 @@ from typing import List, Dict, Optional, Callable
 import pandas as pd
 import matplotlib.pyplot as plt
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from data_intelligence_system.utils.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger("HTMLReportGenerator")
 logging.basicConfig(level=logging.INFO)
 
 
