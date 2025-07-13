@@ -1,7 +1,5 @@
 from pathlib import Path
-
-# ✅ استيرادات مطلقة من جذر المشروع
-from data_intelligence_system.config.yaml_config_handler import YAMLConfigHandler
+from data_intelligence_system.utils.config_handler import ConfigHandler
 from data_intelligence_system.utils.logger import get_logger
 
 """
@@ -14,7 +12,7 @@ logger = get_logger("dashboard_config")
 # Load configuration
 config_path = Path(__file__).resolve().parent / "config.yaml"
 try:
-    _config = YAMLConfigHandler(str(config_path))
+    _config = ConfigHandler(str(config_path))
     logger.info(f"✅ Loaded dashboard settings from: {config_path}")
 except Exception as e:
     logger.warning(f"⚠️ Failed to load dashboard settings: {e}")
