@@ -1,11 +1,13 @@
 from dash import html
 import dash_bootstrap_components as dbc
 
-# 🎨 ألوان ثيم المشروع
-BACKGROUND_COLOR = "#0A0F1A"
-TEXT_COLOR = "#FFFFFF"
-PRIMARY_COLOR = "#1E90FF"
+from data_intelligence_system.config.dashboard_config import DEFAULT_THEME  # ✅ جديد لاستخدام الإعدادات المركزية
+from data_intelligence_system.dashboard.layouts.theme import Theme  # ✅ استيراد الثيم المحدث
 
+# 🎨 ألوان الثيم من Theme class بدل التكرار
+BACKGROUND_COLOR = Theme.BACKGROUND_COLOR
+TEXT_COLOR = Theme.TEXT_COLOR
+PRIMARY_COLOR = Theme.PRIMARY_COLOR
 BORDER_COLOR = "rgba(30, 144, 255, 0.2)"
 
 PRE_STYLE = {
