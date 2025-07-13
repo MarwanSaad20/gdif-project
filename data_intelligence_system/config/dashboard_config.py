@@ -2,29 +2,34 @@ from pathlib import Path
 from data_intelligence_system.utils.config_handler import ConfigHandler
 from data_intelligence_system.utils.logger import get_logger
 
-# ✅ إعداد اللوجر
+"""
+Dashboard configuration module.
+Loads and manages dashboard settings for the GDIF project.
+"""
+
 logger = get_logger("dashboard_config")
 
-# ✅ تحميل الإعدادات من ملف YAML
+# Load configuration
 config_path = Path(__file__).resolve().parent / "config.yaml"
 try:
     _config = ConfigHandler(str(config_path))
-    logger.info(f"✅ تم تحميل إعدادات لوحة التحكم من: {config_path}")
+    logger.info(f"✅ Loaded dashboard settings from: {config_path}")
 except Exception as e:
-    logger.warning(f"⚠️ فشل تحميل إعدادات لوحة التحكم: {e}")
+    logger.warning(f"⚠️ Failed to load dashboard settings: {e}")
     _config = None
 
-# 🎯 عنوان النظام
+def get_config_value(key, default):
+    return _config.get(key, default) if _config else default
+
+# Dashboard settings
 DASHBOARD_TITLE = "لوحة تحكم تحليل البيانات العام – GDIF"
+DEFAULT_LANGUAGE = get_config_value("project.language", default="ar")
+DEFAULT_THEME = get_config_value("dashboard.theme", default="dark")
+REFRESH_INTERVAL = get_config_value("dashboard.refresh_interval", default=60)
+MAX_RECORDS_DISPLAY = get_config_value("dashboard.max_records", default=500)
 
-# 🌐 إعدادات الواجهة من الملف
-DEFAULT_LANGUAGE = _config.get("project.language", default="ar") if _config else "ar"
-DEFAULT_THEME = _config.get("dashboard.theme", default="dark") if _config else "dark"
-REFRESH_INTERVAL = _config.get("dashboard.refresh_interval", default=60) if _config else 60
-MAX_RECORDS_DISPLAY = _config.get("dashboard.max_records", default=500) if _config else 500
-
-# 📦 إعدادات مؤشرات الأداء الرئيسية (KPIs)
-_KPI_LIST = _config.get("kpis", default=[]) if _config else []
+# KPI settings
+_KPI_LIST = get_config_value("kpis", default=[])
 KPI_SETTINGS = {
     kpi["name"]: {
         "label": kpi.get("label", kpi["name"]),
@@ -36,7 +41,7 @@ KPI_SETTINGS = {
     if isinstance(kpi, dict) and "name" in kpi
 }
 
-# 🗂️ إعدادات أقسام الواجهة (Navigation / Tabs)
+# Layout sections
 LAYOUT_SECTIONS = {
     "overview": "نظرة عامة",
     "exploration": "التحليل الاستكشافي",
@@ -46,6 +51,6 @@ LAYOUT_SECTIONS = {
     "settings": "الإعدادات"
 }
 
-# 🔧 إعدادات عامة إضافية
+# Other general settings
 DEFAULT_FONT = "Cairo"
 ENABLE_EXPORT_BUTTONS = True
