@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import seaborn as sns
+from data_intelligence_system.config.report_config import REPORT_CONFIG  # ✅ مضاف للتكامل مع الإعدادات العامة
 
 
 def ensure_dir(path: str) -> None:
@@ -13,14 +14,14 @@ def ensure_dir(path: str) -> None:
         os.makedirs(path)
 
 
-def save_dataframe_to_csv(df: pd.DataFrame, filename: str, output_dir: str) -> None:
+def save_dataframe_to_csv(df: pd.DataFrame, filename: str, output_dir: Optional[str] = None) -> None:
     """
     Save a DataFrame to a CSV file with UTF-8 BOM encoding to support Arabic.
 
     Args:
         df (pd.DataFrame): DataFrame to save.
         filename (str): Name of the file without extension.
-        output_dir (str): Directory where the file will be saved.
+        output_dir (Optional[str]): Directory where the file will be saved. Defaults to REPORT_CONFIG["output_dir"].
 
     Raises:
         ValueError: If DataFrame is empty.
@@ -28,6 +29,7 @@ def save_dataframe_to_csv(df: pd.DataFrame, filename: str, output_dir: str) -> N
     """
     if df.empty:
         raise ValueError("Cannot save empty DataFrame to CSV.")
+    output_dir = output_dir or REPORT_CONFIG["output_dir"]
     ensure_dir(output_dir)
     full_path = os.path.join(output_dir, f"{filename}.csv")
     try:
@@ -36,14 +38,14 @@ def save_dataframe_to_csv(df: pd.DataFrame, filename: str, output_dir: str) -> N
         raise OSError(f"Failed to save CSV file at {full_path}: {e}")
 
 
-def save_dataframe_to_excel(df: pd.DataFrame, filename: str, output_dir: str, sheet_name: str = "Sheet1") -> None:
+def save_dataframe_to_excel(df: pd.DataFrame, filename: str, output_dir: Optional[str] = None, sheet_name: str = "Sheet1") -> None:
     """
     Save a DataFrame to an Excel file with auto-adjusted column widths.
 
     Args:
         df (pd.DataFrame): DataFrame to save.
         filename (str): Name of the file without extension.
-        output_dir (str): Directory where the file will be saved.
+        output_dir (Optional[str]): Directory where the file will be saved. Defaults to REPORT_CONFIG["output_dir"].
         sheet_name (str): Name of the Excel sheet.
 
     Raises:
@@ -52,6 +54,7 @@ def save_dataframe_to_excel(df: pd.DataFrame, filename: str, output_dir: str, sh
     """
     if df.empty:
         raise ValueError("Cannot save empty DataFrame to Excel.")
+    output_dir = output_dir or REPORT_CONFIG["output_dir"]
     ensure_dir(output_dir)
     full_path = os.path.join(output_dir, f"{filename}.xlsx")
     try:
@@ -65,19 +68,20 @@ def save_dataframe_to_excel(df: pd.DataFrame, filename: str, output_dir: str, sh
         raise OSError(f"Failed to save Excel file at {full_path}: {e}")
 
 
-def save_plot(fig: Figure, filename: str, output_dir: str, dpi: int = 300) -> None:
+def save_plot(fig: Figure, filename: str, output_dir: Optional[str] = None, dpi: int = 300) -> None:
     """
     Save a Matplotlib figure to a PNG file.
 
     Args:
         fig (Figure): Matplotlib figure to save.
         filename (str): Name of the file (extension optional).
-        output_dir (str): Directory where the file will be saved.
+        output_dir (Optional[str]): Directory where the file will be saved. Defaults to REPORT_CONFIG["output_dir"].
         dpi (int): Dots per inch (resolution).
 
     Raises:
         OSError: If saving fails.
     """
+    output_dir = output_dir or REPORT_CONFIG["output_dir"]
     ensure_dir(output_dir)
     if not filename.lower().endswith('.png'):
         filename += '.png'
@@ -107,7 +111,7 @@ def df_to_html_table(df: pd.DataFrame, classes: Optional[str] = None, index: boo
 
 def plot_correlation_heatmap(df_corr: pd.DataFrame,
                              filename: str,
-                             output_dir: str,
+                             output_dir: Optional[str] = None,
                              cmap: str = "coolwarm",
                              annot: bool = True,
                              title: str = "Correlation Heatmap") -> None:
@@ -117,7 +121,7 @@ def plot_correlation_heatmap(df_corr: pd.DataFrame,
     Args:
         df_corr (pd.DataFrame): Correlation matrix DataFrame.
         filename (str): Name of the output PNG file.
-        output_dir (str): Directory where the file will be saved.
+        output_dir (Optional[str]): Directory where the file will be saved. Defaults to REPORT_CONFIG["output_dir"].
         cmap (str): Colormap for the heatmap.
         annot (bool): Whether to annotate cells with correlation values.
         title (str): Title of the heatmap.
@@ -128,6 +132,7 @@ def plot_correlation_heatmap(df_corr: pd.DataFrame,
     """
     if df_corr.empty:
         raise ValueError("Correlation DataFrame is empty.")
+    output_dir = output_dir or REPORT_CONFIG["output_dir"]
     ensure_dir(output_dir)
     fig, ax = plt.subplots(figsize=(12, 10))
     sns.heatmap(df_corr, annot=annot, fmt=".2f", cmap=cmap, square=True, cbar_kws={"shrink": 0.8}, ax=ax)
