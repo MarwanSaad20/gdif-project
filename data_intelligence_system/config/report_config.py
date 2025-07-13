@@ -83,3 +83,24 @@ OUTPUT_DIR = Path(get_config_value("paths.reports", "data_intelligence_system/re
 
 # ✅ مسار حفظ التقرير النهائي
 OUTPUT_PATH = OUTPUT_DIR
+
+# ===================== إعداد تجميعي للتصدير =====================
+
+REPORT_CONFIG = {
+    "title": REPORT_TITLE,
+    "date": REPORT_DATE,
+    "author": AUTHOR,
+    "organization": ORGANIZATION,
+    "color_scheme": COLOR_SCHEME,
+    "logo_path": LOGO_PATH,
+    "footer_banner_path": FOOTER_BANNER_PATH,
+    "template_path": TEMPLATE_PATH,
+    "font": FONT,
+    "font_size": FONT_SIZE,
+    "header_font_size": HEADER_FONT_SIZE,
+    "line_spacing": LINE_SPACING,
+    "table_style": TABLE_STYLE,
+    "default_format": DEFAULT_FORMAT,
+    "output_dir": OUTPUT_DIR,
+    "output_path": OUTPUT_PATH,
+}
