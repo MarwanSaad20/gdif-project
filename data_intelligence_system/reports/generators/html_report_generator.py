@@ -1,5 +1,4 @@
 import os
-import logging
 import base64
 from io import BytesIO
 from typing import List, Dict, Optional, Callable
@@ -10,7 +9,6 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from data_intelligence_system.utils.logger import get_logger
 
 logger = get_logger("HTMLReportGenerator")
-logging.basicConfig(level=logging.INFO)
 
 
 class HTMLReportGenerator:
