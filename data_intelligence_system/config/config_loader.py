@@ -6,6 +6,7 @@ from typing import Any, Dict
 
 # ✅ استيرادات مطلقة من جذر المشروع
 from data_intelligence_system.config.env_config import env_namespace
+from data_intelligence_system.config import yaml_config_handler  # جديد: تحميل القيم من config.yaml
 
 # إعداد اللوجينغ المحلي
 logger = logging.getLogger(__name__)
@@ -78,6 +79,9 @@ for key, module_path in CONFIG_MODULE_PATHS.items():
 
 # دمج env_namespace مباشرةً في CONFIG.env
 CONFIG.env = env_namespace
+
+# ⚙️ تحميل إعدادات YAML وإضافتها داخل CONFIG.yaml
+CONFIG.yaml = yaml_config_handler.load_yaml_config()
 
 # ⚙️ إعدادات إضافية
 setup_defaults(CONFIG)
