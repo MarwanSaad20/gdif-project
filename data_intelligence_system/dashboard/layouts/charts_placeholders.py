@@ -1,12 +1,15 @@
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-from typing import Optional, List, Dict, Union
+from typing import Optional, List, Dict
 
-# 🎨 إعدادات التصميم
-BACKGROUND_COLOR = "#0A0F1A"
-TEXT_COLOR = "#FFFFFF"
-PRIMARY_COLOR = "#1E90FF"
+from data_intelligence_system.dashboard.layouts.theme import Theme  # ✅ استخدام الثيم المحدث
+
+
+# 🎨 إعدادات التصميم باستخدام Theme
+BACKGROUND_COLOR = Theme.BACKGROUND_COLOR
+TEXT_COLOR = Theme.TEXT_COLOR
+PRIMARY_COLOR = Theme.PRIMARY_COLOR
 MARGIN_DEFAULT = dict(l=40, r=40, t=40, b=40)
 SHOW_MODEBAR = False
 
@@ -16,11 +19,6 @@ def get_base_layout(title: str = "رسم بياني",
                     placeholder_text: Optional[str] = None) -> go.Layout:
     """
     توليد تخطيط موحد للرسم البياني مع دعم لإظهار نص بديل عند عدم وجود بيانات.
-
-    :param title: عنوان الرسم البياني.
-    :param is_placeholder: إذا كان الرسم احتياطيًا (فارغًا).
-    :param placeholder_text: نص بديل يظهر في حالة عدم وجود بيانات.
-    :return: كائن تخطيط Plotly.
     """
     if placeholder_text is None:
         placeholder_text = "⚠️ لا توجد بيانات بعد"
@@ -46,12 +44,6 @@ def get_base_layout(title: str = "رسم بياني",
 def create_placeholder_chart(chart_type: str, chart_id: str, title: str) -> dcc.Graph:
     """
     توليد رسم بياني فارغ (placeholder) حسب نوع الرسم المطلوب.
-
-    :param chart_type: نوع الرسم (line, bar, pie, scatter, box, heatmap, area, bubble, dist).
-    :param chart_id: معرف الرسم البياني.
-    :param title: عنوان الرسم البياني.
-    :return: عنصر dcc.Graph جاهز للعرض.
-    :raises ValueError: إذا كان نوع الرسم غير مدعوم.
     """
     chart_map: Dict[str, List[go.BaseTraceType]] = {
         "line": [go.Scatter(x=[], y=[], mode='lines')],
@@ -80,10 +72,6 @@ def create_placeholder_chart(chart_type: str, chart_id: str, title: str) -> dcc.
 def wrap_chart(title: str, chart: dcc.Graph) -> dbc.Card:
     """
     تغليف الرسم البياني داخل بطاقة (Card) موحدة التصميم.
-
-    :param title: عنوان البطاقة.
-    :param chart: عنصر الرسم البياني dcc.Graph.
-    :return: بطاقة Bootstrap جاهزة للعرض.
     """
     return dbc.Card(
         [
