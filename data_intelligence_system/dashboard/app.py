@@ -14,6 +14,7 @@ import dash_bootstrap_components as dbc
 
 # ✅ استيراد إعدادات النظام المركزية والمسارات من جذر المشروع
 from data_intelligence_system.config.config_loader import CONFIG
+from data_intelligence_system.config.dashboard_config import DASHBOARD_TITLE, DEFAULT_THEME
 
 # ========== إعداد مسارات النظام وإضافتها إلى sys.path بطريقة مركزية ==========
 def configure_sys_path():
@@ -63,14 +64,14 @@ logger.addHandler(stream_handler)
 logger.info("🚀 بدء تشغيل تطبيق GDIF - نظام تحليل البيانات العام")
 
 # ========== إنشاء تطبيق Dash ==========
-external_stylesheets = [dbc.themes.DARKLY]
+external_stylesheets = [dbc.themes.DARKLY if DEFAULT_THEME == "dark" else dbc.themes.FLATLY]
 
 app = dash.Dash(
     __name__,
     server=True,
     external_stylesheets=external_stylesheets,
     suppress_callback_exceptions=True,
-    title="نظام تحليل البيانات العام - GDIF",
+    title=DASHBOARD_TITLE,
     meta_tags=[
         {"name": "viewport", "content": "width=device-width, initial-scale=1"},
         {"name": "theme-color", "content": "#0A0F1A"},
