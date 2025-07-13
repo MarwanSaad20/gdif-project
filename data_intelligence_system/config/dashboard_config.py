@@ -1,7 +1,5 @@
 from pathlib import Path
-
-# ✅ استيرادات مطلقة من جذر المشروع
-from data_intelligence_system.config.yaml_config_handler import YAMLConfigHandler
+from data_intelligence_system.utils.config_handler import ConfigHandler
 from data_intelligence_system.utils.logger import get_logger
 
 """
@@ -14,7 +12,7 @@ logger = get_logger("dashboard_config")
 # Load configuration
 config_path = Path(__file__).resolve().parent / "config.yaml"
 try:
-    _config = YAMLConfigHandler(str(config_path))
+    _config = ConfigHandler(str(config_path))
     logger.info(f"✅ Loaded dashboard settings from: {config_path}")
 except Exception as e:
     logger.warning(f"⚠️ Failed to load dashboard settings: {e}")
@@ -25,13 +23,13 @@ def get_config_value(key, default):
 
 # Dashboard settings
 DASHBOARD_TITLE = "لوحة تحكم تحليل البيانات العام – GDIF"
-DEFAULT_LANGUAGE = get_config_value("project.language", default="ar")
-DEFAULT_THEME = get_config_value("dashboard.theme", default="dark")
-REFRESH_INTERVAL = get_config_value("dashboard.refresh_interval", default=60)
-MAX_RECORDS_DISPLAY = get_config_value("dashboard.max_records", default=500)
+DEFAULT_LANGUAGE = get_config_value("project.language", "ar")
+DEFAULT_THEME = get_config_value("dashboard.theme", "dark")
+REFRESH_INTERVAL = get_config_value("dashboard.refresh_interval", 60)
+MAX_RECORDS_DISPLAY = get_config_value("dashboard.max_records", 500)
 
 # KPI settings
-_KPI_LIST = get_config_value("kpis", default=[])
+_KPI_LIST = get_config_value("kpis", [])
 KPI_SETTINGS = {
     kpi["name"]: {
         "label": kpi.get("label", kpi["name"]),
