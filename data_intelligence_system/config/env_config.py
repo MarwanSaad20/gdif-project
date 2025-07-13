@@ -11,8 +11,8 @@ from types import SimpleNamespace
 from typing import Optional
 
 # ✅ استيرادات من جذر المشروع
-from data_intelligence_system.utils.config_handler import ConfigHandler
 from data_intelligence_system.utils.logger import get_logger
+from data_intelligence_system.config.yaml_config_handler import YAMLConfigHandler
 
 logger = get_logger("env_config")
 
@@ -27,7 +27,7 @@ if ENV_PATH.exists():
 else:
     logger.warning("⚠️ ملف .env غير موجود. سيتم الاعتماد على متغيرات البيئة المباشرة.")
 
-config = ConfigHandler(str(CONFIG_PATH)) if CONFIG_PATH.exists() else None
+config = YAMLConfigHandler(str(CONFIG_PATH)) if CONFIG_PATH.exists() else None
 
 
 def get_env_var(key: str, default: Optional[str] = None, config_key: Optional[str] = None) -> str:
