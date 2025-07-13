@@ -16,7 +16,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import warnings
 
-# استيراد نماذج الانحدار والتصنيف المحسّنة
+# استيراد نماذج الانحدار والتصنيف المحسّنة من جذر المشروع
 from data_intelligence_system.ml_models.regression.lasso_regression import LassoRegressionModel
 from data_intelligence_system.ml_models.regression.ridge_regression import RidgeRegressionModel
 from data_intelligence_system.ml_models.classification.logistic_regression import LogisticRegressionModel
