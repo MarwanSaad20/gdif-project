@@ -5,12 +5,14 @@ from typing import Optional, Literal, Dict
 import logging
 import os
 
-# تعديل الاستيراد ليكون من جذر المشروع
+# ✅ استيراد إعدادات التقرير من config
+from data_intelligence_system.config.report_config import REPORT_CONFIG
 from data_intelligence_system.api.services import reports_service
 
 logger = logging.getLogger("api.reports")
 
-SAFE_REPORTS_DIR = os.path.abspath("reports/generated")  # تم تحديث المسار ليطابق مجلد التقارير الفعلي
+# ✅ استخدام المسار الرسمي من إعدادات التقرير
+SAFE_REPORTS_DIR = str(REPORT_CONFIG["output_dir"])
 
 router = APIRouter(
     prefix="/reports",
