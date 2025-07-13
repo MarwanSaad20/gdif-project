@@ -1,0 +1,21 @@
+2025-07-12 10:54:57 — [INFO] — analysis.cli — 📁 بدء تحميل الملف: C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\processed\clean_data.csv
+2025-07-12 10:54:57 — [INFO] — analysis.cli — ✅ تم تحميل البيانات بنجاح من: C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\processed\clean_data.csv
+2025-07-12 10:54:57 — [INFO] — analysis.cli — 🚀 بدء التحليل الوصفي...
+2025-07-12 10:54:59 — [INFO] — analysis.cli — 🔍 تحليل الارتباط باستخدام pearson
+2025-07-12 10:54:59 — [INFO] — analysis.cli — ⚠️ كشف القيم الشاذة باستخدام iqr
+2025-07-12 10:54:59 — [INFO] — analysis.cli — 📊 التجميع باستخدام kmeans بعدد 3 مجموعات
+2025-07-12 10:55:02 — [INFO] — analysis.cli — 🎯 تحليل العلاقة مع الهدف: species
+2025-07-12 16:00:54 — [INFO] — analysis.cli — 📁 بدء تحميل الملف: C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\processed\clean_data.csv
+2025-07-12 16:00:54 — [INFO] — analysis.cli — ✅ تم تحميل البيانات بنجاح من: C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\processed\clean_data.csv
+2025-07-12 16:00:54 — [INFO] — analysis.cli — 🚀 بدء التحليل الوصفي...
+2025-07-12 16:00:56 — [INFO] — analysis.cli — 🔍 تحليل الارتباط باستخدام pearson
+2025-07-12 16:00:56 — [INFO] — analysis.cli — ⚠️ كشف القيم الشاذة باستخدام iqr
+2025-07-12 16:00:56 — [INFO] — analysis.cli — 📊 التجميع باستخدام kmeans بعدد 3 مجموعات
+2025-07-12 16:01:00 — [INFO] — analysis.cli — 🎯 تحليل العلاقة مع الهدف: species
+2025-07-12 19:33:13 — [INFO] — analysis.cli — 📁 بدء تحميل الملف: C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\processed\clean_data.csv
+2025-07-12 19:33:13 — [INFO] — analysis.cli — ✅ تم تحميل البيانات بنجاح من: C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\processed\clean_data.csv
+2025-07-12 19:33:13 — [INFO] — analysis.cli — 🚀 بدء التحليل الوصفي...
+2025-07-12 19:33:14 — [INFO] — analysis.cli — 🔍 تحليل الارتباط باستخدام pearson
+2025-07-12 19:33:14 — [INFO] — analysis.cli — ⚠️ كشف القيم الشاذة باستخدام iqr
+2025-07-12 19:33:14 — [INFO] — analysis.cli — 📊 التجميع باستخدام kmeans بعدد 3 مجموعات
+2025-07-12 19:33:18 — [INFO] — analysis.cli — 🎯 تحليل العلاقة مع الهدف: species
