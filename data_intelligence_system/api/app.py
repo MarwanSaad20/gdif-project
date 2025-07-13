@@ -73,3 +73,8 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+if __name__ == "__main__":
+    import uvicorn
+    from data_intelligence_system.api.main import main
+
+    main()
