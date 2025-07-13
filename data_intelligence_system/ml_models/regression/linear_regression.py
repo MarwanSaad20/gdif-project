@@ -5,7 +5,9 @@ from pathlib import Path
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
+# ✅ استيرادات من جذر المشروع
 from data_intelligence_system.config.paths_config import ML_MODELS_DIR
+from data_intelligence_system.config.model_config import REGRESSION_MODELS
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
@@ -26,10 +28,18 @@ class LinearRegressionModel(BaseModel):
         model_name="linear_regression",
         model_dir=ML_MODELS_DIR,
         scaler_type="standard",
+        fit_intercept=None,
+        normalize=None
     ):
         super().__init__(model_name, model_dir)
-        self.model = LinearRegression()
+
+        # ✅ استخدام القيم من config إذا لم يُمرَّر
+        config_params = REGRESSION_MODELS.get("linear", {})
+        self.fit_intercept = fit_intercept if fit_intercept is not None else config_params.get("fit_intercept", True)
+        self.normalize = normalize if normalize is not None else config_params.get("normalize", False)
         self.scaler_type = scaler_type
+
+        self.model = LinearRegression(fit_intercept=self.fit_intercept, normalize=self.normalize)
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
@@ -71,7 +81,7 @@ class LinearRegressionModel(BaseModel):
 
         self.model.fit(X, y)
         self.is_fitted = True
-        logger.info("✅ تم تدريب نموذج الانحدار الخطي.")
+        logger.info(f"✅ تم تدريب نموذج الانحدار الخطي: fit_intercept={self.fit_intercept}, normalize={self.normalize}")
         return self  # لتمكين method chaining إذا رغبت
 
     def predict(self, X, inverse_transform=True):
