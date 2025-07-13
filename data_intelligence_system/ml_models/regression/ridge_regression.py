@@ -6,7 +6,9 @@ from pathlib import Path
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
+# ✅ استيرادات من جذر المشروع
 from data_intelligence_system.config.paths_config import ML_MODELS_DIR
+from data_intelligence_system.config.model_config import REGRESSION_MODELS
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
@@ -20,11 +22,11 @@ logging.basicConfig(level=logging.INFO)
 class RidgeRegressionModel(BaseModel):
     def __init__(
         self,
-        alpha: float = 1.0,
+        alpha: float | None = None,
         max_iter: int | None = None,
         tol: float = 1e-4,
         random_state: int | None = None,
-        solver: str = 'auto',
+        solver: str | None = None,
         scaler_type: str = "standard",
         **kwargs,
     ):
@@ -32,14 +34,24 @@ class RidgeRegressionModel(BaseModel):
         نموذج Ridge Regression مع دعم تحجيم البيانات.
         """
         super().__init__(model_name="ridge_regression", model_dir=ML_MODELS_DIR)
-        self.alpha = alpha
+
+        config_params = REGRESSION_MODELS.get("ridge", {})
+
+        self.alpha = alpha if alpha is not None else config_params.get("alpha", 1.0)
         self.max_iter = max_iter
         self.tol = tol
         self.random_state = random_state
-        self.solver = solver
+        self.solver = solver if solver is not None else config_params.get("solver", "auto")
         self.scaler_type = scaler_type
-        self.model = Ridge(alpha=alpha, max_iter=max_iter, tol=tol,
-                           random_state=random_state, solver=solver, **kwargs)
+
+        self.model = Ridge(
+            alpha=self.alpha,
+            max_iter=max_iter,
+            tol=tol,
+            random_state=random_state,
+            solver=self.solver,
+            **kwargs,
+        )
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
