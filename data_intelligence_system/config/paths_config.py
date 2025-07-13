@@ -4,7 +4,9 @@ Define and resolve all important project paths.
 """
 
 from pathlib import Path
-from data_intelligence_system.utils.config_handler import ConfigHandler
+
+# ✅ استيرادات مطلقة من جذر المشروع
+from data_intelligence_system.config.yaml_config_handler import YAMLConfigHandler
 from data_intelligence_system.utils.logger import get_logger
 
 logger = get_logger("PathsConfig")
@@ -12,7 +14,7 @@ logger = get_logger("PathsConfig")
 # ===================== Load config.yaml =====================
 CONFIG_FILE = Path(__file__).resolve().parent / "config.yaml"
 try:
-    config = ConfigHandler(str(CONFIG_FILE))
+    config = YAMLConfigHandler(str(CONFIG_FILE))
     logger.info(f"✅ Loaded config from: {CONFIG_FILE}")
 except Exception as e:
     logger.warning(f"⚠️ Failed to load config from {CONFIG_FILE}: {e}")
@@ -35,7 +37,6 @@ def get_path_from_config(key: str, fallback: Path) -> Path:
     except Exception as e:
         logger.warning(f"⚠️ Error reading config key '{key}': {e}; using fallback: {fallback}")
     return fallback
-
 
 # ===================== Data paths =====================
 DATA_DIR = SYSTEM_ROOT / "data"
