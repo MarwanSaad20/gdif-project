@@ -6,7 +6,9 @@ from pathlib import Path
 from sklearn.linear_model import Lasso
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
+# ✅ استيرادات من جذر المشروع
 from data_intelligence_system.config.paths_config import ML_MODELS_DIR
+from data_intelligence_system.config.model_config import REGRESSION_MODELS
 from data_intelligence_system.ml_models.base_model import BaseModel
 from data_intelligence_system.ml_models.utils.preprocessing import DataPreprocessor
 from data_intelligence_system.utils.preprocessing import fill_missing_values
@@ -18,18 +20,27 @@ logging.basicConfig(level=logging.INFO)
 
 
 class LassoRegressionModel(BaseModel):
-    def __init__(self, alpha=1.0, max_iter=1000, tol=1e-4, random_state=None, scaler_type="standard", **kwargs):
+    def __init__(self, alpha=None, max_iter=None, tol=1e-4, random_state=None, scaler_type="standard", **kwargs):
         """
         نموذج Lasso Regression مع دعم التحجيم المسبق.
         """
         super().__init__(model_name="lasso_regression", model_dir=ML_MODELS_DIR)
-        self.alpha = alpha
-        self.max_iter = max_iter
+
+        # ✅ استخدام القيم من config إذا لم يُمرَّر
+        config_params = REGRESSION_MODELS.get("lasso", {})
+        self.alpha = alpha if alpha is not None else config_params.get("alpha", 0.1)
+        self.max_iter = max_iter if max_iter is not None else config_params.get("max_iter", 1000)
         self.tol = tol
         self.random_state = random_state
         self.scaler_type = scaler_type
-        self.model = Lasso(alpha=alpha, max_iter=max_iter, tol=tol,
-                           random_state=random_state, **kwargs)
+
+        self.model = Lasso(
+            alpha=self.alpha,
+            max_iter=self.max_iter,
+            tol=self.tol,
+            random_state=self.random_state,
+            **kwargs
+        )
         self.preprocessor = DataPreprocessor(scaler_type=scaler_type) if scaler_type else None
         self.is_fitted = False
 
