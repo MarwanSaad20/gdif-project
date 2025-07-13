@@ -11,14 +11,15 @@ from data_intelligence_system.analysis.descriptive_stats import generate_descrip
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.reports.report_dispatcher import generate_report
 from data_intelligence_system.reports.generators.html_report_generator import HTMLReportGenerator
-from data_intelligence_system.config.paths_config import REPORT_OUTPUT_DIR, REPORT_GENERATORS_DIR
+from data_intelligence_system.config.report_config import REPORT_CONFIG  # ✅ تم إضافة الاستيراد
 
 logger = get_logger("report.service")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "reports", "generators", "templates")
-# استخدام المتغير الصحيح
-REPORTS_OUTPUT_DIR = REPORT_OUTPUT_DIR
+
+# استخدام القيمة من إعدادات التقرير
+REPORTS_OUTPUT_DIR = str(REPORT_CONFIG["output_dir"])
 
 
 def ensure_dir(path: str):
