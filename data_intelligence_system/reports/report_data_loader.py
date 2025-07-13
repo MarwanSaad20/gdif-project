@@ -4,7 +4,7 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 import logging
 
-from data_intelligence_system.reports.report_config import REPORT_CONFIG
+from data_intelligence_system.config.report_config import OUTPUT_PATH  # ✅ تعديل الاستيراد ليتوافق مع التحديث الجديد
 from data_intelligence_system.analysis.descriptive_stats import generate_descriptive_stats
 from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
 from data_intelligence_system.data.processed.validate_clean_data import validate  # ✅ مضاف حديثًا
@@ -21,7 +21,7 @@ class ReportDataLoader:
 
     def __init__(self, processed_data_path: Optional[str] = None):
         base_dir = os.path.abspath(os.path.dirname(__file__))
-        default_data_path = os.path.join(base_dir, "..", "data", "processed")
+        default_data_path = str(OUTPUT_PATH) if not processed_data_path else processed_data_path
         self.data_path = processed_data_path or default_data_path
         self.loaded_datasets: Dict[str, pd.DataFrame] = {}
         self.metadata: Dict[str, Any] = {}
@@ -95,7 +95,7 @@ class ReportDataLoader:
             raise FileNotFoundError(f"الملف غير موجود: {full_path}")
 
         try:
-            generate_descriptive_stats(full_path, output_dir=REPORT_CONFIG["output_dir"])
+            generate_descriptive_stats(full_path, output_dir=str(OUTPUT_PATH))
             return {"status": "generated", "file": filename}
         except Exception as e:
             logger.error(f"فشل توليد الإحصائيات للملف {filename}: {e}")
