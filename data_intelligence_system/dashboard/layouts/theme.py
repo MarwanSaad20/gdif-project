@@ -5,7 +5,7 @@
 """
 
 from typing import List, Dict
-
+from data_intelligence_system.config.dashboard_config import DEFAULT_FONT  # ✅ جديد
 
 class Theme:
     # الألوان الأساسية للتطبيق
@@ -42,7 +42,7 @@ class Theme:
     ]
 
     # خطوط عامة للتطبيق
-    FONT_FAMILY: str = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+    FONT_FAMILY: str = DEFAULT_FONT  # ✅ تم التبديل ليكون ديناميكيًا بدل القيمة الصلبة
 
     # الخطوط لأجزاء الكود أو النصوص المهيكلة (Monospace)
     MONOSPACE_FONT_FAMILY: str = "'Consolas', 'Courier New', monospace"
