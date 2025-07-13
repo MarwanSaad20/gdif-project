@@ -9,7 +9,7 @@ from data_intelligence_system.dashboard.components.upload_component import uploa
 from data_intelligence_system.dashboard.layouts.charts_placeholders import forecast_chart
 from data_intelligence_system.dashboard.layouts.stats_summary import stats_summary_card
 from data_intelligence_system.dashboard.layouts.theme import Theme  # استيراد الثيم من الملف المحدث
-
+from data_intelligence_system.config.dashboard_config import DASHBOARD_TITLE, DEFAULT_FONT
 
 BACKGROUND_COLOR = Theme.BACKGROUND_COLOR
 TEXT_COLOR = Theme.TEXT_COLOR
@@ -19,7 +19,7 @@ PRIMARY_COLOR = Theme.PRIMARY_COLOR
 def build_title_section():
     return dbc.Row(dbc.Col(
         html.H1(
-            "نظام تحليل البيانات العام - GDIF",
+            DASHBOARD_TITLE,
             className="text-center my-4",
             style={"color": PRIMARY_COLOR, "fontWeight": "bold"}
         ), width=12
@@ -99,7 +99,7 @@ def build_data_table_section():
                 style_header={"backgroundColor": "#1e1e1e", "color": "white", "fontWeight": "bold"},
                 style_cell={
                     "backgroundColor": "#2e2e2e", "color": "white", "textAlign": "center",
-                    "fontFamily": "Tahoma"
+                    "fontFamily": DEFAULT_FONT
                 },
                 row_selectable="multi",
                 filter_action="native",
@@ -118,7 +118,6 @@ def build_data_table_section():
 def get_layout():
     """Builds the main layout of the GDIF dashboard"""
     return html.Div([
-        # Stores for internal state
         dcc.Store(id="store_raw_data"),
         dcc.Store(id="store_filtered_data"),
         dcc.Store(id="store_filtered_multi"),
@@ -155,10 +154,10 @@ def get_layout():
         ], fluid=True, style={
             "padding": "30px", "minHeight": "100vh", "backgroundColor": BACKGROUND_COLOR,
             "color": TEXT_COLOR, "direction": "rtl",
-            "fontFamily": "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+            "fontFamily": DEFAULT_FONT
         })
     ], style={
         "minHeight": "100vh", "overflowY": "auto", "backgroundColor": BACKGROUND_COLOR,
         "color": TEXT_COLOR, "direction": "rtl",
-        "fontFamily": "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+        "fontFamily": DEFAULT_FONT
     })
