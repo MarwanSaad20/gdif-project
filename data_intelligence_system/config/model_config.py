@@ -4,31 +4,36 @@ from data_intelligence_system.utils.logger import get_logger
 
 logger = get_logger("model_config")
 
-# ✅ تحميل config.yaml إن وجد
 CONFIG_PATH = Path(__file__).resolve().parent / "config.yaml"
 config = ConfigHandler(str(CONFIG_PATH)) if CONFIG_PATH.exists() else None
 
+
+def get_config_value(key: str, default):
+    """Helper to get config value or default."""
+    return config.get(key, default) if config else default
+
+
 # 🔢 الإعدادات العامة للنماذج
-RANDOM_STATE = config.get("model.random_state", 42) if config else 42
-TEST_SIZE = config.get("model.test_size", 0.2) if config else 0.2
-VALIDATION_SPLIT = config.get("model.validation_split", 0.1) if config else 0.1
-CROSS_VALIDATION_FOLDS = config.get("model.cross_validation_folds", 5) if config else 5
-SCALING_METHOD = config.get("model.scaling_method", "standard") if config else "standard"
+RANDOM_STATE = get_config_value("model.random_state", 42)
+TEST_SIZE = get_config_value("model.test_size", 0.2)
+VALIDATION_SPLIT = get_config_value("model.validation_split", 0.1)
+CROSS_VALIDATION_FOLDS = get_config_value("model.cross_validation_folds", 5)
+SCALING_METHOD = get_config_value("model.scaling_method", "standard")
 
 # ⚙️ إعدادات النماذج الانحدارية (Regression)
 REGRESSION_MODELS = {
     "linear": {
         "fit_intercept": True,
-        "normalize": False
+        "normalize": False,
     },
     "lasso": {
         "alpha": 0.1,
-        "max_iter": 1000
+        "max_iter": 1000,
     },
     "ridge": {
         "alpha": 1.0,
-        "solver": "auto"
-    }
+        "solver": "auto",
+    },
 }
 
 # ⚙️ إعدادات النماذج التصنيفية (Classification)
@@ -36,13 +41,13 @@ CLASSIFICATION_MODELS = {
     "logistic": {
         "penalty": "l2",
         "C": 1.0,
-        "solver": "liblinear"
+        "solver": "liblinear",
     },
     "random_forest": {
         "n_estimators": 100,
         "max_depth": 10,
         "min_samples_split": 2,
-        "random_state": RANDOM_STATE
+        "random_state": RANDOM_STATE,
     },
     "xgboost": {
         "learning_rate": 0.1,
@@ -50,8 +55,8 @@ CLASSIFICATION_MODELS = {
         "n_estimators": 100,
         "subsample": 0.8,
         "colsample_bytree": 0.8,
-        "random_state": RANDOM_STATE
-    }
+        "random_state": RANDOM_STATE,
+    },
 }
 
 # ⚙️ إعدادات نماذج التجميع (Clustering)
@@ -61,29 +66,28 @@ CLUSTERING_MODELS = {
         "init": "k-means++",
         "n_init": 10,
         "max_iter": 300,
-        "random_state": RANDOM_STATE
+        "random_state": RANDOM_STATE,
     },
     "dbscan": {
         "eps": 0.5,
         "min_samples": 5,
-        "metric": "euclidean"
-    }
+        "metric": "euclidean",
+    },
 }
 
 # ⚙️ إعدادات التنبؤ الزمني (Time Series)
 TIME_SERIES_MODELS = {
     "arima": {
-        "order": (1, 1, 1)
+        "order": (1, 1, 1),
     },
     "prophet": {
         "seasonality_mode": "additive",
         "yearly_seasonality": "auto",
         "weekly_seasonality": True,
-        "daily_seasonality": False
-    }
+        "daily_seasonality": False,
+    },
 }
 
-# 🧪 عرض القيم عند التشغيل المباشر
 if __name__ == "__main__":
     print(f"RANDOM_STATE: {RANDOM_STATE}")
     print(f"SCALING_METHOD: {SCALING_METHOD}")
