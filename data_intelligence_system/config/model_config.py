@@ -1,11 +1,13 @@
 from pathlib import Path
-from data_intelligence_system.utils.config_handler import ConfigHandler
+
+# ✅ استيرادات مطلقة من جذر المشروع
+from data_intelligence_system.config.yaml_config_handler import YAMLConfigHandler
 from data_intelligence_system.utils.logger import get_logger
 
 logger = get_logger("model_config")
 
 CONFIG_PATH = Path(__file__).resolve().parent / "config.yaml"
-config = ConfigHandler(str(CONFIG_PATH)) if CONFIG_PATH.exists() else None
+config = YAMLConfigHandler(str(CONFIG_PATH)) if CONFIG_PATH.exists() else None
 
 
 def get_config_value(key: str, default):
