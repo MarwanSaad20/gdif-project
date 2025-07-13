@@ -5,8 +5,9 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 import logging
 
-# ✅ استيراد من جذر المشروع
+# ✅ استيرادات من جذر المشروع
 from data_intelligence_system.config.paths_config import ML_MODELS_DIR
+from data_intelligence_system.config.model_config import RANDOM_STATE
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.timer import Timer
 
