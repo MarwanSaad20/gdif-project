@@ -1,5 +1,4 @@
 import os
-import logging
 from typing import List, Dict, Optional
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -11,16 +10,16 @@ from reportlab.platypus import (
 from reportlab.lib.units import cm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from data_intelligence_system.utils.logger import get_logger
 
-# إعداد تسجيل الأخطاء
-logging.basicConfig(level=logging.INFO)
+logger = get_logger("PDFReportGenerator")
 
 # إعداد الخط
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 FONT_PATH = os.path.join(CURRENT_DIR, "..", "..", "fonts", "DejaVuSans.ttf")
 
 if not os.path.exists(FONT_PATH):
-    logging.warning(f"خط غير موجود: {FONT_PATH}. قد تواجه مشاكل في عرض الخطوط.")
+    logger.warning(f"خط غير موجود: {FONT_PATH}. قد تواجه مشاكل في عرض الخطوط.")
 
 pdfmetrics.registerFont(TTFont("DejaVu", FONT_PATH))
 
@@ -74,7 +73,7 @@ class PDFReportGenerator:
         Build and save the PDF report.
         """
         if sections is None:
-            logging.error("Sections list is None.")
+            logger.error("Sections list is None.")
             return
 
         os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
@@ -116,7 +115,7 @@ class PDFReportGenerator:
                     elements.append(Spacer(1, 0.5 * cm))
                     elements.append(Image(img_path, width=14 * cm, height=7 * cm))
                 else:
-                    logging.warning(f"صورة غير موجودة: {img_path}")
+                    logger.warning(f"صورة غير موجودة: {img_path}")
 
             elements.append(Spacer(1, 1 * cm))
 
@@ -124,9 +123,9 @@ class PDFReportGenerator:
 
         try:
             doc.build(elements, onFirstPage=self._add_page_number, onLaterPages=self._add_page_number)
-            logging.info(f"PDF report created at: {self.output_path}")
+            logger.info(f"PDF report created at: {self.output_path}")
         except Exception as e:
-            logging.error(f"خطأ أثناء إنشاء ملف PDF: {e}")
+            logger.error(f"خطأ أثناء إنشاء ملف PDF: {e}")
 
     def _add_page_number(self, canvas_obj: canvas.Canvas, doc):
         """
