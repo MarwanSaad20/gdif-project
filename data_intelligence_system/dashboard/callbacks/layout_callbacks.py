@@ -2,6 +2,7 @@ from dash import Input, Output, State, no_update
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.utils.logger import get_logger  # نظام تسجيل موحد
+from data_intelligence_system.config.dashboard_config import DEFAULT_THEME  # ✅ جديد (للاستخدام المستقبلي لو احتجنا نمط الثيم)
 
 logger = get_logger("LayoutCallbacks")  # تخصيص اسم للوجر
 
