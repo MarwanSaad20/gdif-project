@@ -3,13 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
 
 import time
-import uvicorn
 import os
 
-# ✅ استيراد مطلق للإعدادات البيئية واللوجر
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.config.env_config import env_namespace
 
@@ -17,6 +14,9 @@ logger = get_logger("api.app")
 
 
 def create_app() -> FastAPI:
+    """
+    Create and configure the FastAPI application.
+    """
     app = FastAPI(
         title="GDIF API",
         description="General Data Intelligence Framework API",
@@ -36,7 +36,7 @@ def create_app() -> FastAPI:
 
     app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-    # استخدام SECRET_KEY من env_namespace
+    # Use SECRET_KEY from env_namespace
     secret_key = env_namespace.SECRET_KEY or os.getenv("SESSION_SECRET_KEY", "development-session-key")
     app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
@@ -64,14 +64,12 @@ def create_app() -> FastAPI:
         app.include_router(reports_router.router, prefix="/reports", tags=["Reports"])
         app.include_router(dashboard_router.router, prefix="/dashboard", tags=["Dashboard"])
 
-        logger.info("✅ Routers تم تسجيلها بنجاح.")
+        logger.info("✅ Routers registered successfully.")
     except ImportError as e:
-        logger.warning(f"⚠️ فشل في استيراد Routers: {e}")
+        logger.warning(f"⚠️ Failed to import Routers: {e}")
 
+    logger.info("🚀 FastAPI application created and configured.")
     return app
 
 
 app = create_app()
-
-if __name__ == "__main__":
-    uvicorn.run("data_intelligence_system.api.app:app", host="127.0.0.1", port=8000, reload=True)
