@@ -31,59 +31,77 @@ class ETLService:
         try:
             logger.info(f"🚀 بدء عملية ETL لمصدر: {source}")
 
-            # ===== استخراج البيانات =====
-            df = None
-            ep = extract_params or {}
-
-            if ep.get("use_load_data", False):
-                df = load_data(source)
-            else:
-                # دعم ملفات external
-                source_path = Path(source)
-                if ep.get("extract_from_external", False):
-                    source_path = (
-                        Path(__file__).resolve().parents[2]
-                        / "data" / "external" / "downloaded" / source
-                    )
-                df = extract_file(source_path)
-
-            logger.info(f"✅ تم استخراج البيانات: {df.shape} - الأعمدة: {df.columns.tolist()}")
-
-            # ===== تحويل البيانات =====
-            datasets = [(Path(source).stem, df)]
-            logger.info(f"🧹 بدء تحويل البيانات مع المعاملات: {transform_params}")
-            transformed_datasets = transform_datasets(datasets, **(transform_params or {}))
-            if not transformed_datasets or not isinstance(transformed_datasets, list):
-                logger.error("❌ تحويل البيانات فشل أو لم يرجع قائمة datasets")
+            df = self._extract(source, extract_params or {})
+            if df is None or df.empty:
+                logger.error("❌ فشل في استخراج البيانات أو البيانات فارغة")
                 return False
 
-            logger.info(f"✅ بعد التحويل: عدد المجموعات = {len(transformed_datasets)}")
-            for name, d in transformed_datasets:
-                logger.info(f"📊 {name}: {d.shape} - الأعمدة: {d.columns.tolist()}")
+            datasets = [(Path(source).stem, df)]
+            transformed = self._transform(datasets, transform_params or {})
+            if not transformed:
+                return False
 
-            # ===== تحميل البيانات =====
             if not load_params or 'output_dir' not in load_params:
                 logger.error("❌ load_params لا يحتوي على 'output_dir'")
                 return False
 
-            logger.info(f"💾 بدء حفظ البيانات مع المعاملات: {load_params}")
-            success = save_multiple_datasets(transformed_datasets, **load_params)
-            if not success:
-                logger.error("❌ فشل في حفظ البيانات بعد التحويل")
+            if not self._load(transformed, load_params):
                 return False
 
-            # ✅ تسجيل الملفات في سجل المصادر بعد حفظها
             try:
                 register_sources_main()
                 logger.info("📘 تم تحديث سجل المصادر بعد التحميل.")
             except Exception as reg_err:
                 logger.warning(f"⚠️ فشل في تحديث سجل المصادر: {reg_err}")
 
-            self.data = transformed_datasets
+            self.data = transformed
             return True
 
         except Exception as e:
             logger.error(f"❌ فشل في تنفيذ ETL: {e}", exc_info=True)
+            return False
+
+    def _extract(self, source: str, params: Dict[str, Any]) -> Optional[pd.DataFrame]:
+        try:
+            if params.get("use_load_data", False):
+                df = load_data(source)
+            else:
+                source_path = Path(source)
+                if params.get("extract_from_external", False):
+                    source_path = (
+                        Path(__file__).resolve().parents[2] / "data" / "external" / "downloaded" / source
+                    )
+                df = extract_file(source_path)
+            logger.info(f"✅ استخراج البيانات: {df.shape} - الأعمدة: {df.columns.tolist()}")
+            return df
+        except Exception as e:
+            logger.error(f"❌ فشل في استخراج البيانات: {e}", exc_info=True)
+            return None
+
+    def _transform(self, datasets: List[Tuple[str, pd.DataFrame]], params: Dict[str, Any]) -> Optional[List[Tuple[str, pd.DataFrame]]]:
+        try:
+            logger.info(f"🧹 بدء تحويل البيانات مع المعاملات: {params}")
+            transformed = transform_datasets(datasets, **params)
+            if not transformed or not isinstance(transformed, list):
+                logger.error("❌ تحويل البيانات فشل أو لم يرجع قائمة datasets")
+                return None
+            logger.info(f"✅ بعد التحويل: عدد المجموعات = {len(transformed)}")
+            return transformed
+        except Exception as e:
+            logger.error(f"❌ خطأ في تحويل البيانات: {e}", exc_info=True)
+            return None
+
+    def _load(self, datasets: List[Tuple[str, pd.DataFrame]], params: Dict[str, Any]) -> bool:
+        try:
+            logger.info(f"💾 بدء حفظ البيانات مع المعاملات: {params}")
+            success = save_multiple_datasets(datasets, **params)
+            if success:
+                logger.info("✅ تم حفظ البيانات بنجاح.")
+                return True
+            logger.error("❌ فشل في حفظ البيانات بعد التحويل")
+            return False
+        except Exception as e:
+            logger.error(f"❌ خطأ في حفظ البيانات: {e}", exc_info=True)
             return False
 
     def get_data(self) -> Optional[List[Tuple[str, pd.DataFrame]]]:
