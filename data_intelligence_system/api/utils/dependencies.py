@@ -1,30 +1,32 @@
 from fastapi import Depends, Header, HTTPException, Request, status
 from sqlalchemy.orm import Session
-from typing import Generator, Dict, Optional
+from typing import Generator, Dict, Optional, Any
 import time
 
-# ✅ استيراد محدث من جذر المشروع
 from data_intelligence_system.api.utils.auth import verify_token as verify_jwt_token, verify_api_key
 from data_intelligence_system.database.session import get_db_session
 from data_intelligence_system.utils.logger import get_logger
 
-# ✅ إعداد اللوقر الموحد
 logger = get_logger("api.dependencies")
 
-# ==========================
-# قاعدة بيانات: جلسة DB
-# ==========================
+
 def get_db() -> Generator[Session, None, None]:
+    """
+    إنشاء جلسة قاعدة بيانات قابلة للاستخدام عبر yield.
+    يغلق الجلسة تلقائيًا بعد الانتهاء.
+    """
     db = get_db_session()
     try:
         yield db
     finally:
         db.close()
 
-# ==========================
-# استخراج المستخدم الحالي من JWT
-# ==========================
-def get_current_user(authorization: Optional[str] = Header(None)) -> Dict:
+
+def get_current_user(authorization: Optional[str] = Header(None)) -> Dict[str, Any]:
+    """
+    استخراج بيانات المستخدم من توكن JWT في رأس Authorization.
+    يتحقق من وجود وتنسيق التوكن.
+    """
     if authorization is None:
         logger.warning("🛑 Authorization header missing")
         raise HTTPException(
@@ -43,12 +45,20 @@ def get_current_user(authorization: Optional[str] = Header(None)) -> Dict:
     logger.info("🔐 محاولة التحقق من JWT Token")
     return verify_jwt_token(token)
 
-# ==========================
-# تحديد معدل الوصول (مؤقت - لا يستخدم في الإنتاج)
-# ==========================
-rate_limit_store = {}
 
-def rate_limiter(request: Request, max_requests: int = 100, window_seconds: int = 60):
+rate_limit_store: Dict[str, list[int]] = {}
+
+
+def rate_limiter(request: Request, max_requests: int = 100, window_seconds: int = 60) -> None:
+    """
+    تحديد معدل الوصول (rate limiting) مؤقت بالذاكرة.
+    يحظر الطلبات بعد تجاوز الحد خلال النافذة الزمنية.
+
+    :param request: طلب HTTP.
+    :param max_requests: الحد الأقصى للطلبات المسموح بها.
+    :param window_seconds: طول نافذة القياس بالثواني.
+    :raises HTTPException: إذا تم تجاوز الحد.
+    """
     client_ip = request.client.host
     current_time = int(time.time())
 
@@ -69,10 +79,15 @@ def rate_limiter(request: Request, max_requests: int = 100, window_seconds: int 
 
     rate_limit_store[client_ip].append(current_time)
 
-# ==========================
-# التحقق من API Key (استخدام دالة من auth.py)
-# ==========================
-def api_key_header(api_key: Optional[str] = Header(None)):
+
+def api_key_header(api_key: Optional[str] = Header(None)) -> str:
+    """
+    تحقق من صلاحية API Key الموجود في رأس الطلب.
+
+    :param api_key: مفتاح API من الرأس.
+    :raises HTTPException: إذا كان المفتاح غير موجود أو غير صالح.
+    :return: المفتاح نفسه إذا كان صالحًا.
+    """
     if api_key is None:
         logger.warning("🛑 API Key header missing")
         raise HTTPException(
