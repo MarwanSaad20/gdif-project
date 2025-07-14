@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Literal, Any
 
-# ✅ استخدام اللوجر المركزي
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.api.services import analysis_service
 
@@ -15,12 +14,12 @@ router = APIRouter(
     responses={404: {"description": "Not Found"}},
 )
 
-# ======== نماذج الطلب ========
 
 class DescriptiveStatsRequest(BaseModel):
     dataset_name: str = Field(..., description="اسم مجموعة البيانات")
     columns: Optional[List[str]] = Field(None, description="قائمة أعمدة للتحليل، إذا لم تُحدد يتم التحليل الكامل")
     include_correlations: bool = Field(False, description="هل يشمل تحليل الارتباط؟")
+
 
 class TrainModelRequest(BaseModel):
     model_type: Literal["linear_regression", "random_forest", "xgboost", "svm", "decision_tree"] = Field(
@@ -31,14 +30,17 @@ class TrainModelRequest(BaseModel):
     features: Optional[List[str]] = Field(None, description="قائمة الميزات لاستخدامها، إذا لم تُحدد تستخدم كل الأعمدة ما عدا الهدف")
     hyperparameters: Optional[Dict[str, Any]] = Field(default_factory=dict, description="إعدادات هايبر باراميترز للنموذج")
 
+
 class EvaluateModelRequest(BaseModel):
     model_id: str = Field(..., description="معرف النموذج المدرب")
     test_dataset_name: str = Field(..., description="اسم مجموعة بيانات الاختبار")
 
-# ======== نقاط النهاية ========
 
 @router.post("/descriptive_stats", summary="تحليل إحصائي وصفي للبيانات")
 async def descriptive_stats(request: DescriptiveStatsRequest):
+    """
+    نقطة نهاية لتحليل إحصائي وصفي لمجموعة بيانات معينة.
+    """
     try:
         logger.info(f"Starting descriptive stats on dataset {request.dataset_name} with columns {request.columns}")
         result = await analysis_service.perform_descriptive_stats(
@@ -46,13 +48,21 @@ async def descriptive_stats(request: DescriptiveStatsRequest):
             columns=request.columns,
             include_correlations=request.include_correlations,
         )
+        if not result:
+            raise HTTPException(status_code=404, detail="Dataset or columns not found")
         return JSONResponse(status_code=status.HTTP_200_OK, content=result)
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error in descriptive_stats: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to perform descriptive stats")
 
+
 @router.post("/train_model", summary="تدريب نموذج تعلم آلة")
 async def train_model(request: TrainModelRequest):
+    """
+    نقطة نهاية لتدريب نموذج تعلم آلة على مجموعة بيانات.
+    """
     try:
         logger.info(f"Training model {request.model_type} on dataset {request.dataset_name}")
         model_id = await analysis_service.train_model(
@@ -62,20 +72,32 @@ async def train_model(request: TrainModelRequest):
             features=request.features,
             hyperparameters=request.hyperparameters,
         )
+        if not model_id:
+            raise HTTPException(status_code=400, detail="Failed to train model")
         return JSONResponse(status_code=status.HTTP_201_CREATED, content={"model_id": model_id})
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error in train_model: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to train model")
 
+
 @router.post("/evaluate_model", summary="تقييم نموذج تعلم آلة")
 async def evaluate_model(request: EvaluateModelRequest):
+    """
+    نقطة نهاية لتقييم نموذج تعلم آلة باستخدام مجموعة بيانات اختبار.
+    """
     try:
         logger.info(f"Evaluating model {request.model_id} on dataset {request.test_dataset_name}")
         metrics = await analysis_service.evaluate_model(
             model_id=request.model_id,
             test_dataset_name=request.test_dataset_name,
         )
+        if not metrics:
+            raise HTTPException(status_code=404, detail="Model or test dataset not found")
         return JSONResponse(status_code=status.HTTP_200_OK, content=metrics)
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error in evaluate_model: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to evaluate model")
