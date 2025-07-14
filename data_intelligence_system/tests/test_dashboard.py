@@ -58,7 +58,6 @@ def test_register_callbacks_does_not_fail(callback_module):
     Ensure that register_*_callbacks functions do not raise exceptions.
     """
     app = dashboard_app.app
-    # Dynamically build register function name, e.g. 'register_layout_callbacks'
     register_func_name = "register_" + callback_module.__name__.split(".")[-1].replace("_callbacks", "") + "_callbacks"
     register_func = getattr(callback_module, register_func_name, None)
     if register_func:
@@ -68,24 +67,76 @@ def test_register_callbacks_does_not_fail(callback_module):
             pytest.fail(f"{register_func.__name__} raised exception: {e}")
 
 
-@pytest.mark.parametrize("component_func", [
-    upload_component.upload_section,
-    charts.create_line_chart,
-    charts.create_bar_chart,
-    charts.create_pie_chart,
-    tables.create_data_table,
-    filters.create_dropdown,
-    filters.create_slider,
-    filters.create_date_picker,
-    indicators.create_kpi_card  # صححت الاسم ليتطابق مع الموجود في indicators.py
+@pytest.mark.parametrize("component_func, args", [
+    (upload_component.upload_section, []),
+    (charts.create_line_chart, []),
+    (charts.create_bar_chart, []),
+    (charts.create_pie_chart, []),
+    (tables.create_data_table, [
+        "test-table-id",
+        [{"id": "col1", "name": "عمود 1"}],
+        [],
+        10,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        False,
+        "native",
+        "single",
+    ]),
+    (filters.create_dropdown, [
+        "test-dropdown-id",
+        [{"label": "خيار 1", "value": "val1"}],
+        None,
+        False,
+        False,
+        False,
+        None,
+        None,
+    ]),
+    (filters.create_slider, [
+        "test-slider-id",
+        0,
+        10,
+        1,
+        5,
+        None,
+        True,
+        True,
+        False,
+    ]),
+    (filters.create_date_picker, [
+        "test-date-picker-id",
+        None,
+        None,
+        None,
+        "من تاريخ",
+        "إلى تاريخ",
+        False,
+        None,
+        None,
+        None,
+    ]),
+    (indicators.create_kpi_card, [
+        "test-kpi-card-id",
+        "عنوان KPI",
+        "القيمة",
+        None,
+        None,
+        None,
+        None,
+    ]),
 ])
-def test_components_can_be_created(component_func):
+def test_components_can_be_created(component_func, args):
     """
     Test that component factory functions return non-null Dash components.
     """
     try:
-        # تمرير None للمعاملات حسب عدد معلمات الدالة
-        args = [None] * component_func.__code__.co_argcount
         result = component_func(*args)
         assert result is not None
     except Exception as e:
