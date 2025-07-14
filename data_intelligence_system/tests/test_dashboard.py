@@ -171,7 +171,8 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
 
     monkeypatch.setattr(upload_callbacks, "save_uploaded_file", lambda contents, filename: "/tmp/fake_path.csv")
     monkeypatch.setattr(upload_callbacks, "load_data", lambda path: sample_df.copy())
-    monkeypatch.setattr(upload_callbacks.etl_pipeline, "run", lambda df: None)
+    # تعديل هنا: التجسس على run_full_pipeline وليس run
+    monkeypatch.setattr(upload_callbacks.etl_pipeline, "run_full_pipeline", lambda filepath=None: True)
     monkeypatch.setattr(upload_callbacks, "compute_statistics", lambda df: None)
     monkeypatch.setattr(upload_callbacks.report_dispatcher, "generate_reports", lambda df, args: None)
 
