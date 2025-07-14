@@ -111,16 +111,16 @@ def test_register_callbacks_does_not_fail(callback_module):
         False,
     ]),
 
-    # صححنا عدد المعطيات لتتناسب مع التوقيع في create_date_picker
+    # تصحيح تمرير الوسيطات لتتناسب مع توقيع create_date_picker
     (filters.create_date_picker, [
         "test-date-picker-id",
-        None,
-        None,
-        None,
-        "من تاريخ",
-        "إلى تاريخ",
-        False,
-        None,
+        None,   # start_date
+        None,   # end_date
+        None,   # min_date
+        None,   # max_date
+        None,   # style (يجب أن يكون dict أو None)
+        False,  # clearable
+        "YYYY-MM-DD",  # display_format
     ]),
 
     (indicators.create_kpi_card, [
@@ -176,12 +176,15 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
     app = dashboard_app.app
     upload_callbacks.register_upload_callbacks(app)
 
-    # تصحيح الوصول إلى callback_map
+    # تصحيح الوصول إلى callback_map للعثور على callback مناسب
     cb_func = None
     for cb in app.callback_map.values():
-        output = cb["output"]
-        if hasattr(output, "component_id") and output.component_id == "upload-status":
-            cb_func = cb["callback"]
+        outputs = cb["output"]
+        for out in outputs:
+            if out.get("component_id") == "upload-status":
+                cb_func = cb["callback"]
+                break
+        if cb_func:
             break
 
     assert cb_func is not None
