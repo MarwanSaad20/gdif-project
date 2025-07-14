@@ -75,7 +75,7 @@ def dash_driver(browser_options, dash_app):
 
     # تشغيل سيرفر Dash داخل Thread كـ daemon
     def run_dash():
-        dash_app.run_server(debug=False, use_reloader=False, port=8050, threaded=True)
+        dash_app.run(debug=False, use_reloader=False, port=8050, threaded=True)
 
     thread = Thread(target=run_dash, daemon=True)
     thread.start()
