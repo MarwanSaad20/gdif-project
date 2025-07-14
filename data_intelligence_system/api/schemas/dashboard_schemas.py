@@ -2,8 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any
 from datetime import date
 
-# ✅ تم التحقق من التكامل مع نظام التسجيل الجديد utils.logger
-# (لا حاجة لتعديل مباشر لأن هذا الملف لا يحتوي على لوجر، فقط تأكد من قابلية الاستيراد دون تعارض)
+# تم التأكد من توافق النماذج مع التحديثات في router و service، بدون الحاجة لأي تغيير في الاستيرادات أو الهيكل.
 
 class KPIsRequest(BaseModel):
     date_from: Optional[date] = Field(None, description="تاريخ البداية للتصفية (YYYY-MM-DD)")
