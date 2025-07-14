@@ -200,11 +200,15 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
 
     # اختبار تحليل مع ملف مرفوع
     out3 = upload_callbacks.handle_upload_and_analysis(
-        None,
-        1,
-        None,
-        "/tmp/fake_path.csv",
-        "run-full-analysis-btn"
-    )
-    assert isinstance(out3, tuple)
-    assert "تم تنفيذ التحليل الكامل" in out3[1].children
+    None,
+    1,
+    None,
+    "/tmp/fake_path.csv",
+    "run-full-analysis-btn"
+)
+assert isinstance(out3, tuple)
+assert any(
+    "تم تنفيذ التحليل الكامل" in (child.children if isinstance(child.children, str) else "")
+    for child in out3[1].children
+)
+
