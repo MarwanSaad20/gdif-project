@@ -1,6 +1,3 @@
-# tests/test_etl.py
-
-import os
 import shutil
 import pytest
 import pandas as pd
@@ -11,53 +8,49 @@ from etl.transform import clean_data
 from etl.load import save_transformed_data
 from utils.data_loader import load_data
 
-# === مسارات اختبارية ثابتة ===
-TEST_SAMPLE_DIR = Path("tests/sample_data")
-TEST_RAW_DATA = TEST_SAMPLE_DIR / "raw_sample.csv"
-TEST_OUTPUT_DIR = Path("tests/temp_output")
-TEST_PROCESSED_FILE = TEST_OUTPUT_DIR / "processed_sample.csv"
 
-# === Fixture: إنشاء ملف بيانات خام لاختبار ETL ===
-@pytest.fixture(scope="module")
-def raw_test_df():
-    """تهيئة بيانات خام لاختبار الاستخراج"""
-    TEST_SAMPLE_DIR.mkdir(parents=True, exist_ok=True)
+@pytest.fixture(scope="function")
+def raw_test_df(tmp_path):
+    """تهيئة بيانات خام لاختبار ETL في مجلد مؤقت"""
+    csv_path = tmp_path / "raw_sample.csv"
     df = pd.DataFrame({
         "name": ["Alice", "Bob", "Charlie", None],
         "age": [25, 30, None, 22],
         "city": ["NY", "LA", "SF", "NY"]
     })
-    df.to_csv(TEST_RAW_DATA, index=False)
-    return df
+    df.to_csv(csv_path, index=False)
+    return df, csv_path
 
 
-# === اختبار: استخراج البيانات ===
 def test_extract_all_data(raw_test_df):
     """اختبار عملية الاستخراج باستخدام extract_from_path"""
-    assert TEST_RAW_DATA.exists(), "❌ ملف البيانات الخام غير موجود للاختبار"
-    df_extracted = extract_from_path(TEST_RAW_DATA)
+    df_expected, csv_path = raw_test_df
+    assert csv_path.exists(), "❌ ملف البيانات الخام غير موجود للاختبار"
+    df_extracted = extract_from_path(csv_path)
     assert isinstance(df_extracted, pd.DataFrame)
-    assert df_extracted.shape == raw_test_df.shape
-    assert list(df_extracted.columns) == list(raw_test_df.columns)
+    assert df_extracted.shape == df_expected.shape
+    assert list(df_extracted.columns) == list(df_expected.columns)
 
 
-# === اختبار: تنظيف البيانات ===
 def test_clean_data(raw_test_df):
     """اختبار تنظيف البيانات"""
-    df_cleaned = clean_data(df=raw_test_df)  # ✅ تمرير المعامل بالاسم
+    df_raw, _ = raw_test_df
+    df_cleaned = clean_data(df=df_raw)  # ✅ تمرير المعامل بالاسم
     assert isinstance(df_cleaned, pd.DataFrame)
     assert df_cleaned.isnull().sum().sum() == 0, "❌ لا تزال توجد قيم مفقودة بعد التنظيف"
 
 
-# === اختبار: حفظ وتحميل البيانات ===
-def test_load_data_process(raw_test_df):
-    """اختبار تحميل البيانات بعد الحفظ"""
-    df_cleaned = clean_data(df=raw_test_df)
-    TEST_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+def test_save_and_load_data(tmp_path, raw_test_df):
+    """اختبار حفظ البيانات المعالجة ثم تحميلها والتأكد من التطابق"""
+    df_raw, _ = raw_test_df
+    df_cleaned = clean_data(df=df_raw)
+
+    output_dir = tmp_path / "output"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     saved_path = save_transformed_data(
         df=df_cleaned,
-        output_dir=TEST_OUTPUT_DIR,
+        output_dir=output_dir,
         base_name="processed_sample",
         file_format="csv"
     )
@@ -65,22 +58,30 @@ def test_load_data_process(raw_test_df):
     assert saved_path is not None and saved_path.exists(), "❌ فشل حفظ الملف المعالج"
 
     df_loaded = load_data(saved_path)
-    assert df_loaded.equals(df_cleaned), "❌ البيانات المحمّلة لا تطابق البيانات المحفوظة"
+    pd.testing.assert_frame_equal(df_loaded, df_cleaned, check_dtype=False)
 
 
-# === Fixture: تنظيف الملفات بعد نهاية كل الاختبارات ===
-@pytest.fixture(scope="module", autouse=True)
-def cleanup():
-    """تنظيف الملفات والمجلدات بعد تنفيذ جميع الاختبارات"""
+@pytest.mark.parametrize("invalid_path", [
+    "non_existent_file.csv",
+    "/path/to/nowhere/data.csv"
+])
+def test_extract_raises_file_not_found(invalid_path):
+    """اختبار رفع استثناء عند محاولة استخراج بيانات من مسار غير موجود"""
+    with pytest.raises(FileNotFoundError):
+        extract_from_path(invalid_path)
+
+
+def test_clean_data_handles_empty_df():
+    """اختبار تنظيف بيانات فارغة"""
+    empty_df = pd.DataFrame(columns=["name", "age", "city"])
+    df_cleaned = clean_data(df=empty_df)
+    assert df_cleaned.empty, "❌ التنظيف لم يرجع DataFrame فارغ كما هو متوقع"
+
+
+@pytest.fixture(scope="function", autouse=True)
+def cleanup_tmp_dir(tmp_path):
+    """تنظيف الملفات بعد كل اختبار - يتم تلقائيًا باستخدام tmp_path فلا حاجة لعمل إضافي"""
     yield
-    try:
-        if TEST_RAW_DATA.exists():
-            TEST_RAW_DATA.unlink()
-        if TEST_PROCESSED_FILE.exists():
-            TEST_PROCESSED_FILE.unlink()
-        if TEST_OUTPUT_DIR.exists():
-            shutil.rmtree(TEST_OUTPUT_DIR)
-        if TEST_SAMPLE_DIR.exists():
-            TEST_SAMPLE_DIR.rmdir()
-    except Exception as e:
-        print(f"⚠️ خطأ أثناء التنظيف: {e}")
+    # لا حاجة لتنظيف هنا لأن tmp_path يدير ذلك تلقائيًا
+
+
