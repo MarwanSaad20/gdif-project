@@ -5,8 +5,8 @@ from typing import List, Tuple, Optional, Union
 import pandas as pd
 import os
 
-from data_intelligence_system.utils.file_manager import save_file
-from data_intelligence_system.utils.file_manager import extract_file_name
+# ✅ استيراد مطلق من جذر المشروع
+from data_intelligence_system.utils.file_manager import save_file, extract_file_name
 from data_intelligence_system.config.paths_config import SUPPORTED_EXTENSIONS
 
 try:
