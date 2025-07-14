@@ -5,9 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
-from dash.testing.application_runners import import_app
 
-# استيراد كل مكونات الواجهة من جذر المشروع (مثال توضيحي، قد تحتاج لتعديل بناءً على مشروعك الفعلي)
+# استيراد كل مكونات الواجهة من جذر المشروع
 from data_intelligence_system.dashboard import app
 from data_intelligence_system.dashboard.callbacks import (
     kpi_callbacks,
@@ -31,7 +30,6 @@ from data_intelligence_system.dashboard.components import (
     indicators
 )
 
-
 CHROMEDRIVER_PATH = os.getenv(
     "CHROMEDRIVER_PATH",
     r"C:\Users\PC\.wdm\drivers\chromedriver\win64\138.0.7204.49\chromedriver-win32\chromedriver.exe"
@@ -47,7 +45,7 @@ def browser_options():
 
 @pytest.fixture(scope="session")
 def dash_app():
-    # استخدام app مباشرة من استيراد جذر المشروع بدل import_app (لأنه موجود عندك)
+    # استخدام app مباشرة من استيراد جذر المشروع
     return app.app  # تأكد أن app.py يحتوي على المتغير app
 
 @pytest.fixture(scope="session")
@@ -55,8 +53,14 @@ def dash_driver(browser_options, dash_app):
     service = ChromeService(executable_path=CHROMEDRIVER_PATH)
     driver = webdriver.Chrome(service=service, options=browser_options)
 
-    # تشغيل التطبيق في الخلفية على منفذ 8050 (يمكن تعديله حسب الحاجة)
-    dash_app.run_server(debug=False, use_reloader=False, port=8050, threaded=True)
+    # تشغيل التطبيق في خلفية منفصلة لتفادي حجب التنفيذ
+    import threading
+
+    def run_dash():
+        dash_app.run(debug=False, use_reloader=False, port=8050, threaded=True)
+
+    thread = threading.Thread(target=run_dash, daemon=True)
+    thread.start()
 
     yield driver
 
