@@ -3,7 +3,12 @@
 import os
 import pytest
 import pandas as pd
+
+# ✅ اجعل matplotlib يستخدم backend لا يحتاج GUI
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
 from tempfile import TemporaryDirectory
 
 from data_intelligence_system.reports.generators.pdf_report_generator import PDFReportGenerator
@@ -164,7 +169,7 @@ def test_save_dataframe_to_csv_and_read(sample_df):
         save_dataframe_to_csv(sample_df, "test", output_dir=tmpdir)
         path = os.path.join(tmpdir, "test.csv")
         assert os.path.exists(path)
-        loaded = pd.read_csv(path)
+        loaded = pd.read_csv(path, parse_dates=["Date"])  # ✅ معالجة نوع التاريخ
         pd.testing.assert_frame_equal(loaded, sample_df)
 
 
