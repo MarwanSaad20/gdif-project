@@ -3,12 +3,12 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import date
-import logging
 
-# ✅ استيراد مطور من الجذر ليتكامل مع هيكل المشروع
+# ✅ استيراد اللوجر المركزي بدلاً من logging.getLogger
+from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.api.services import dashboard_service
 
-logger = logging.getLogger("api.dashboard")
+logger = get_logger("api.dashboard")
 
 router = APIRouter(
     prefix="/dashboard",
