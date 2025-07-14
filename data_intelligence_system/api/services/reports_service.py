@@ -112,17 +112,17 @@ class ReportsService:
 
         return output_path
 
-    def convert_html_to_pdf(self, html_path: Path, output_dir: Path = REPORTS_OUTPUT_DIR) -> Path:
+    def convert_html_to_pdf(self, html_path: Path, output_dir: Path = REPORTS_OUTPUT_DIR) -> Path | None:
         """يحوّل تقرير HTML إلى PDF."""
         ensure_dir(output_dir)
         output_path = output_dir / (html_path.stem + ".pdf")
         try:
             HTML(str(html_path)).write_pdf(str(output_path))
             logger.info(f"📄 تم تحويل HTML إلى PDF: {output_path}")
+            return output_path
         except Exception as e:
             logger.error(f"❌ فشل تحويل HTML إلى PDF: {e}", exc_info=True)
-            raise
-        return output_path
+            return None  # عدنا None بدلاً من رفع استثناء
 
     def export_to_excel(
         self,
@@ -130,8 +130,12 @@ class ReportsService:
         sheet_names: List[str],
         output_filename: str,
         output_dir: Path = REPORTS_OUTPUT_DIR
-    ) -> Path:
+    ) -> Path | None:
         """يصدّر البيانات إلى ملف Excel."""
+        if not dfs or all(df.empty for df in dfs):
+            logger.warning("⚠️ محاولة تصدير Excel ببيانات فارغة، تم تخطي الإنشاء.")
+            return None
+
         ensure_dir(output_dir)
         output_path = output_dir / output_filename
         try:
@@ -139,19 +143,22 @@ class ReportsService:
                 for df, name in zip(dfs, sheet_names):
                     df.to_excel(writer, sheet_name=name, index=False)
             logger.info(f"📊 تم حفظ تقرير Excel: {output_path}")
+            return output_path
         except Exception as e:
             logger.error(f"❌ فشل في حفظ تقرير Excel: {e}", exc_info=True)
-            raise
-        return output_path
+            return None
 
 
 _service_instance = ReportsService()
 
+
 def generate_summary_report(*args, **kwargs):
     return _service_instance.generate_summary_report(*args, **kwargs)
 
+
 def convert_html_to_pdf(html_path: str, output_dir: str = REPORTS_OUTPUT_DIR):
     return _service_instance.convert_html_to_pdf(Path(html_path), Path(output_dir))
+
 
 def export_to_excel(
     dfs: List[pd.DataFrame],
