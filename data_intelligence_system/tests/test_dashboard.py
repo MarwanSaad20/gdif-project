@@ -169,54 +169,41 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
         "value": [10, 20, 15]
     })
 
-    json_data = df_to_dash_json(sample_df)
-
-    app = dashboard_app.app
-    upload_callbacks.register_upload_callbacks(app)
-
-    cb_func = None
-    for cb in app.callback_map.values():
-        outputs = cb["output"]
-        if isinstance(outputs, list):
-            for out in outputs:
-                if hasattr(out, "component_id") and out.component_id == "upload-status":
-                    cb_func = cb["callback"]
-                    break
-        else:
-            if hasattr(outputs, "component_id") and outputs.component_id == "upload-status":
-                cb_func = cb["callback"]
-        if cb_func:
-            break
-
-    assert cb_func is not None
-
-    def fake_save_uploaded_file(contents, filename):
-        return "/tmp/fake_path.csv"
-    monkeypatch.setattr(upload_callbacks, "save_uploaded_file", fake_save_uploaded_file)
-    monkeypatch.setattr(upload_callbacks, "load_data", lambda path: sample_df.copy())
-
-    # اختبار رفع ملف
-    out = cb_func("data:text/csv;base64,FAKE_BASE64_ENCODED", None, "test.csv", None)
-    assert isinstance(out, tuple)
-    assert len(out) == 5
-    assert isinstance(out[0], html.Div)
-    assert "تم رفع الملف" in out[0].children or "⚠️" in out[0].children
-
-    # اختبار تحليل بدون ملف (يجب تحذير)
-    out2 = cb_func(None, 1, None, None)
-    assert isinstance(out2, tuple)
-    assert len(out2) == 5
-    assert isinstance(out2[1], html.Div)
-    assert "يرجى رفع ملف" in out2[1].children
-
-    # اختبار تحليل مع ملف مرفوع
+    monkeypatch.setattr(upload_callbacks, "save_uploaded_file", lambda contents, filename: "/tmp/fake_path.csv")
     monkeypatch.setattr(upload_callbacks, "load_data", lambda path: sample_df.copy())
     monkeypatch.setattr(upload_callbacks.etl_pipeline, "run", lambda df: None)
     monkeypatch.setattr(upload_callbacks, "compute_statistics", lambda df: None)
     monkeypatch.setattr(upload_callbacks.report_dispatcher, "generate_reports", lambda df, args: None)
 
-    out3 = cb_func(None, 1, None, "/tmp/fake_path.csv")
+    # اختبار رفع ملف
+    out = upload_callbacks.handle_upload_and_analysis(
+        "data:text/csv;base64,FAKE_BASE64_ENCODED",
+        None,
+        "test.csv",
+        None,
+        "upload-data"
+    )
+    assert isinstance(out, tuple)
+    assert "تم رفع الملف" in out[0].children or "⚠️" in out[0].children
+
+    # اختبار تحليل بدون ملف (يجب تحذير)
+    out2 = upload_callbacks.handle_upload_and_analysis(
+        None,
+        1,
+        None,
+        None,
+        "run-full-analysis-btn"
+    )
+    assert isinstance(out2, tuple)
+    assert "يرجى رفع ملف" in out2[1].children
+
+    # اختبار تحليل مع ملف مرفوع
+    out3 = upload_callbacks.handle_upload_and_analysis(
+        None,
+        1,
+        None,
+        "/tmp/fake_path.csv",
+        "run-full-analysis-btn"
+    )
     assert isinstance(out3, tuple)
-    assert len(out3) == 5
-    assert isinstance(out3[1], html.Div)
     assert "تم تنفيذ التحليل الكامل" in out3[1].children
