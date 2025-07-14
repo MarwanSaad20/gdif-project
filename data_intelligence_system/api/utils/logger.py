@@ -4,7 +4,7 @@ import logging
 import os
 from logging.handlers import RotatingFileHandler
 
-# ✅ استيراد اللوجر العام من المشروع الرئيسي (لمنع تكرار الإعداد)
+# ✅ استيراد اللوجر العام من جذر المشروع (utils.logger)
 from data_intelligence_system.utils.logger import get_logger as root_get_logger
 
 # ✅ إعداد واجهة محلية لاستخدام نفس اللوجر الموحد من utils/logger.py
