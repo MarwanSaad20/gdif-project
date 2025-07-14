@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -15,7 +15,9 @@ logger = get_logger("api.app")
 
 def create_app() -> FastAPI:
     """
-    Create and configure the FastAPI application.
+    Create and configure the FastAPI application:
+    - Adds CORS, GZip, Session and Timing middlewares
+    - Registers API routers for ETL, Analysis, Reports, and Dashboard
     """
     app = FastAPI(
         title="GDIF API",
@@ -36,14 +38,15 @@ def create_app() -> FastAPI:
 
     app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-    # Use SECRET_KEY from env_namespace
     secret_key = env_namespace.SECRET_KEY or os.getenv("SESSION_SECRET_KEY", "development-session-key")
+    if secret_key == "development-session-key":
+        logger.warning("⚠️ Using default session key; set SESSION_SECRET_KEY or SECRET_KEY in production.")
     app.add_middleware(SessionMiddleware, secret_key=secret_key)
 
     class TimingMiddleware(BaseHTTPMiddleware):
         async def dispatch(self, request: Request, call_next):
             start_time = time.time()
-            response: Response = await call_next(request)
+            response = await call_next(request)
             process_time = time.time() - start_time
             response.headers["X-Process-Time"] = f"{process_time:.4f}"
             logger.info(f"{request.method} {request.url} - {process_time:.4f}s")
@@ -73,8 +76,3 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-if __name__ == "__main__":
-    import uvicorn
-    from data_intelligence_system.api.main import main
-
-    main()
