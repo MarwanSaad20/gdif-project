@@ -5,7 +5,6 @@ from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
 from pathlib import Path
 
-
 def get_logger(
     name: str = "DataIntelligenceLogger",
     log_dir: str = "logs",
@@ -19,9 +18,6 @@ def get_logger(
     - يستخدم TimedRotatingFileHandler لتدوير السجلات يوميًا.
     - يسمح بعرض الرسائل في الكونسول أيضًا.
     - يدعم إعادة تهيئة اللوجر لمنع التكرار عند إعادة الاستيراد.
-
-    Returns:
-        logging.Logger: كائن اللوجر المهيأ.
     """
     log_path = Path(log_dir).resolve()
     try:
