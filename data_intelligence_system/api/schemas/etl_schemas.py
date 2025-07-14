@@ -1,5 +1,12 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, Dict
+from enum import Enum
+
+
+class CleaningLevelEnum(str, Enum):
+    basic = "basic"
+    standard = "standard"
+    advanced = "advanced"
 
 
 class DataSourceSchema(BaseModel):
@@ -14,14 +21,13 @@ class ExtractParamsSchema(BaseModel):
 
 
 class TransformParamsSchema(BaseModel):
-    cleaning_level: str = Field("standard", description="مستوى تنظيف البيانات (basic, standard, advanced)")
+    cleaning_level: CleaningLevelEnum = Field(CleaningLevelEnum.standard, description="مستوى تنظيف البيانات")
 
     @field_validator('cleaning_level')
     @classmethod
     def check_cleaning_level(cls, v: str) -> str:
-        allowed = {"basic", "standard", "advanced"}
-        if v not in allowed:
-            raise ValueError(f"cleaning_level يجب أن يكون واحدًا من {allowed}")
+        if v not in CleaningLevelEnum.__members__:
+            raise ValueError(f"cleaning_level يجب أن يكون واحدًا من: {list(CleaningLevelEnum)}")
         return v
 
 
@@ -32,11 +38,11 @@ class LoadParamsSchema(BaseModel):
 
 class ETLJobSchema(BaseModel):
     """
-    نموذج شامل يمثل عملية ETL بكامل مراحلها:
-    - المصدر
-    - معلمات الاستخراج
-    - معلمات التحويل
-    - معلمات التحميل
+    نموذج شامل يمثل مهمة ETL كاملة:
+    - المصدر: معلومات مصدر البيانات
+    - معلمات الاستخراج: تحديد عدد السجلات والفلاتر
+    - معلمات التحويل: مستوى تنظيف البيانات
+    - معلمات التحميل: إعدادات الوجهة وحجم الدفعات
     """
     source: DataSourceSchema
     extract_params: ExtractParamsSchema = Field(default_factory=ExtractParamsSchema)
