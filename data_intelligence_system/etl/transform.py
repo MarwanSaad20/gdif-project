@@ -123,4 +123,7 @@ def transform_datasets(
 
 @log_step
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
-    return transform_datasets([("clean_data", df)], encode_type='label')[0][1]
+    result = transform_datasets([("clean_data", df)], encode_type='label')
+    if not result:
+        return df.copy()
+    return result[0][1]
