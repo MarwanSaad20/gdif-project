@@ -1,12 +1,16 @@
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
-from typing import Optional, Literal, Callable, Awaitable, Any, TypeVar
+from typing import Callable, Awaitable, Any, TypeVar
 import functools
 
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.api.services.etl_service import ETLService
 from data_intelligence_system.data.raw.convert_format import convert_all_files
+from data_intelligence_system.api.schemas.etl_schemas import (
+    DataSourceSchema,
+    TransformParamsSchema,
+    ExtractParamsSchema
+)
 
 logger = get_logger("api.etl")
 
@@ -17,22 +21,6 @@ router = APIRouter(
 )
 
 etl_service = ETLService()
-
-# ============ Models ============
-
-class LoadDataRequest(BaseModel):
-    source_name: Literal["raw", "external"] = Field(..., description="اسم مصدر البيانات (raw أو external)")
-    file_path: Optional[str] = Field(None, description="المسار الكامل للملف (اختياري)")
-    overwrite: bool = Field(False, description="هل يتم استبدال البيانات القديمة؟")
-
-class CleanDataRequest(BaseModel):
-    cleaning_level: Literal["basic", "standard", "advanced"] = Field("standard", description="مستوى التنظيف")
-
-class ExtractDataRequest(BaseModel):
-    limit: int = Field(1000, ge=1, le=10000, description="عدد السجلات المراد استخراجها")
-
-class ConvertFormatRequest(BaseModel):
-    target_format: Literal[".csv", ".xlsx", ".json"] = Field(..., description="الصيغة المطلوبة للتحويل")
 
 # ============ Error Handling Decorator ============
 
@@ -58,7 +46,7 @@ def handle_etl_errors(func: F) -> F:
 
 @router.post("/load", summary="تحميل بيانات جديدة إلى النظام")
 @handle_etl_errors
-async def load_data(request: LoadDataRequest):
+async def load_data(request: DataSourceSchema):
     logger.info(f"[LOAD] المصدر: {request.source_name} | مسار: {request.file_path} | استبدال: {request.overwrite}")
     result = etl_service.load_data(
         source_name=request.source_name,
@@ -69,22 +57,21 @@ async def load_data(request: LoadDataRequest):
 
 @router.post("/clean", summary="تنظيف البيانات الموجودة")
 @handle_etl_errors
-async def clean_data(request: CleanDataRequest):
+async def clean_data(request: TransformParamsSchema):
     logger.info(f"[CLEAN] المستوى المطلوب: {request.cleaning_level}")
-    result = etl_service.clean_data(level=request.cleaning_level)
+    result = etl_service.clean_data(level=request.cleaning_level.value)
     return JSONResponse(status_code=status.HTTP_200_OK, content={"message": result})
 
 @router.post("/extract", summary="استخراج عينة من البيانات")
 @handle_etl_errors
-async def extract_data(request: ExtractDataRequest):
+async def extract_data(request: ExtractParamsSchema):
     logger.info(f"[EXTRACT] عدد السجلات: {request.limit}")
     data = etl_service.extract_data(limit=request.limit)
     return JSONResponse(status_code=status.HTTP_200_OK, content={"data": data})
 
 @router.post("/convert", summary="تحويل صيغ الملفات الخام")
 @handle_etl_errors
-async def convert_data_format(request: ConvertFormatRequest):
-    logger.info(f"[CONVERT] الصيغة المستهدفة: {request.target_format}")
-    # تحقق إن كانت convert_all_files متزامنة، إذا كانت blocking من الأفضل تشغيلها في ThreadPoolExecutor
-    convert_all_files(target_format=request.target_format)
-    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": f"تم التحويل إلى {request.target_format}"})
+async def convert_data_format(target_format: str):
+    logger.info(f"[CONVERT] الصيغة المستهدفة: {target_format}")
+    convert_all_files(target_format=target_format)
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": f"تم التحويل إلى {target_format}"})
