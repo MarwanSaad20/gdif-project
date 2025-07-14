@@ -1,120 +1,117 @@
 import pytest
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+from unittest.mock import patch
 
-from data_intelligence_system.analysis.descriptive_stats import compute_statistics
-from data_intelligence_system.analysis.correlation_analysis import generate_correlation_matrix
-from data_intelligence_system.analysis.outlier_detection import detect_outliers_iqr
-from data_intelligence_system.analysis.clustering_analysis import apply_kmeans, apply_dbscan
-from data_intelligence_system.analysis.target_relation_analysis import analyze_target_relation
+# استيراد مطلق من جذر المشروع
+from data_intelligence_system.analysis import (
+    descriptive_stats,
+    correlation_analysis,
+    outlier_detection,
+    clustering_analysis,
+    target_relation_analysis,
+    analysis_utils
+)
 
 
-# ============================
-# 📄 بيانات اختبار وهمية
-# ============================
+# ---- بيانات مساعدة للاختبارات ----
+
 @pytest.fixture
-def sample_df():
+def sample_numeric_df():
     return pd.DataFrame({
-        "feature1": [10, 20, 30, 40, 50],
-        "feature2": [1, 2, 3, 4, 5],
-        "feature3": [5, 6, 7, 8, 9],
-        "target": [0, 1, 1, 0, 1]
+        "A": [1, 2, 3, 4, 5],
+        "B": [5, 4, 3, 2, 1]
     })
 
 
-# ============================
-# 🧪 descriptive_stats
-# ============================
-def test_compute_statistics(sample_df):
-    stats = compute_statistics(sample_df)
-    assert isinstance(stats, dict)
-    assert "general_info" in stats
-    assert "numeric_summary" in stats
-    assert isinstance(stats["numeric_summary"], dict)
-    assert stats["general_info"]["Number of Rows"] == 5
-    assert "feature1" in stats["numeric_summary"]
+@pytest.fixture
+def sample_mixed_df():
+    return pd.DataFrame({
+        "num": [1, 2, 3, 4],
+        "cat": ["a", "b", "a", "b"],
+        "flag": [True, False, True, False]
+    })
 
 
-def test_compute_statistics_empty():
-    stats = compute_statistics(pd.DataFrame())
-    # نتوقع أن تعود إما dict فارغة أو تحتوي على تحذير معين
-    assert isinstance(stats, dict)
-    # أو حسب السلوك الفعلي: مثلاً عدم وجود إحصائيات رقمية
-    assert "numeric_summary" in stats
-    assert stats["numeric_summary"] == {} or not stats["numeric_summary"]
+@pytest.fixture
+def sample_target_df():
+    return pd.DataFrame({
+        "feature": [1, 2, 3, 4],
+        "target": [10, 20, 30, 40]
+    })
 
 
-# ============================
-# 🧪 correlation_analysis
-# ============================
-def test_compute_correlations(sample_df):
-    corr = generate_correlation_matrix(sample_df.drop(columns=["target"]))
-    assert isinstance(corr, pd.DataFrame)
-    assert not corr.isnull().values.any()
-    assert corr.shape[0] == corr.shape[1]
-    assert "feature1" in corr.columns
-    assert "feature2" in corr.index
+# ---- descriptive_stats.py ----
+
+def test_analyze_numerical_columns(sample_numeric_df):
+    summary = descriptive_stats.analyze_numerical_columns(sample_numeric_df)
+    assert isinstance(summary, pd.DataFrame)
+    assert not summary.empty
+    assert "mean" in summary.columns or "std" in summary.columns
 
 
-def test_compute_correlations_non_numeric():
-    df = pd.DataFrame({"col1": ["a", "b", "c"]})
-    with pytest.raises(Exception):
-        generate_correlation_matrix(df)
+def test_analyze_categorical_columns(sample_mixed_df):
+    summary = descriptive_stats.analyze_categorical_columns(sample_mixed_df[["cat"]])
+    assert isinstance(summary, pd.DataFrame)
+    assert "count" in summary.columns
 
 
-# ============================
-# 🧪 outlier_detection
-# ============================
-def test_detect_outliers_iqr(sample_df):
-    outliers_mask = detect_outliers_iqr(sample_df.drop(columns=["target"]))
-    assert isinstance(outliers_mask, pd.Series)
-    assert outliers_mask.dtype == bool
-    assert len(outliers_mask) == len(sample_df)
-
-
-# ============================
-# 🧪 clustering_analysis
-# ============================
-def test_kmeans_clustering(sample_df):
-    data_scaled = StandardScaler().fit_transform(sample_df.drop(columns=["target"]))
-    labels, inertia, silhouette = apply_kmeans(data_scaled, n_clusters=2)
-    assert isinstance(labels, np.ndarray)
-    assert len(labels) == sample_df.shape[0]
-    assert isinstance(inertia, (int, float))
-    assert silhouette is None or isinstance(silhouette, float)
-
-
-def test_dbscan_clustering(sample_df):
-    data_scaled = StandardScaler().fit_transform(sample_df.drop(columns=["target"]))
-    labels = apply_dbscan(data_scaled, eps=0.5, min_samples=1)
-    assert isinstance(labels, np.ndarray)
-    assert len(labels) == sample_df.shape[0]
-
-
-def test_kmeans_invalid_clusters(sample_df):
-    data_scaled = StandardScaler().fit_transform(sample_df.drop(columns=["target"]))
-    with pytest.raises(ValueError):
-        apply_kmeans(data_scaled, n_clusters=0)
-
-
-# ============================
-# 🧪 target_relation_analysis
-# ============================
-def test_analyze_target_relation(sample_df):
-    result = analyze_target_relation(sample_df, target="target")
-    assert isinstance(result, pd.DataFrame)
-    assert not result.empty
-    assert "feature" in result.columns
-    assert "p_value" in result.columns
-    assert "test_type" in result.columns
-
-
-def test_analyze_target_relation_invalid():
+def test_analyze_datetime_columns():
     df = pd.DataFrame({
-        "f1": [1, 2, 3],
-        "target": ["a", "b", "c"]  # غير رقمي
+        "dates": pd.date_range("2023-01-01", periods=5, freq="D")
     })
-    result = analyze_target_relation(df, target="target")
-    assert isinstance(result, pd.DataFrame)
-    assert set(result.columns) >= {"feature", "test_type", "p_value"}
+    summary = descriptive_stats.analyze_datetime_columns(df)
+    assert isinstance(summary, pd.DataFrame)
+    assert "min" in summary.columns or "max" in summary.columns
+
+
+# ---- correlation_analysis.py ----
+
+def test_calculate_correlations(sample_numeric_df):
+    corr = correlation_analysis.calculate_correlations(sample_numeric_df)
+    assert isinstance(corr, pd.DataFrame)
+    assert "A" in corr.columns and "B" in corr.columns
+
+
+# ---- outlier_detection.py ----
+
+def test_detect_outliers(sample_numeric_df):
+    outliers = outlier_detection.detect_outliers(sample_numeric_df, method="zscore", threshold=2.0)
+    assert isinstance(outliers, pd.DataFrame)
+    assert set(outliers.columns) == set(sample_numeric_df.columns)
+
+
+# ---- clustering_analysis.py ----
+
+def test_perform_clustering(sample_numeric_df):
+    clustered = clustering_analysis.perform_clustering(sample_numeric_df, n_clusters=2)
+    assert isinstance(clustered, pd.DataFrame)
+    assert "cluster" in clustered.columns
+
+
+# ---- target_relation_analysis.py ----
+
+def test_analyze_relation_to_target(sample_target_df):
+    summary = target_relation_analysis.analyze_relation_to_target(
+        sample_target_df, feature_col="feature", target_col="target"
+    )
+    assert isinstance(summary, dict)
+    assert "correlation" in summary
+
+
+# ---- analysis_utils.py ----
+
+def test_normalize_dataframe(sample_numeric_df):
+    norm_df = analysis_utils.normalize_dataframe(sample_numeric_df)
+    assert isinstance(norm_df, pd.DataFrame)
+    assert np.allclose(norm_df.mean(), 0, atol=1e-1) or np.allclose(norm_df.std(), 1, atol=1e-1)
+
+
+def test_calculate_iqr(sample_numeric_df):
+    iqr_values = analysis_utils.calculate_iqr(sample_numeric_df)
+    assert isinstance(iqr_values, dict)
+    assert all(isinstance(v, (int, float)) for v in iqr_values.values())
+
+
+if __name__ == "__main__":
+    pytest.main(["-v", __file__])
