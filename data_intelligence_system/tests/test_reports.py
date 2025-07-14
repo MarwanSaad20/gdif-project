@@ -1,5 +1,3 @@
-# data_intelligence_system/tests/test_reports.py
-
 import os
 import pytest
 import pandas as pd
@@ -169,7 +167,7 @@ def test_save_dataframe_to_csv_and_read(sample_df):
         save_dataframe_to_csv(sample_df, "test", output_dir=tmpdir)
         path = os.path.join(tmpdir, "test.csv")
         assert os.path.exists(path)
-        loaded = pd.read_csv(path, parse_dates=["Date"])  # ✅ معالجة نوع التاريخ
+        loaded = pd.read_csv(path, parse_dates=["Date"])  # ✅ إضافة parse_dates للحفاظ على نوع التاريخ
         pd.testing.assert_frame_equal(loaded, sample_df)
 
 
