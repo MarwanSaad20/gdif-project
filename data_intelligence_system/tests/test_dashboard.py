@@ -1,13 +1,8 @@
-"""
-✅ Comprehensive tests for GDIF Dashboard:
-- app creation
-- layout structure
-- callbacks registration
-- components creation
-"""
-
 import pytest
 from dash import html
+from dash.exceptions import PreventUpdate
+from dash import callback_context
+
 from data_intelligence_system.dashboard import app as dashboard_app
 from data_intelligence_system.dashboard.layouts import main_layout
 from data_intelligence_system.dashboard.callbacks import (
@@ -28,7 +23,6 @@ from data_intelligence_system.dashboard.components import (
 
 
 def test_app_creation():
-    """Test that Dash app is created and has layout/title."""
     app = dashboard_app.app
     assert app is not None
     assert hasattr(app, 'layout')
@@ -37,7 +31,6 @@ def test_app_creation():
 
 
 def test_layout_structure():
-    """Test that get_layout returns Div with expected children IDs."""
     layout = main_layout.get_layout()
     assert isinstance(layout, html.Div)
     expected_store_ids = [
@@ -54,9 +47,6 @@ def test_layout_structure():
     export_callbacks, upload_callbacks, filters_callbacks
 ])
 def test_register_callbacks_does_not_fail(callback_module):
-    """
-    Ensure that register_*_callbacks functions do not raise exceptions.
-    """
     app = dashboard_app.app
     register_func_name = "register_" + callback_module.__name__.split(".")[-1].replace("_callbacks", "") + "_callbacks"
     register_func = getattr(callback_module, register_func_name, None)
@@ -133,9 +123,6 @@ def test_register_callbacks_does_not_fail(callback_module):
     ]),
 ])
 def test_components_can_be_created(component_func, args):
-    """
-    Test that component factory functions return non-null Dash components.
-    """
     try:
         result = component_func(*args)
         assert result is not None
@@ -144,20 +131,78 @@ def test_components_can_be_created(component_func, args):
 
 
 def test_toggle_sidebar_logic():
-    """Test toggle_sidebar logic directly."""
     style_block = {'display': 'block', 'width': '250px'}
     style_none = {'display': 'none', 'width': '250px'}
-    # Toggle from block -> none
     res = layout_callbacks.toggle_sidebar(1, style_block)
     assert res['display'] == 'none'
     assert res['width'] == '0px'
-    # Toggle from none -> block
     res = layout_callbacks.toggle_sidebar(1, style_none)
     assert res['display'] == 'block'
     assert res['width'] == '250px'
 
 
 def test_enable_analysis_button_logic():
-    """Test enable_analysis_button_if_data_uploaded logic directly."""
     assert layout_callbacks.enable_analysis_button_if_data_uploaded("/tmp/data.csv") is False
     assert layout_callbacks.enable_analysis_button_if_data_uploaded(None) is True
+
+
+# =================
+# اختبار callback موحد للرفع والتحليل (upload_callbacks.py)
+# =================
+from data_intelligence_system.dashboard.callbacks import upload_callbacks
+from data_intelligence_system.core.data_bindings import df_to_dash_json
+import pandas as pd
+
+def test_unified_upload_and_analysis_callback(monkeypatch):
+    # تجهيز البيانات التجريبية
+    sample_df = pd.DataFrame({
+        "category": ["A", "B", "A"],
+        "date": pd.to_datetime(["2025-01-01", "2025-01-02", "2025-01-03"]),
+        "type": ["X", "Y", "X"],
+        "value": [10, 20, 15]
+    })
+
+    json_data = df_to_dash_json(sample_df)
+
+    # استدعاء الدالة التي تسجل callback
+    app = dashboard_app.app
+    upload_callbacks.register_upload_callbacks(app)
+
+    # نستخدم دالة الكولباك مباشرة للاختبار (تحتاج نفس التوقيع)
+    cb_func = None
+    for cb in app.callback_map.values():
+        if "upload-status" in cb["output"][0]["id"]:
+            cb_func = cb["callback"]
+            break
+
+    assert cb_func is not None
+
+    # حالة رفع ملف: تمرير محتويات وهمية واسم ملف
+    # - هنا نفترض save_uploaded_file تعيد مسار وهمي
+    def fake_save_uploaded_file(contents, filename):
+        return "/tmp/fake_path.csv"
+    monkeypatch.setattr(upload_callbacks, "save_uploaded_file", fake_save_uploaded_file)
+
+    # - monkeypatch load_data ليرجع DataFrame تجريبي
+    monkeypatch.setattr(upload_callbacks, "load_data", lambda path: sample_df.copy())
+
+    # حالة رفع ملف
+    out = cb_func("data:text/csv;base64,FAKE_BASE64_ENCODED", None, "test.csv", None)
+    assert isinstance(out[0], html.Div)
+    assert "تم رفع الملف" in out[0].children or "⚠️" in out[0].children
+
+    # حالة تشغيل التحليل بدون ملف مرفوع (يجب أن تعطي تحذير)
+    out2 = cb_func(None, 1, None, None)
+    assert isinstance(out2[1], html.Div)
+    assert "يرجى رفع ملف" in out2[1].children
+
+    # حالة تشغيل التحليل مع ملف مرفوع
+    monkeypatch.setattr(upload_callbacks, "load_data", lambda path: sample_df.copy())
+    monkeypatch.setattr(upload_callbacks.etl_pipeline, "run", lambda df: None)
+    monkeypatch.setattr(upload_callbacks, "compute_statistics", lambda df: None)
+    monkeypatch.setattr(upload_callbacks.report_dispatcher, "generate_reports", lambda df, args: None)
+
+    out3 = cb_func(None, 1, None, "/tmp/fake_path.csv")
+    assert isinstance(out3[1], html.Div)
+    assert "تم تنفيذ التحليل الكامل" in out3[1].children
+
