@@ -3,7 +3,7 @@ import pytest
 import pandas as pd
 from pathlib import Path
 
-from data_intelligence_system.etl.extract import extract_from_path
+from data_intelligence_system.etl.extract import extract_file
 from data_intelligence_system.etl.transform import clean_data
 from data_intelligence_system.etl.load import save_transformed_data
 from data_intelligence_system.utils.data_loader import load_data
@@ -23,10 +23,14 @@ def raw_test_df(tmp_path):
 
 
 def test_extract_all_data(raw_test_df):
-    """اختبار عملية الاستخراج باستخدام extract_from_path"""
+    """اختبار عملية الاستخراج باستخدام extract_file"""
     df_expected, csv_path = raw_test_df
     assert csv_path.exists(), "❌ ملف البيانات الخام غير موجود للاختبار"
-    df_extracted = extract_from_path(csv_path)
+    extracted_dict = extract_file(csv_path)
+    assert isinstance(extracted_dict, dict)
+    key = csv_path.stem
+    assert key in extracted_dict
+    df_extracted = extracted_dict[key]
     assert isinstance(df_extracted, pd.DataFrame)
     assert df_extracted.shape == df_expected.shape
     assert list(df_extracted.columns) == list(df_expected.columns)
@@ -68,7 +72,7 @@ def test_save_and_load_data(tmp_path, raw_test_df):
 def test_extract_raises_file_not_found(invalid_path):
     """اختبار رفع استثناء عند محاولة استخراج بيانات من مسار غير موجود"""
     with pytest.raises(FileNotFoundError):
-        extract_from_path(invalid_path)
+        extract_file(invalid_path)
 
 
 def test_clean_data_handles_empty_df():
