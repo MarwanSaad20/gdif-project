@@ -2,13 +2,13 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional, Literal
-import logging
 
-# تحديث الاستيرادات لتكون من جذر المشروع
+# ✅ استيراد اللوجر المركزي بدلاً من logging.getLogger
+from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.api.services.etl_service import ETLService
 from data_intelligence_system.data.raw.convert_format import convert_all_files
 
-logger = logging.getLogger("api.etl")
+logger = get_logger("api.etl")
 
 router = APIRouter(
     prefix="/etl",
@@ -17,7 +17,6 @@ router = APIRouter(
 )
 
 etl_service = ETLService()  # كائن الخدمة المشترك
-
 
 # ======================== النماذج ========================
 
@@ -34,7 +33,6 @@ class ExtractDataRequest(BaseModel):
 
 class ConvertFormatRequest(BaseModel):
     target_format: Literal[".csv", ".xlsx", ".json"] = Field(..., description="الصيغة المطلوبة للتحويل")
-
 
 # ======================== المسارات ========================
 
@@ -58,7 +56,6 @@ async def load_data(request: LoadDataRequest):
         logger.error(f"[LOAD ERROR] {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="فشل في تحميل البيانات")
 
-
 @router.post("/clean", summary="تنظيف البيانات الموجودة")
 async def clean_data(request: CleanDataRequest):
     try:
@@ -69,7 +66,6 @@ async def clean_data(request: CleanDataRequest):
         logger.error(f"[CLEAN ERROR] {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="فشل في تنظيف البيانات")
 
-
 @router.post("/extract", summary="استخراج عينة من البيانات")
 async def extract_data(request: ExtractDataRequest):
     try:
@@ -79,7 +75,6 @@ async def extract_data(request: ExtractDataRequest):
     except Exception as e:
         logger.error(f"[EXTRACT ERROR] {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="فشل في استخراج البيانات")
-
 
 @router.post("/convert", summary="تحويل صيغ الملفات الخام")
 async def convert_data_format(request: ConvertFormatRequest):
