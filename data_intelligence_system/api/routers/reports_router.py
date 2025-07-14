@@ -2,16 +2,16 @@ from fastapi import APIRouter, HTTPException, status, Query
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 from typing import Optional, Literal, Dict
-import os
+from pathlib import Path
+import mimetypes
 
-# ✅ استيراد اللوجر المركزي وإعدادات التقرير من جذر المشروع
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.config.report_config import REPORT_CONFIG
 from data_intelligence_system.api.services import reports_service
 
 logger = get_logger("api.reports")
 
-SAFE_REPORTS_DIR = str(REPORT_CONFIG["output_dir"])
+SAFE_REPORTS_DIR = Path(REPORT_CONFIG["output_dir"])
 
 router = APIRouter(
     prefix="/reports",
@@ -27,6 +27,9 @@ class ReportRequest(BaseModel):
 
 @router.post("/generate", summary="توليد تقرير جديد")
 async def generate_report(request: ReportRequest):
+    """
+    توليد تقرير بناءً على نوعه، اسم مجموعة البيانات، الفلاتر، وإدراج الرسوم البيانية.
+    """
     try:
         logger.info(f"📝 توليد تقرير [{request.report_type}] لبيانات: {request.dataset_name} مع الفلاتر: {request.filters}")
 
@@ -34,10 +37,12 @@ async def generate_report(request: ReportRequest):
             report_type=request.report_type,
             dataset_name=request.dataset_name,
             include_charts=request.include_charts,
-            filters=request.filters
+            filters=request.filters,
         )
 
-        if not os.path.isfile(report_path):
+        report_path_obj = Path(report_path)
+
+        if not report_path_obj.is_file():
             logger.error(f"تقرير غير موجود بعد التوليد: {report_path}")
             raise FileNotFoundError(f"تقرير غير موجود بعد التوليد: {report_path}")
 
@@ -46,9 +51,9 @@ async def generate_report(request: ReportRequest):
         return JSONResponse(
             status_code=status.HTTP_201_CREATED,
             content={
-                "report_path": report_path,
-                "message": "📄 تم توليد التقرير بنجاح"
-            }
+                "report_path": str(report_path_obj),
+                "message": "📄 تم توليد التقرير بنجاح",
+            },
         )
     except ValueError as ve:
         logger.warning(f"⚠️ خطأ في الطلب: {ve}")
@@ -59,27 +64,34 @@ async def generate_report(request: ReportRequest):
 
 @router.get("/download", summary="تحميل تقرير موجود")
 async def download_report(file_name: str = Query(..., description="اسم ملف التقرير فقط (بدون المسار الكامل)")):
+    """
+    تحميل ملف تقرير موجود من مجلد التقارير الآمن.
+    """
     try:
-        safe_file_name = os.path.basename(file_name)
-        safe_path = os.path.join(SAFE_REPORTS_DIR, safe_file_name)
+        safe_file_name = Path(file_name).name  # امنع Path Traversal
+        safe_path = SAFE_REPORTS_DIR / safe_file_name
 
-        if not os.path.isfile(safe_path):
+        if not safe_path.is_file():
             logger.warning(f"⚠️ تقرير غير موجود: {safe_path}")
             raise HTTPException(status_code=404, detail="لم يتم العثور على التقرير")
 
-        file_size = os.path.getsize(safe_path)
+        file_size = safe_path.stat().st_size
         logger.info(f"📥 تحميل التقرير: {safe_path} (الحجم: {file_size} bytes)")
 
         def iterfile():
             with open(safe_path, mode="rb") as file_like:
                 yield from file_like
 
+        content_type, _ = mimetypes.guess_type(str(safe_path))
+        if content_type is None:
+            content_type = "application/octet-stream"
+
         return StreamingResponse(
             iterfile(),
-            media_type="application/octet-stream",
+            media_type=content_type,
             headers={
                 "Content-Disposition": f"attachment; filename={safe_file_name}"
-            }
+            },
         )
     except HTTPException:
         raise
