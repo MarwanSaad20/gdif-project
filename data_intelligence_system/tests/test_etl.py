@@ -1,89 +1,167 @@
-import shutil
 import pytest
 import pandas as pd
 from pathlib import Path
+from unittest.mock import patch, MagicMock
 
-from data_intelligence_system.etl.extract import extract_file
-from data_intelligence_system.etl.transform import clean_data
-from data_intelligence_system.etl.load import save_transformed_data
-from data_intelligence_system.utils.data_loader import load_data
+# استيراد مطلق من جذر المشروع
+from data_intelligence_system.etl import extract, transform, load, pipeline, etl_utils
 
 
-@pytest.fixture(scope="function")
-def raw_test_df(tmp_path):
-    """تهيئة بيانات خام لاختبار ETL في مجلد مؤقت"""
-    csv_path = tmp_path / "raw_sample.csv"
+# ---- بيانات مساعدة للاختبارات ----
+@pytest.fixture
+def sample_raw_csv(tmp_path):
+    csv_path = tmp_path / "sample.csv"
     df = pd.DataFrame({
-        "name": ["Alice", "Bob", "Charlie", None],
-        "age": [25, 30, None, 22],
-        "city": ["NY", "LA", "SF", "NY"]
+        "Name": ["Alice", "Bob", "Charlie"],
+        "Age": [25, 30, 35],
+        "City": ["NY", "LA", "SF"]
     })
     df.to_csv(csv_path, index=False)
-    return df, csv_path
+    return csv_path, df
 
 
-def test_extract_all_data(raw_test_df):
-    """اختبار عملية الاستخراج باستخدام extract_file"""
-    df_expected, csv_path = raw_test_df
-    assert csv_path.exists(), "❌ ملف البيانات الخام غير موجود للاختبار"
-    extracted_dict = extract_file(csv_path)
-    assert isinstance(extracted_dict, dict)
-    key = csv_path.stem
-    assert key in extracted_dict
-    df_extracted = extracted_dict[key]
-    assert isinstance(df_extracted, pd.DataFrame)
-    assert df_extracted.shape == df_expected.shape
-    assert list(df_extracted.columns) == list(df_expected.columns)
+@pytest.fixture
+def sample_dataframe():
+    return pd.DataFrame({
+        "name": ["alice", "bob", "alice", "dan"],
+        "age": [25, 30, 25, None],
+        "city": ["NY", "LA", "NY", "SF"]
+    })
 
 
-def test_clean_data(raw_test_df):
-    """اختبار تنظيف البيانات"""
-    df_raw, _ = raw_test_df
-    df_cleaned = clean_data(df=df_raw)  # ✅ تمرير المعامل بالاسم
-    assert isinstance(df_cleaned, pd.DataFrame)
-    assert df_cleaned.isnull().sum().sum() == 0, "❌ لا تزال توجد قيم مفقودة بعد التنظيف"
+# ---- اختبارات extract.py ----
+
+def test_is_valid_file(sample_raw_csv):
+    path, _ = sample_raw_csv
+    assert extract.is_valid_file(path) is True
+    fake_path = Path("nonexistent.csv")
+    assert extract.is_valid_file(fake_path) is False
 
 
-def test_save_and_load_data(tmp_path, raw_test_df):
-    """اختبار حفظ البيانات المعالجة ثم تحميلها والتأكد من التطابق"""
-    df_raw, _ = raw_test_df
-    df_cleaned = clean_data(df=df_raw)
-
-    output_dir = tmp_path / "output"
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    saved_path = save_transformed_data(
-        df=df_cleaned,
-        output_dir=output_dir,
-        base_name="processed_sample",
-        file_format="csv"
-    )
-
-    assert saved_path is not None and saved_path.exists(), "❌ فشل حفظ الملف المعالج"
-
-    df_loaded = load_data(saved_path)
-    pd.testing.assert_frame_equal(df_loaded, df_cleaned, check_dtype=False)
+@patch("data_intelligence_system.etl.extract.read_file")
+def test_extract_file_success(mock_read_file, sample_raw_csv):
+    path, df = sample_raw_csv
+    mock_read_file.return_value = df
+    result = extract.extract_file(path, validate=False)
+    assert isinstance(result, dict)
+    assert list(result.keys())[0] == extract.extract_file_name(str(path))
 
 
-@pytest.mark.parametrize("invalid_path", [
-    "non_existent_file.csv",
-    "/path/to/nowhere/data.csv"
-])
-def test_extract_raises_file_not_found(invalid_path):
-    """اختبار رفع استثناء عند محاولة استخراج بيانات من مسار غير موجود"""
-    with pytest.raises(FileNotFoundError):
-        extract_file(invalid_path)
+@patch("data_intelligence_system.etl.extract.read_file")
+def test_extract_all_data(mock_read_file, tmp_path):
+    # نجهز مجلد raw مع ملف CSV
+    raw_dir = tmp_path / "raw"
+    raw_dir.mkdir()
+    file_path = raw_dir / "data.csv"
+    df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
+    df.to_csv(file_path, index=False)
+
+    mock_read_file.return_value = df
+
+    with patch("data_intelligence_system.config.paths_config.RAW_DATA_PATHS", [raw_dir]):
+        with patch("data_intelligence_system.config.paths_config.SUPPORTED_EXTENSIONS", [".csv"]):
+            data = extract.extract_all_data(validate=False)
+            assert isinstance(data, list)
+            assert any(isinstance(t[1], pd.DataFrame) for t in data)
 
 
-def test_clean_data_handles_empty_df():
-    """اختبار تنظيف بيانات فارغة"""
-    empty_df = pd.DataFrame(columns=["name", "age", "city"])
-    df_cleaned = clean_data(df=empty_df)
-    assert df_cleaned.empty, "❌ التنظيف لم يرجع DataFrame فارغ كما هو متوقع"
+# ---- اختبارات transform.py ----
+
+def test_unify_column_names(sample_dataframe):
+    df = sample_dataframe.copy()
+    df.columns = [" Name ", "AGE", "City!"]
+    df2 = transform.unify_column_names(df)
+    assert "name" in df2.columns
+    assert "age" in df2.columns
+    assert "city" in df2.columns
 
 
-@pytest.fixture(scope="function", autouse=True)
-def cleanup_tmp_dir(tmp_path):
-    """تنظيف الملفات بعد كل اختبار - يتم تلقائيًا باستخدام tmp_path فلا حاجة لعمل إضافي"""
-    yield
-    # لا حاجة لتنظيف هنا لأن tmp_path يدير ذلك تلقائيًا
+def test_encode_categorical_columns(sample_dataframe):
+    df = sample_dataframe.copy()
+    result = transform.encode_categorical_columns(df, encode_type="label")
+    assert all(isinstance(val, (int, float)) for val in result["name"])
+
+
+def test_remove_duplicates(sample_dataframe):
+    df = sample_dataframe.copy()
+    df2 = transform.remove_duplicates(df)
+    assert len(df2) < len(df)
+
+
+@patch("data_intelligence_system.etl.transform.fill_missing", lambda df: df.fillna(0))
+@patch("data_intelligence_system.etl.transform.scale_numericals", lambda df: df)
+def test_transform_datasets(sample_dataframe):
+    datasets = [("test.csv", sample_dataframe)]
+    transformed = transform.transform_datasets(datasets)
+    assert isinstance(transformed, list)
+    assert len(transformed) == 1
+    assert isinstance(transformed[0][1], pd.DataFrame)
+
+
+# ---- اختبارات load.py ----
+
+@patch("data_intelligence_system.utils.file_manager.save_file")
+@patch("data_intelligence_system.data.processed.validate_clean_data.validate", lambda df: True)
+@patch("data_intelligence_system.data.raw.archive_raw_file.archive_file", lambda path: True)
+def test_save_dataframe(tmp_path, sample_dataframe):
+    output_dir = tmp_path / "processed"
+    output_dir.mkdir()
+    path = load.save_dataframe(sample_dataframe, output_dir, "testfile", "csv")
+    assert path is not None
+    assert path.exists()
+
+
+def test_create_output_dir(tmp_path):
+    new_dir = tmp_path / "new_output"
+    result = load.create_output_dir(new_dir)
+    assert result.exists()
+    assert isinstance(result, Path)
+
+
+# ---- اختبارات pipeline.py ----
+
+@patch("data_intelligence_system.etl.extract.extract_file")
+@patch("data_intelligence_system.etl.transform.transform_datasets")
+@patch("data_intelligence_system.utils.file_manager.save_file")
+def test_run_full_pipeline(mock_save_file, mock_transform, mock_extract_file, sample_dataframe):
+    mock_extract_file.return_value = {"file.csv": sample_dataframe}
+    mock_transform.return_value = [("file.csv", sample_dataframe)]
+    mock_save_file.return_value = True
+
+    result = pipeline.run_full_pipeline(filepath="fake/path/file.csv", encode_type="label", scale_type="standard")
+    assert result is True
+
+
+# ---- اختبارات etl_utils.py ----
+
+def test_get_all_files(tmp_path):
+    file1 = tmp_path / "a.csv"
+    file2 = tmp_path / "b.json"
+    file1.write_text("dummy")
+    file2.write_text("dummy")
+    exts = [".csv"]
+    files = etl_utils.get_all_files(tmp_path, extensions=exts)
+    assert any(str(file1) == f for f in files)
+    assert all(Path(f).suffix in exts for f in files)
+
+
+def test_detect_file_type():
+    assert etl_utils.detect_file_type("test.csv") == "csv"
+    assert etl_utils.detect_file_type("test.xlsx") == "excel"
+    assert etl_utils.detect_file_type("test.json") == "json"
+    assert etl_utils.detect_file_type("test.unsupported") == "unsupported"
+
+
+def test_is_supported_file():
+    assert etl_utils.is_supported_file("file.csv") is True
+    assert etl_utils.is_supported_file("file.unsupported") is False
+
+
+def test_ensure_directory_exists(tmp_path):
+    new_dir = tmp_path / "newfolder"
+    result = etl_utils.ensure_directory_exists(new_dir)
+    assert result.exists()
+
+
+if __name__ == "__main__":
+    pytest.main(["-v", __file__])
