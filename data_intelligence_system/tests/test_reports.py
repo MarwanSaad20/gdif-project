@@ -15,7 +15,7 @@ from data_intelligence_system.reports.generators.html_report_generator import HT
 from data_intelligence_system.reports import report_dispatcher
 from data_intelligence_system.reports.report_dispatcher import ReportDispatcher
 from data_intelligence_system.reports.report_data_loader import ReportDataLoader
-from data_intelligence_system.config import report_config
+from data_intelligence_system.config.report_config import REPORT_CONFIG, REPORT_OPTIONS
 from data_intelligence_system.reports.export_utils import (
     ensure_dir,
     save_dataframe_to_csv,
