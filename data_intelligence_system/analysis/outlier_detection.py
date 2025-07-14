@@ -65,8 +65,10 @@ def detect_outliers_isolation_forest(df: pd.DataFrame, contamination=0.05) -> pd
         return pd.Series(False, index=df.index)
 
     model = IsolationForest(contamination=contamination, random_state=42)
-    preds = model.fit_predict(df[numeric_cols])
-    return preds == -1
+    preds = model.fit_predict(df[numeric_cols])  # ndarray من -1 و 1
+    mask = preds == -1  # ndarray من قيم boolean
+    return pd.Series(mask, index=df.index)  # تحويل إلى Series مع نفس الفهرس
+
 
 
 @Timer("تحليل القيم الشاذة الفردي")
