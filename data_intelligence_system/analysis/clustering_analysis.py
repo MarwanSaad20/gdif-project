@@ -8,6 +8,7 @@ import seaborn as sns
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
+from sklearn.cluster import DBSCAN  # استيراد DBSCAN من sklearn مباشرة
 
 from data_intelligence_system.analysis.analysis_utils import (
     ensure_output_dir,
@@ -19,7 +20,7 @@ from data_intelligence_system.analysis.analysis_utils import (
 from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.utils.timer import Timer
 from data_intelligence_system.ml_models.clustering.kmeans import KMeansClusteringModel
-from data_intelligence_system.ml_models.clustering.dbscan import DBSCANClusteringModel
+# إزالة استيراد DBSCANClusteringModel لأنه لم نعد بحاجة له
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
@@ -42,9 +43,8 @@ def apply_kmeans(data: np.ndarray, n_clusters: int = 3) -> tuple[np.ndarray, flo
 
 
 def apply_dbscan(data: np.ndarray, eps: float = 0.5, min_samples: int = 5) -> np.ndarray:
-    model = DBSCANClusteringModel(model_params={'eps': eps, 'min_samples': min_samples})
-    model.fit(pd.DataFrame(data))
-    labels = model.predict(pd.DataFrame(data))
+    model = DBSCAN(eps=eps, min_samples=min_samples)
+    labels = model.fit_predict(data)
     return labels
 
 
