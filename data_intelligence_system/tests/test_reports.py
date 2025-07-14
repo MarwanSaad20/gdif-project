@@ -148,9 +148,9 @@ def test_report_data_loader(sample_df):
 
 # -------- Config tests --------
 def test_report_config_values():
-    assert isinstance(report_config.REPORT_CONFIG, dict)
-    assert "title" in report_config.REPORT_CONFIG  # تم تعديل المفتاح هنا
-    assert isinstance(report_config.REPORT_OPTIONS, dict)
+    assert isinstance(REPORT_CONFIG, dict)
+    assert "report_title" in REPORT_CONFIG
+    assert isinstance(REPORT_OPTIONS, dict)
 
 
 # -------- Export utils tests --------
