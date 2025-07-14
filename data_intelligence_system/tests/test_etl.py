@@ -3,10 +3,10 @@ import pytest
 import pandas as pd
 from pathlib import Path
 
-from etl.extract import extract_from_path
-from etl.transform import clean_data
-from etl.load import save_transformed_data
-from utils.data_loader import load_data
+from data_intelligence_system.etl.extract import extract_from_path
+from data_intelligence_system.etl.transform import clean_data
+from data_intelligence_system.etl.load import save_transformed_data
+from data_intelligence_system.utils.data_loader import load_data
 
 
 @pytest.fixture(scope="function")
@@ -83,5 +83,3 @@ def cleanup_tmp_dir(tmp_path):
     """تنظيف الملفات بعد كل اختبار - يتم تلقائيًا باستخدام tmp_path فلا حاجة لعمل إضافي"""
     yield
     # لا حاجة لتنظيف هنا لأن tmp_path يدير ذلك تلقائيًا
-
-
