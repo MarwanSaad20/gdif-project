@@ -49,7 +49,6 @@ def test_extract_file_success(mock_read_file, sample_raw_csv):
 
 @patch("data_intelligence_system.etl.extract.read_file")
 def test_extract_all_data(mock_read_file, tmp_path):
-    # نجهز مجلد raw مع ملف CSV
     raw_dir = tmp_path / "raw"
     raw_dir.mkdir()
     file_path = raw_dir / "data.csv"
@@ -102,8 +101,8 @@ def test_transform_datasets(sample_dataframe):
 
 @patch("data_intelligence_system.utils.file_manager.save_file")
 @patch("data_intelligence_system.data.processed.validate_clean_data.validate", lambda df: True)
-@patch("data_intelligence_system.data.raw.archive_raw_file.archive_file", lambda path: True)
-def test_save_dataframe(tmp_path, sample_dataframe):
+@patch("data_intelligence_system.data.raw.archive_raw_file.archive_file", new_callable=MagicMock, create=True)
+def test_save_dataframe(mock_archive_file, tmp_path, sample_dataframe):
     output_dir = tmp_path / "processed"
     output_dir.mkdir()
     path = load.save_dataframe(sample_dataframe, output_dir, "testfile", "csv")
@@ -121,9 +120,10 @@ def test_create_output_dir(tmp_path):
 # ---- اختبارات pipeline.py ----
 
 @patch("data_intelligence_system.etl.extract.extract_file")
+@patch("data_intelligence_system.etl.extract.is_valid_file", return_value=True)  # موك للتحقق الملف
 @patch("data_intelligence_system.etl.transform.transform_datasets")
 @patch("data_intelligence_system.utils.file_manager.save_file")
-def test_run_full_pipeline(mock_save_file, mock_transform, mock_extract_file, sample_dataframe):
+def test_run_full_pipeline(mock_save_file, mock_transform, mock_extract_file, mock_is_valid, sample_dataframe):
     mock_extract_file.return_value = {"file.csv": sample_dataframe}
     mock_transform.return_value = [("file.csv", sample_dataframe)]
     mock_save_file.return_value = True
