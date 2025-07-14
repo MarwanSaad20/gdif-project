@@ -56,18 +56,17 @@ def test_register_callbacks_does_not_fail(callback_module):
 @pytest.mark.parametrize("component_func, args", [
     (upload_component.upload_section, []),
 
-    # صححنا تمرير الوسيطات اللازمة للرسم البياني:
     (charts.create_line_chart, [
-        [1, 2, 3],    # x_data وهمي
-        [10, 20, 15]  # y_data وهمي
+        [1, 2, 3],
+        [10, 20, 15]
     ]),
     (charts.create_bar_chart, [
-        ['A', 'B', 'C'],  # categories وهمي
-        [5, 7, 3]         # values وهمي
+        ['A', 'B', 'C'],
+        [5, 7, 3]
     ]),
     (charts.create_pie_chart, [
-        ['Cat1', 'Cat2', 'Cat3'],  # labels وهمي
-        [30, 50, 20]               # values وهمي
+        ['Cat1', 'Cat2', 'Cat3'],
+        [30, 50, 20]
     ]),
 
     (tables.create_data_table, [
@@ -88,7 +87,6 @@ def test_register_callbacks_does_not_fail(callback_module):
         "single",
     ]),
 
-    # صححنا عدد المعطيات لتتناسب مع التوقيع في create_dropdown
     (filters.create_dropdown, [
         "test-dropdown-id",
         [{"label": "خيار 1", "value": "val1"}],
@@ -111,16 +109,15 @@ def test_register_callbacks_does_not_fail(callback_module):
         False,
     ]),
 
-    # تصحيح تمرير الوسيطات لتتناسب مع توقيع create_date_picker
     (filters.create_date_picker, [
         "test-date-picker-id",
-        None,   # start_date
-        None,   # end_date
-        None,   # min_date
-        None,   # max_date
-        None,   # style (يجب أن يكون dict أو None)
-        False,  # clearable
-        "YYYY-MM-DD",  # display_format
+        None,
+        None,
+        None,
+        None,
+        None,
+        False,
+        "YYYY-MM-DD",
     ]),
 
     (indicators.create_kpi_card, [
@@ -171,7 +168,6 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
 
     monkeypatch.setattr(upload_callbacks, "save_uploaded_file", lambda contents, filename: "/tmp/fake_path.csv")
     monkeypatch.setattr(upload_callbacks, "load_data", lambda path: sample_df.copy())
-    # تعديل هنا: التجسس على run_full_pipeline وليس run
     monkeypatch.setattr(upload_callbacks.etl_pipeline, "run_full_pipeline", lambda filepath=None: True)
     monkeypatch.setattr(upload_callbacks, "compute_statistics", lambda df: None)
     monkeypatch.setattr(upload_callbacks.report_dispatcher, "generate_reports", lambda df, args: None)
@@ -200,15 +196,14 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
 
     # اختبار تحليل مع ملف مرفوع
     out3 = upload_callbacks.handle_upload_and_analysis(
-    None,
-    1,
-    None,
-    "/tmp/fake_path.csv",
-    "run-full-analysis-btn"
-)
-assert isinstance(out3, tuple)
-assert any(
-    "تم تنفيذ التحليل الكامل" in (child.children if isinstance(child.children, str) else "")
-    for child in out3[1].children
-)
-
+        None,
+        1,
+        None,
+        "/tmp/fake_path.csv",
+        "run-full-analysis-btn"
+    )
+    assert isinstance(out3, tuple)
+    assert any(
+        "تم تنفيذ التحليل الكامل" in (child.children if isinstance(child.children, str) else "")
+        for child in out3[1].children
+    )
