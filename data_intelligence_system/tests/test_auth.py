@@ -2,6 +2,8 @@ import pytest
 import pandas as pd
 import numpy as np
 import os
+import matplotlib
+matplotlib.use('Agg')  # حل مشكلة TclError في بيئة الاختبارات
 import matplotlib.pyplot as plt
 
 from data_intelligence_system.utils import (
@@ -15,7 +17,6 @@ from data_intelligence_system.utils.visualization import (
     visuals_helpers,
     visuals_interactive
 )
-
 
 # -------- بيانات عامة للاختبارات --------
 
@@ -35,7 +36,6 @@ df_basic = pd.DataFrame({
 # -------- اختبارات data_loader --------
 
 def test_load_data_csv(tmp_path):
-    # أنشئ ملف CSV مؤقت
     path = tmp_path / "test.csv"
     df_basic.to_csv(path, index=False)
     df_loaded = data_loader.load_data(str(path))
@@ -143,7 +143,7 @@ def test_plot_correlation_heatmap_raises_on_no_numeric():
 
 def test_interactive_scatter_matrix_show(monkeypatch):
     called = {}
-    def fake_show():
+    def fake_show(*args, **kwargs):  # تعديل هنا لقبول أي باراميترات
         called["shown"] = True
     monkeypatch.setattr("plotly.graph_objs._figure.Figure.show", fake_show)
     fig = visuals_interactive.interactive_scatter_matrix(df_basic, dimensions=["income", "expenses"])
