@@ -179,12 +179,9 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
     # تصحيح الوصول إلى callback_map للعثور على callback مناسب
     cb_func = None
     for cb in app.callback_map.values():
-        outputs = cb["output"]
-        for out in outputs:
-            if out.get("component_id") == "upload-status":
-                cb_func = cb["callback"]
-                break
-        if cb_func:
+        output = cb["output"]
+        if hasattr(output, "component_id") and output.component_id == "upload-status":
+            cb_func = cb["callback"]
             break
 
     assert cb_func is not None
