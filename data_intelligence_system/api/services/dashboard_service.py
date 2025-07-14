@@ -13,6 +13,10 @@ DEFAULT_FILE = "clean_data.csv"
 
 
 def load_processed_data(filename: Optional[str] = DEFAULT_FILE) -> pd.DataFrame:
+    """
+    Load processed data from CSV.
+    Raises FileNotFoundError if file does not exist.
+    """
     path = PROCESSED_DATA_DIR / filename
     if not path.exists():
         logger.error(f"❌ ملف البيانات غير موجود: {path}")
@@ -26,11 +30,15 @@ def load_processed_data(filename: Optional[str] = DEFAULT_FILE) -> pd.DataFrame:
         raise
 
 
-def launch_dashboard():
+def start_dashboard():
+    """
+    Start interactive dashboard with numeric scatter plot and histogram.
+    """
     df = load_processed_data()
 
-    app = Dash(__name__)
-    app.title = "📊 Data Intelligence Dashboard"
+    if df.empty:
+        logger.error("❌ البيانات فارغة، لا يمكن إطلاق لوحة التحكم.")
+        raise ValueError("البيانات فارغة.")
 
     numeric_cols = df.select_dtypes(include='number').columns.tolist()
     cat_cols = df.select_dtypes(include='object').columns.tolist()
@@ -38,6 +46,9 @@ def launch_dashboard():
     if len(numeric_cols) < 2:
         logger.error("❌ عدد الأعمدة الرقمية أقل من 2، لا يمكن إنشاء المخططات.")
         raise ValueError("عدد الأعمدة الرقمية أقل من 2")
+
+    app = Dash(__name__)
+    app.title = "📊 Data Intelligence Dashboard"
 
     app.layout = html.Div([
         html.H1("لوحة التحكم الذكية", style={"textAlign": "center"}),
@@ -71,36 +82,39 @@ def launch_dashboard():
          Input('color-by', 'value')]
     )
     def update_scatter(x_col: str, y_col: str, color_col: Optional[str]):
+        """
+        Update scatter plot based on selected columns.
+        """
         try:
             logger.info(f"⏳ تحديث scatter: {x_col} مقابل {y_col}, color={color_col}")
             if x_col not in df.columns or y_col not in df.columns:
-                logger.warning(f"⚠️ الأعمدة غير موجودة في البيانات: {x_col}, {y_col}")
-                return {}
-            fig = px.scatter(df, x=x_col, y=y_col, color=color_col,
-                             title=f"{y_col} مقابل {x_col}")
-            return fig
+                logger.warning(f"⚠️ الأعمدة غير موجودة: {x_col}, {y_col}")
+                return px.scatter(title="⚠️ الأعمدة المختارة غير موجودة")
+            return px.scatter(df, x=x_col, y=y_col, color=color_col, title=f"{y_col} مقابل {x_col}")
         except Exception as e:
             logger.error(f"❌ خطأ في تحديث scatter: {e}", exc_info=True)
-            return {}
+            return px.scatter(title="⚠️ خطأ في إنشاء الرسم البياني")
 
     @app.callback(
         Output('histogram', 'figure'),
         Input('dist-column', 'value')
     )
     def update_histogram(col: str):
+        """
+        Update histogram for selected column.
+        """
         try:
             logger.info(f"⏳ تحديث histogram للعمود: {col}")
             if col not in df.columns:
-                logger.warning(f"⚠️ العمود غير موجود في البيانات: {col}")
-                return {}
-            fig = px.histogram(df, x=col, nbins=30, title=f"توزيع {col}", color_discrete_sequence=['teal'])
-            return fig
+                logger.warning(f"⚠️ العمود غير موجود: {col}")
+                return px.histogram(title="⚠️ العمود غير موجود")
+            return px.histogram(df, x=col, nbins=30, title=f"توزيع {col}", color_discrete_sequence=['teal'])
         except Exception as e:
             logger.error(f"❌ خطأ في تحديث histogram: {e}", exc_info=True)
-            return {}
+            return px.histogram(title="⚠️ خطأ في إنشاء الرسم البياني")
 
     app.run(debug=True, port=8050)
 
 
 if __name__ == "__main__":
-    launch_dashboard()
+    start_dashboard()
