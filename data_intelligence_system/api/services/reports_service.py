@@ -1,5 +1,4 @@
 import os
-import logging
 import pandas as pd
 from typing import List
 from datetime import datetime
@@ -10,15 +9,13 @@ from data_intelligence_system.utils.data_loader import load_data
 from data_intelligence_system.analysis.descriptive_stats import generate_descriptive_stats
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.reports.report_dispatcher import generate_report
-from data_intelligence_system.reports.generators.html_report_generator import HTMLReportGenerator
-from data_intelligence_system.config.report_config import REPORT_CONFIG  # ✅ تم إضافة الاستيراد
+from data_intelligence_system.config.report_config import REPORT_CONFIG
 
 logger = get_logger("report.service")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TEMPLATE_DIR = os.path.join(BASE_DIR, "reports", "generators", "templates")
 
-# استخدام القيمة من إعدادات التقرير
 REPORTS_OUTPUT_DIR = str(REPORT_CONFIG["output_dir"])
 
 
