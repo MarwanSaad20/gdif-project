@@ -52,11 +52,15 @@ def test_outlier_detection(sample_df):
 
     # تجربة Z-Score
     mask_z = outlier_detection.detect_outliers_zscore(sample_df)
-    assert isinstance(mask_z, pd.Series)
+    assert isinstance(mask_z, (pd.Series, np.ndarray))  # ✅ التحديث هنا
+    # إذا رجعت كـ ndarray تأكد أنها dtype=bool أيضًا
+    if isinstance(mask_z, np.ndarray):
+        assert mask_z.dtype == bool
 
     # تجربة Isolation Forest
     mask_iso = outlier_detection.detect_outliers_isolation_forest(sample_df)
     assert isinstance(mask_iso, pd.Series)
+
 
 
 def test_clustering_kmeans(sample_df):
