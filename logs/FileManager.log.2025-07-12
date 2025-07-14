@@ -1,0 +1,104 @@
+2025-07-12 07:18:29 — [INFO] — FileManager — ✅ JSON: found list under key 'columns', first items types: [<class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>]
+2025-07-12 07:18:30 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 07:18:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 07:18:32 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 07:18:32 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 07:18:32 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 07:18:32 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 07:18:32 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 07:18:32 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 07:18:32 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 07:18:32 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 07:18:32 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 07:18:32 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 07:18:32 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:15 — [INFO] — FileManager — ✅ JSON: found list under key 'columns', first items types: [<class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>]
+2025-07-12 11:01:16 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 11:01:17 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 11:01:17 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 11:01:17 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 11:01:17 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 11:01:17 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 11:01:17 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 11:01:17 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 11:01:17 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 11:01:17 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 11:01:17 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 11:01:18 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 11:01:18 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:21 — [INFO] — FileManager — ✅ JSON: found list under key 'columns', first items types: [<class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>]
+2025-07-12 15:52:22 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 15:52:23 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 15:52:23 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 15:52:23 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 15:52:23 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 15:52:23 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 15:52:23 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 15:52:23 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 15:52:23 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 15:52:23 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 15:52:23 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 15:52:23 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:23 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:24 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 15:52:24 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:28 — [INFO] — FileManager — ✅ JSON: found list under key 'columns', first items types: [<class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>]
+2025-07-12 16:50:29 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 16:50:30 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 16:50:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>, <class 'dict'>]
+2025-07-12 16:50:31 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 16:50:31 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 16:50:31 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 16:50:31 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 16:50:31 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 16:50:31 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 16:50:31 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 16:50:31 — [INFO] — FileManager — ℹ️ JSON dict fallback: using pd.json_normalize
+2025-07-12 16:50:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [INFO] — FileManager — ✅ JSON root is list, first items types: [<class 'dict'>, <class 'list'>]
+2025-07-12 16:50:31 — [WARNING] — FileManager — ⚠️ Mixed types in root list: [<class 'dict'>, <class 'list'>]
