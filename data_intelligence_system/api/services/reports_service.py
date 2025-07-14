@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import pandas as pd
 from typing import List
 from datetime import datetime
@@ -13,27 +14,32 @@ from data_intelligence_system.config.report_config import REPORT_CONFIG
 
 logger = get_logger("report.service")
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-TEMPLATE_DIR = os.path.join(BASE_DIR, "reports", "generators", "templates")
+BASE_DIR = Path(__file__).resolve().parents[2]
+TEMPLATE_DIR = BASE_DIR / "reports" / "generators" / "templates"
+REPORTS_OUTPUT_DIR = Path(REPORT_CONFIG["output_dir"])
 
-REPORTS_OUTPUT_DIR = str(REPORT_CONFIG["output_dir"])
 
-
-def ensure_dir(path: str):
-    if not os.path.exists(path):
-        os.makedirs(path)
-        logger.info(f"📂 تم إنشاء المجلد: {path}")
+def ensure_dir(path: Path):
+    """Ensure directory exists."""
+    path.mkdir(parents=True, exist_ok=True)
+    logger.info(f"📂 تم التأكد من وجود المجلد: {path}")
 
 
 class ReportsService:
+    """
+    خدمة توليد التقارير بمختلف الصيغ: HTML, PDF, Excel.
+    """
 
     def generate_summary_report(
         self,
         file_path: str,
-        output_dir: str = REPORTS_OUTPUT_DIR,
+        output_dir: Path = REPORTS_OUTPUT_DIR,
         output_format: str = "html",
         title: str = "Data Summary Report"
     ) -> bool:
+        """
+        يولّد تقريرًا موجزًا من ملف بيانات.
+        """
         try:
             df = load_data(file_path)
             if df.empty:
@@ -45,22 +51,15 @@ class ReportsService:
                 logger.warning("⚠️ لم يتم حساب الإحصائيات بنجاح.")
                 return False
 
-            html_path = self._generate_html(file_path, stats, title, output_dir)
+            html_path = self.generate_html(file_path, stats, title, output_dir)
 
             if output_format == "html":
                 return True
 
             elif output_format == "pdf":
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                config = {
-                    "filename": f"summary_report_{timestamp}",
-                    "title": title
-                }
-                generate_report(
-                    data=df,
-                    report_type="pdf",
-                    config=config
-                )
+                config = {"filename": f"summary_report_{timestamp}", "title": title}
+                generate_report(data=df, report_type="pdf", config=config)
                 return True
 
             elif output_format == "excel":
@@ -68,9 +67,10 @@ class ReportsService:
                     pd.DataFrame([stats.get("general_info", {})]),
                     pd.DataFrame(stats.get("numeric_summary", {})).T
                 ]
-                base_name = os.path.splitext(os.path.basename(file_path))[0]
-                excel_filename = f"{base_name}_summary.xlsx"
-                self._export_to_excel(dfs, ["General Info", "Numeric Summary"], excel_filename, output_dir)
+                if len(dfs) != 2:
+                    logger.warning("⚠️ عدد أوراق العمل لا يتطابق مع البيانات.")
+                excel_filename = f"{Path(file_path).stem}_summary.xlsx"
+                self.export_to_excel(dfs, ["General Info", "Numeric Summary"], excel_filename, output_dir)
                 return True
 
             else:
@@ -81,13 +81,14 @@ class ReportsService:
             logger.error(f"❌ فشل في توليد التقرير: {e}", exc_info=True)
             return False
 
-    def _generate_html(self, data_path: str, stats: dict, title: str, output_dir: str) -> str:
+    def generate_html(self, data_path: str, stats: dict, title: str, output_dir: Path) -> Path:
+        """ينشئ تقرير HTML باستخدام القالب."""
         ensure_dir(output_dir)
         try:
-            env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
+            env = Environment(loader=FileSystemLoader(str(TEMPLATE_DIR)))
             template = env.get_template("base_report.html")
         except TemplateNotFound:
-            logger.error(f"❌ قالب التقرير غير موجود في المسار: {TEMPLATE_DIR}")
+            logger.error(f"❌ قالب التقرير غير موجود: {TEMPLATE_DIR}")
             raise
         except Exception as e:
             logger.error(f"❌ خطأ أثناء تحميل القالب: {e}", exc_info=True)
@@ -101,12 +102,9 @@ class ReportsService:
             additional_images=[]
         )
 
-        filename = os.path.splitext(os.path.basename(data_path))[0] + "_report.html"
-        output_path = os.path.join(output_dir, filename)
-
+        output_path = output_dir / f"{Path(data_path).stem}_report.html"
         try:
-            with open(output_path, "w", encoding="utf-8") as f:
-                f.write(html_content)
+            output_path.write_text(html_content, encoding="utf-8")
             logger.info(f"✅ تم إنشاء تقرير HTML: {output_path}")
         except Exception as e:
             logger.error(f"❌ فشل في حفظ تقرير HTML: {e}", exc_info=True)
@@ -114,30 +112,28 @@ class ReportsService:
 
         return output_path
 
-    def _convert_html_to_pdf(self, html_path: str, output_dir: str) -> str:
+    def convert_html_to_pdf(self, html_path: Path, output_dir: Path = REPORTS_OUTPUT_DIR) -> Path:
+        """يحوّل تقرير HTML إلى PDF."""
         ensure_dir(output_dir)
-        basename = os.path.splitext(os.path.basename(html_path))[0] + ".pdf"
-        output_path = os.path.join(output_dir, basename)
-
+        output_path = output_dir / (html_path.stem + ".pdf")
         try:
-            HTML(html_path).write_pdf(output_path)
+            HTML(str(html_path)).write_pdf(str(output_path))
             logger.info(f"📄 تم تحويل HTML إلى PDF: {output_path}")
         except Exception as e:
             logger.error(f"❌ فشل تحويل HTML إلى PDF: {e}", exc_info=True)
             raise
-
         return output_path
 
-    def _export_to_excel(
+    def export_to_excel(
         self,
         dfs: List[pd.DataFrame],
         sheet_names: List[str],
         output_filename: str,
-        output_dir: str
-    ) -> str:
+        output_dir: Path = REPORTS_OUTPUT_DIR
+    ) -> Path:
+        """يصدّر البيانات إلى ملف Excel."""
         ensure_dir(output_dir)
-        output_path = os.path.join(output_dir, output_filename)
-
+        output_path = output_dir / output_filename
         try:
             with pd.ExcelWriter(output_path) as writer:
                 for df, name in zip(dfs, sheet_names):
@@ -146,20 +142,16 @@ class ReportsService:
         except Exception as e:
             logger.error(f"❌ فشل في حفظ تقرير Excel: {e}", exc_info=True)
             raise
-
         return output_path
 
 
 _service_instance = ReportsService()
 
-
 def generate_summary_report(*args, **kwargs):
     return _service_instance.generate_summary_report(*args, **kwargs)
 
-
 def convert_html_to_pdf(html_path: str, output_dir: str = REPORTS_OUTPUT_DIR):
-    return _service_instance._convert_html_to_pdf(html_path, output_dir)
-
+    return _service_instance.convert_html_to_pdf(Path(html_path), Path(output_dir))
 
 def export_to_excel(
     dfs: List[pd.DataFrame],
@@ -167,4 +159,4 @@ def export_to_excel(
     output_filename: str,
     output_dir: str = REPORTS_OUTPUT_DIR
 ):
-    return _service_instance._export_to_excel(dfs, sheet_names, output_filename, output_dir)
+    return _service_instance.export_to_excel(dfs, sheet_names, output_filename, Path(output_dir))
