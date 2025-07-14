@@ -5,6 +5,7 @@ from logging.handlers import TimedRotatingFileHandler
 from typing import Optional
 from pathlib import Path
 
+
 def get_logger(
     name: str = "DataIntelligenceLogger",
     log_dir: str = "logs",
