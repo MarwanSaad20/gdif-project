@@ -162,7 +162,6 @@ from data_intelligence_system.core.data_bindings import df_to_dash_json
 import pandas as pd
 
 def test_unified_upload_and_analysis_callback(monkeypatch):
-    # بيانات تجريبية
     sample_df = pd.DataFrame({
         "category": ["A", "B", "A"],
         "date": pd.to_datetime(["2025-01-01", "2025-01-02", "2025-01-03"]),
@@ -172,11 +171,9 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
 
     json_data = df_to_dash_json(sample_df)
 
-    # تسجيل الكولباكات
     app = dashboard_app.app
     upload_callbacks.register_upload_callbacks(app)
 
-    # تصحيح الوصول إلى callback_map للعثور على callback مناسب
     cb_func = None
     for cb in app.callback_map.values():
         outputs = cb["output"]
@@ -200,11 +197,15 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
 
     # اختبار رفع ملف
     out = cb_func("data:text/csv;base64,FAKE_BASE64_ENCODED", None, "test.csv", None)
+    assert isinstance(out, tuple)
+    assert len(out) == 5
     assert isinstance(out[0], html.Div)
     assert "تم رفع الملف" in out[0].children or "⚠️" in out[0].children
 
     # اختبار تحليل بدون ملف (يجب تحذير)
     out2 = cb_func(None, 1, None, None)
+    assert isinstance(out2, tuple)
+    assert len(out2) == 5
     assert isinstance(out2[1], html.Div)
     assert "يرجى رفع ملف" in out2[1].children
 
@@ -215,5 +216,7 @@ def test_unified_upload_and_analysis_callback(monkeypatch):
     monkeypatch.setattr(upload_callbacks.report_dispatcher, "generate_reports", lambda df, args: None)
 
     out3 = cb_func(None, 1, None, "/tmp/fake_path.csv")
+    assert isinstance(out3, tuple)
+    assert len(out3) == 5
     assert isinstance(out3[1], html.Div)
     assert "تم تنفيذ التحليل الكامل" in out3[1].children
