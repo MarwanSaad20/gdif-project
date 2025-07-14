@@ -2,12 +2,12 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Literal, Any
-import logging
 
-# تحديث الاستيراد ليكون من جذر المشروع
+# ✅ استخدام اللوجر المركزي
+from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.api.services import analysis_service
 
-logger = logging.getLogger("api.analysis")
+logger = get_logger("api.analysis")
 
 router = APIRouter(
     prefix="/analysis",
