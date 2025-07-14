@@ -128,10 +128,10 @@ def test_create_output_dir(tmp_path):
 
 # ---- اختبارات pipeline.py ----
 
-@patch("data_intelligence_system.etl.extract.extract_file")
-@patch("data_intelligence_system.etl.extract.is_valid_file", return_value=True)
-@patch("data_intelligence_system.etl.transform.transform_datasets")
-@patch("data_intelligence_system.utils.file_manager.save_file")
+@patch("data_intelligence_system.etl.pipeline.extract_file")
+@patch("data_intelligence_system.etl.pipeline.is_valid_file", return_value=True)
+@patch("data_intelligence_system.etl.pipeline.transform_datasets")
+@patch("data_intelligence_system.etl.pipeline.save_file")
 def test_run_full_pipeline(mock_save_file, mock_transform, mock_extract_file, mock_is_valid, sample_dataframe):
     mock_extract_file.return_value = {"file.csv": sample_dataframe}
     mock_transform.return_value = [("file.csv", sample_dataframe)]
