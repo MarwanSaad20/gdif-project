@@ -1,131 +1,81 @@
-import os
-import time
+"""
+✅ Tests for GDIF Dashboard (app, layout, and callbacks)
+"""
+
 import pytest
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium import webdriver
-from socket import socket, AF_INET, SOCK_STREAM
+from dash import html
+from data_intelligence_system.dashboard import app as dashboard_app
+from data_intelligence_system.dashboard.layouts.main_layout import get_layout
+from data_intelligence_system.dashboard.callbacks import layout_callbacks
 
-# استيراد كل مكونات الواجهة من جذر المشروع
-from data_intelligence_system.dashboard import app
-from data_intelligence_system.dashboard.callbacks import (
-    kpi_callbacks,
-    layout_callbacks,
-    filters_callbacks,
-    charts_callbacks,
-    export_callbacks
-)
-from data_intelligence_system.dashboard.layouts import (
-    main_layout,
-    kpi_cards,
-    charts_placeholders,
-    stats_summary,
-    theme
-)
-from data_intelligence_system.dashboard.components import (
-    upload_component,
-    charts,
-    tables,
-    filters,
-    indicators
-)
 
-CHROMEDRIVER_PATH = os.getenv(
-    "CHROMEDRIVER_PATH",
-    r"C:\Users\PC\.wdm\drivers\chromedriver\win64\138.0.7204.49\chromedriver-win32\chromedriver.exe"
-)
+def test_app_creation():
+    """
+    Test that the Dash app is created and has correct properties.
+    """
+    app = dashboard_app.app
+    assert app is not None
+    assert hasattr(app, 'layout')
+    assert app.title is not None
+    assert isinstance(app.layout, html.Div)
 
-@pytest.fixture(scope="session")
-def browser_options():
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--window-size=1920,1080")
-    return options
 
-def wait_for_port(host: str, port: int, timeout=15):
-    """انتظار حتى يصبح السيرفر جاهز (البورت مفتوح للاستماع)."""
-    start_time = time.time()
-    while True:
-        try:
-            with socket(AF_INET, SOCK_STREAM) as sock:
-                result = sock.connect_ex((host, port))
-                if result == 0:
-                    return True
-        except Exception:
-            pass
-        if time.time() - start_time > timeout:
-            raise TimeoutError(f"لم يفتح المنفذ {port} على {host} خلال {timeout} ثانية.")
-        time.sleep(0.5)
+def test_layout_structure():
+    """
+    Test that get_layout returns a Div with expected children.
+    """
+    layout = get_layout()
+    assert isinstance(layout, html.Div)
+    # يجب أن يحتوي على dcc.Store و dbc.Container على الأقل
+    store_ids = [
+        "store_raw_data", "store_filtered_data", "store_filtered_multi",
+        "store_window_size", "store_raw_data_path", "store_analysis_done"
+    ]
+    found_ids = [comp.id for comp in layout.children if hasattr(comp, 'id')]
+    for store_id in store_ids:
+        assert store_id in found_ids
 
-@pytest.fixture(scope="session")
-def dash_app():
-    # ارجاع app Dash
-    return app.app
 
-@pytest.fixture(scope="session")
-def dash_driver(browser_options, dash_app):
-    from threading import Thread
+def test_register_layout_callbacks(tmp_path):
+    """
+    Test that registering layout callbacks does not raise exceptions
+    and adds entries to app.callback_map.
+    """
+    app = dashboard_app.app
+    num_callbacks_before = len(app.callback_map)
 
-    service = ChromeService(executable_path=CHROMEDRIVER_PATH)
-    driver = webdriver.Chrome(service=service, options=browser_options)
+    # Call the registration function
+    layout_callbacks.register_layout_callbacks(app)
 
-    # تشغيل سيرفر Dash داخل Thread كـ daemon
-    def run_dash():
-        dash_app.run(debug=False, use_reloader=False, port=8050, threaded=True)
+    num_callbacks_after = len(app.callback_map)
+    assert num_callbacks_after >= num_callbacks_before + 1  # تأكد تمت إضافة كولباكات
 
-    thread = Thread(target=run_dash, daemon=True)
-    thread.start()
 
-    # انتظر حتى يفتح السيرفر المنفذ 8050 (جاهزية)
-    wait_for_port("127.0.0.1", 8050, timeout=20)
+@pytest.mark.parametrize("current_display,new_display,expected_width", [
+    ("block", "none", "0px"),
+    ("none", "block", "250px"),
+])
+def test_toggle_sidebar_logic(current_display, new_display, expected_width):
+    """
+    Test the toggle_sidebar logic in isolation.
+    """
+    # استدعاء الدالة داخليًا بدون app.callback
+    current_style = {'display': current_display, 'width': '250px'}
+    result = layout_callbacks.toggle_sidebar(1, current_style)
+    assert isinstance(result, dict)
+    assert result['display'] == new_display
+    assert result['width'] == expected_width
 
-    yield driver
 
-    driver.quit()
+def test_enable_analysis_button_if_data_uploaded():
+    """
+    Test enabling the analysis button when a file is uploaded.
+    """
+    # مع وجود path -> يجب تفعيل الزر
+    path = "/tmp/data.csv"
+    enabled = layout_callbacks.enable_analysis_button_if_data_uploaded(path)
+    assert enabled is False
 
-class TestDashboardApp:
-    BASE_URL = "http://localhost:8050"
-
-    def wait_for_element(self, driver, by, identifier, timeout=10):
-        return WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located((by, identifier))
-        )
-
-    def test_app_renders(self, dash_driver):
-        dash_driver.get(self.BASE_URL)
-        WebDriverWait(dash_driver, 10).until(EC.title_contains("نظام تحليل البيانات العام"))
-        assert "نظام تحليل البيانات العام" in dash_driver.title
-
-        expected_ids = [
-            "app-title",
-            "refresh-button",
-            "data-selector",
-            "output-area",
-            "status-message",
-        ]
-
-        for eid in expected_ids:
-            elem = self.wait_for_element(dash_driver, By.ID, eid)
-            assert elem is not None, f"❌ العنصر {eid} غير موجود في الصفحة"
-
-    def test_callbacks_execution(self, dash_driver):
-        dash_driver.get(self.BASE_URL)
-
-        button = self.wait_for_element(dash_driver, By.ID, "refresh-button")
-        assert button is not None
-        button.click()
-
-        status = self.wait_for_element(dash_driver, By.ID, "status-message")
-        assert "تم التحديث بنجاح" in status.text.strip()
-
-    def test_main_graph_rendered(self, dash_driver):
-        dash_driver.get(self.BASE_URL)
-
-        graph = self.wait_for_element(dash_driver, By.ID, "main-graph")
-        assert graph is not None
-        inner_html = graph.get_attribute("innerHTML").lower()
-        assert "plotly" in inner_html or "svg" in inner_html
+    # بدون path -> يبقى معطل
+    enabled = layout_callbacks.enable_analysis_button_if_data_uploaded(None)
+    assert enabled is True
