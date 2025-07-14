@@ -3,18 +3,11 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
-try:
-    from analysis.descriptive_stats import compute_statistics
-    from analysis.correlation_analysis import compute_correlations
-    from analysis.outlier_detection import detect_outliers_iqr
-    from analysis.clustering_analysis import apply_kmeans, apply_dbscan
-    from analysis.target_relation_analysis import analyze_target_relation
-except ImportError:
-    from data_intelligence_system.analysis.descriptive_stats import compute_statistics
-    from data_intelligence_system.analysis.correlation_analysis import compute_correlations
-    from data_intelligence_system.analysis.outlier_detection import detect_outliers_iqr
-    from data_intelligence_system.analysis.clustering_analysis import apply_kmeans, apply_dbscan
-    from data_intelligence_system.analysis.target_relation_analysis import analyze_target_relation
+from data_intelligence_system.analysis.descriptive_stats import compute_statistics
+from data_intelligence_system.analysis.correlation_analysis import compute_correlations
+from data_intelligence_system.analysis.outlier_detection import detect_outliers_iqr
+from data_intelligence_system.analysis.clustering_analysis import apply_kmeans, apply_dbscan
+from data_intelligence_system.analysis.target_relation_analysis import analyze_target_relation
 
 
 @pytest.fixture
