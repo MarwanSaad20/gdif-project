@@ -58,7 +58,9 @@ def test_register_callbacks_does_not_fail(callback_module):
     Ensure that register_*_callbacks functions do not raise exceptions.
     """
     app = dashboard_app.app
-    register_func = getattr(callback_module, "register_" + callback_module.__name__.split(".")[-1].replace("_callbacks", "") + "_callbacks", None)
+    # Dynamically build register function name, e.g. 'register_layout_callbacks'
+    register_func_name = "register_" + callback_module.__name__.split(".")[-1].replace("_callbacks", "") + "_callbacks"
+    register_func = getattr(callback_module, register_func_name, None)
     if register_func:
         try:
             register_func(app)
@@ -75,14 +77,16 @@ def test_register_callbacks_does_not_fail(callback_module):
     filters.create_dropdown,
     filters.create_slider,
     filters.create_date_picker,
-    indicators.create_indicator_card
+    indicators.create_kpi_card  # صححت الاسم ليتطابق مع الموجود في indicators.py
 ])
 def test_components_can_be_created(component_func):
     """
     Test that component factory functions return non-null Dash components.
     """
     try:
-        result = component_func(*([None] * component_func.__code__.co_argcount))
+        # تمرير None للمعاملات حسب عدد معلمات الدالة
+        args = [None] * component_func.__code__.co_argcount
+        result = component_func(*args)
         assert result is not None
     except Exception as e:
         pytest.fail(f"{component_func.__name__} raised exception: {e}")
