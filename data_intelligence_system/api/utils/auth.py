@@ -8,7 +8,7 @@ from data_intelligence_system.utils.logger import get_logger
 logger = get_logger("api.auth")
 
 # إعدادات
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "MarwanSaad2004447")  # المفتاح السري الافتراضي
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "MarwanSaad200447")  # المفتاح السري الافتراضي
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_SECONDS = 3600  # 1 ساعة
 
