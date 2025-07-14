@@ -12,7 +12,6 @@ from data_intelligence_system.analysis.outlier_detection import run_outlier_dete
 from data_intelligence_system.analysis.clustering_analysis import run_clustering
 from data_intelligence_system.analysis.target_relation_analysis import run_target_relation_analysis
 
-# ✅ استيراد المسار الصحيح من paths_config
 from data_intelligence_system.config.paths_config import CLEAN_DATA_FILE
 
 logger = get_logger("analysis.service")
@@ -86,7 +85,6 @@ class AnalysisService:
 if __name__ == "__main__":
     logger = get_logger("analysis.cli", reset=True)
 
-    # ✅ استخدام CLEAN_DATA_FILE مباشرةً
     data_file_path = str(CLEAN_DATA_FILE)
 
     if not os.path.exists(data_file_path):
