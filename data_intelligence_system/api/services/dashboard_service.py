@@ -5,7 +5,6 @@ import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 
 from data_intelligence_system.utils.logger import get_logger
-# ✅ استيراد المسار الصحيح من paths_config
 from data_intelligence_system.config.paths_config import PROCESSED_DATA_DIR
 
 logger = get_logger("dashboard.service")
