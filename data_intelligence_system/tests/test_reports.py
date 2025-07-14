@@ -87,7 +87,7 @@ def test_convert_html_to_pdf_invalid(invalid_html):
     يجب أن ترجع الدالة None أو False عند المدخلات غير الصالحة.
     """
     result = reports_service.convert_html_to_pdf(invalid_html)
-    assert result in (None, False)
+    assert result is None or result is False
 
 
 def test_export_to_excel(sample_dfs, tmp_path: Path):
@@ -120,5 +120,5 @@ def test_export_to_excel_empty(empty_dfs):
         result = reports_service.export_to_excel(dfs, sheets, "empty.xlsx")
     except Exception:
         result = False
-    # قد ترجع مسار، أو False، أو ترفع استثناء => نتحقق أنها لا ترجع مسار لملف فعلي
+    # قد ترجع None، أو False، أو ترفع استثناء => نتحقق أنها لا ترجع مسار لملف فعلي
     assert result is False or result is None or not (isinstance(result, (str, Path)) and Path(result).exists())
