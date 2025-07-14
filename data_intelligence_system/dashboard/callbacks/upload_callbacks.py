@@ -16,7 +16,7 @@ logger = get_logger("UploadCallbacks")
 
 def handle_upload_and_analysis(upload_contents, run_analysis_clicks, filename, last_uploaded_path, triggered_id):
     # منطق الـ callback (فصلته هنا للاختبار)
-    
+
     # 📁 [1] عملية رفع الملف
     if triggered_id == "upload-data":
         if not upload_contents or not filename:
@@ -72,20 +72,16 @@ def handle_upload_and_analysis(upload_contents, run_analysis_clicks, filename, l
 
         try:
             logger.info(f"🚀 بدء التحليل الكامل من: {last_uploaded_path}")
+
+            # تشغيل خط أنابيب ETL الكامل باستخدام المسار وليس DataFrame
+            success = etl_pipeline.run_full_pipeline(filepath=last_uploaded_path)
+
+            if not success:
+                raise Exception("فشل في تنفيذ خط أنابيب ETL")
+
+            # بعد نجاح ETL، نقرأ الملف المعالج ونستمر بالتحليل الإحصائي والتقارير
             df = load_data(str(last_uploaded_path))
             df = fill_missing_values(df)  # ✅ تنظيف قبل التحليل
-
-            if df.empty:
-                return (
-                    dash.no_update,
-                    html.Div("⚠️ الملف المرفوع فارغ.", style={"color": "orange"}),
-                    None,
-                    last_uploaded_path,
-                    dash.no_update,
-                )
-
-            etl_pipeline.run(df)
-            logger.info("✅ ETL اكتمل بنجاح.")
 
             compute_statistics(df)
             logger.info("📊 التحليل الإحصائي تم بنجاح.")
