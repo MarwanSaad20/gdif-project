@@ -2,16 +2,15 @@ from fastapi import APIRouter, HTTPException, status, Query
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 from typing import Optional, Literal, Dict
-import logging
 import os
 
-# ✅ استيراد إعدادات التقرير من config
+# ✅ استيراد اللوجر المركزي وإعدادات التقرير من جذر المشروع
+from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.config.report_config import REPORT_CONFIG
 from data_intelligence_system.api.services import reports_service
 
-logger = logging.getLogger("api.reports")
+logger = get_logger("api.reports")
 
-# ✅ استخدام المسار الرسمي من إعدادات التقرير
 SAFE_REPORTS_DIR = str(REPORT_CONFIG["output_dir"])
 
 router = APIRouter(
