@@ -8,10 +8,7 @@ from data_intelligence_system.utils.logger import get_logger
 logger = get_logger("api.auth")
 
 # إعدادات
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-if not SECRET_KEY or SECRET_KEY == "your_secret_key_123":
-    raise RuntimeError("⚠️ يجب تعيين متغير البيئة JWT_SECRET_KEY بقيمة آمنة في بيئة الإنتاج!")
-
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "MarwanSaad2004447")  # المفتاح السري الافتراضي
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_SECONDS = 3600  # 1 ساعة
 
