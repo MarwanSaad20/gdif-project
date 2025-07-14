@@ -11,7 +11,7 @@ paths:
   processed_data: data_intelligence_system/data/processed/
   reports: data_intelligence_system/reports/output/
   models: data_intelligence_system/ml_models/
-  logs: logs/
+  logs: data_intelligence_system/logs/
 
 dashboard:
   theme: dark
