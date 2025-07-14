@@ -1,20 +1,12 @@
-# data_intelligence_system/database/session.py
-
-import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 
+# ✅ استيراد مطلق من جذر المشروع
 from data_intelligence_system.config.env_config import env_namespace
+from data_intelligence_system.utils.logger import get_logger
 
 # ======================== إعدادات تسجيل الدخول ==========================
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-if not logger.hasHandlers():
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+logger = get_logger("database.session")
 
 # ======================== إعداد رابط قاعدة البيانات ==========================
 DATABASE_URL = env_namespace.DATABASE_URL
