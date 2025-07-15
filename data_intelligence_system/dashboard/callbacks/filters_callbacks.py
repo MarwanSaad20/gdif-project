@@ -36,19 +36,29 @@ def register_filters_callbacks(app):
     )
     def filter_by_category_and_date(category_value, start_date, end_date, stored_json):
         try:
+            # تحقق من المدخلات
+            if not category_value and not start_date and not end_date:
+                logger.info("ℹ️ لم يتم تحديد أي فلاتر.")
+                return df_to_dash_json(None)
+            
             df = _validate_df(stored_json, required_columns=['category', 'date'])
+            
             if category_value:
                 df = df[df['category'].astype(str) == str(category_value)]
-            df = filter_data_by_date(df, start_date=start_date, end_date=end_date, date_column='date')
+                
+            if start_date or end_date:  # تحقق من تواريخ
+                df = filter_data_by_date(df, start_date=start_date, end_date=end_date, date_column='date')
+                
             if df.empty:
                 logger.info("ℹ️ لا توجد بيانات بعد الفلترة.")
-                return df_to_dash_json(None)
+                return df_to_dash_json({"message": "لا توجد بيانات بعد الفلترة."})
+            
             return df_to_dash_json(df)
         except PreventUpdate:
             raise
         except Exception as e:
             logger.exception(f"❌ خطأ أثناء الفلترة حسب الفئة والتاريخ: {e}")
-            return df_to_dash_json(None)
+            return df_to_dash_json({"message": "حدث خطأ أثناء الفلترة."})
 
     @app.callback(
         Output('filter-dropdown-category', 'options'),
@@ -93,19 +103,19 @@ def register_filters_callbacks(app):
     def filter_by_type_multi(selected, stored_json):
         if not selected:
             logger.info("⚠️ لا توجد قيم محددة للنوع.")
-            return df_to_dash_json(None)
+            return df_to_dash_json({"message": "لم يتم تحديد أي نوع للفلترة."})
         try:
             df = _validate_df(stored_json, required_columns=['type'])
             filtered = df[df['type'].isin(selected)]
             if filtered.empty:
                 logger.info("ℹ️ الفلترة حسب النوع لم تُرجع بيانات.")
-                return df_to_dash_json(None)
+                return df_to_dash_json({"message": "لم تُرجع الفلترة حسب النوع أي بيانات."})
             return df_to_dash_json(filtered)
         except PreventUpdate:
             raise
         except Exception as e:
             logger.warning(f"⚠️ فشل الفلترة حسب النوع: {e}", exc_info=True)
-            return df_to_dash_json(None)
+            return df_to_dash_json({"message": "حدث خطأ أثناء الفلترة حسب النوع."})
 
     @app.callback(
         Output('filtered-multi-count', 'children'),
