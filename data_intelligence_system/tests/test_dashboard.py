@@ -204,16 +204,22 @@ def test_components_functions_return_elements():
 
 
 def test_init_py_files_exist():
-    base_path = pathlib.Path(__file__).parent.parent / "data_intelligence_system" / "dashboard"
+    # __file__ داخل data_intelligence_system/tests/
+    # نرجع للـ parent مرة واحدة فقط للوصول إلى جذر المشروع data_intelligence_system
+    base_path = pathlib.Path(__file__).parent.parent  # يعطينا مجلد data_intelligence_system
+
+    dashboard_path = base_path / "dashboard"  # مجلد dashboard داخل data_intelligence_system
+
     dirs_to_check = [
-        base_path / "callbacks",
-        base_path / "components",
-        base_path / "layouts",
+        dashboard_path / "callbacks",
+        dashboard_path / "components",
+        dashboard_path / "layouts",
     ]
     for d in dirs_to_check:
         init_file = d / "__init__.py"
         print(f"Checking __init__.py in: {init_file}")  # طباعة مسار للتحقق
         assert init_file.exists(), f"مفقود __init__.py في {d}"
+
 
 
 def test_app_instance_exists():
