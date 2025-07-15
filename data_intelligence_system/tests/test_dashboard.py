@@ -4,7 +4,11 @@ from dash import Dash, html
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.dashboard.callbacks import register_callbacks
-from data_intelligence_system.dashboard.callbacks.kpi_callbacks import register_kpi_callbacks, parse_data, update_kpi_cards_func
+from data_intelligence_system.dashboard.callbacks.kpi_callbacks import (
+    register_kpi_callbacks,
+    parse_data,
+    update_kpi_cards_func  # دالة معالجة منفصلة ليست callback مباشرة
+)
 from data_intelligence_system.dashboard.callbacks.layout_callbacks import register_layout_callbacks
 from data_intelligence_system.dashboard.callbacks.filters_callbacks import register_filters_callbacks
 from data_intelligence_system.dashboard.callbacks.charts_callbacks import register_charts_callbacks
@@ -12,7 +16,7 @@ from data_intelligence_system.dashboard.callbacks.export_callbacks import regist
 from data_intelligence_system.dashboard.callbacks.upload_callbacks import register_upload_callbacks
 
 from data_intelligence_system.dashboard.layouts.main_layout import get_layout, build_upload_section
-from data_intelligence_system.dashboard.layouts.kpi_cards import build_kpi_cards
+from data_intelligence_system.dashboard.layouts.kpi_cards import generate_kpi_cards_layout  # تصحيح اسم الدالة
 from data_intelligence_system.dashboard.layouts.charts_placeholders import forecast_chart
 from data_intelligence_system.dashboard.layouts.stats_summary import stats_summary_card
 from data_intelligence_system.dashboard.layouts.theme import Theme
@@ -24,6 +28,7 @@ from data_intelligence_system.dashboard.components.indicators import create_indi
 
 from data_intelligence_system.dashboard.app import app
 
+
 @pytest.fixture
 def sample_df():
     data = {
@@ -34,27 +39,33 @@ def sample_df():
     }
     return pd.DataFrame(data)
 
+
 @pytest.fixture
 def sample_json(sample_df):
     return sample_df.to_json(orient="split")
+
 
 def test_parse_data_valid(sample_json):
     df = parse_data(sample_json)
     assert not df.empty
     assert "numeric_col" in df.columns
 
+
 def test_parse_data_empty():
     with pytest.raises(PreventUpdate):
         parse_data("")
+
 
 def test_parse_data_invalid():
     with pytest.raises(PreventUpdate):
         parse_data("this is not json")
 
+
 def test_update_kpi_cards_func(sample_df):
     result = update_kpi_cards_func(sample_df)
     assert isinstance(result, tuple)
     assert len(result) == 5
+
 
 def test_register_all_callbacks_no_error():
     test_app = Dash(__name__)
@@ -63,6 +74,7 @@ def test_register_all_callbacks_no_error():
     register_callbacks(test_app)
 
     assert True  # تمرير إذا لم تحدث أخطاء
+
 
 def test_layout_structure():
     layout = get_layout()
@@ -73,9 +85,11 @@ def test_layout_structure():
     }
     assert required_ids.issubset(store_ids)
 
+
 def test_stats_summary_card_elements():
     card = stats_summary_card()
     found_pre = False
+
     def find_pre(children):
         nonlocal found_pre
         if isinstance(children, list):
@@ -85,16 +99,20 @@ def test_stats_summary_card_elements():
             found_pre = True
         elif hasattr(children, "children"):
             find_pre(children.children)
+
     find_pre(card.children)
     assert found_pre
+
 
 def test_theme_colors():
     assert isinstance(Theme.PRIMARY_COLOR, str)
     assert Theme.BACKGROUND_COLOR.startswith("#")
 
+
 def test_build_upload_section_contains_elements():
     section = build_upload_section()
     children_ids = []
+
     def gather_ids(children):
         if isinstance(children, list):
             for c in children:
@@ -103,13 +121,16 @@ def test_build_upload_section_contains_elements():
             children_ids.append(children.id)
         elif hasattr(children, "children"):
             gather_ids(children.children)
+
     gather_ids(section.children)
     assert "upload-status" in children_ids
+
 
 def test_forecast_chart_type():
     chart = forecast_chart()
     assert hasattr(chart, "id")
     assert chart.id == "forecast-chart"
+
 
 def test_components_functions_return_elements():
     dd = create_dropdown("test-dropdown", options=[{"label": "A", "value": "a"}], placeholder="اختر")
@@ -131,9 +152,11 @@ def test_components_functions_return_elements():
     assert data_table.id == "table-test"
     assert indicator.id == "indicator-test"
 
+
 import importlib.util
 import sys
 from pathlib import Path
+
 
 def test_init_py_files_exist():
     base_path = Path(__file__).parent.parent / "data_intelligence_system" / "dashboard"
@@ -145,6 +168,7 @@ def test_init_py_files_exist():
     for d in dirs_to_check:
         init_file = d / "__init__.py"
         assert init_file.exists(), f"مفقود __init__.py في {d}"
+
 
 def test_app_instance_exists():
     assert hasattr(app, "layout")
