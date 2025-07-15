@@ -1,9 +1,7 @@
 import pytest
 import pandas as pd
-import pathlib
 from dash import Dash
 from dash.exceptions import PreventUpdate
-from plotly.graph_objs import Figure
 
 from data_intelligence_system.dashboard.callbacks import register_callbacks
 from data_intelligence_system.dashboard.callbacks.kpi_callbacks import (
@@ -29,6 +27,8 @@ from data_intelligence_system.dashboard.components.tables import create_data_tab
 from data_intelligence_system.dashboard.components.indicators import create_kpi_card
 
 from data_intelligence_system.dashboard.app import app
+
+import pathlib
 
 
 @pytest.fixture
@@ -73,6 +73,38 @@ def test_register_all_callbacks_no_error():
     test_app = Dash(__name__)
     test_app.layout = get_layout()
     register_callbacks(test_app)
+    assert True
+
+
+# اختبارات تسجيل callbacks بشكل مستقل لكل ملف callback
+def test_register_kpi_callbacks_no_error():
+    app = Dash(__name__)
+    register_kpi_callbacks(app)
+    assert True
+
+def test_register_layout_callbacks_no_error():
+    app = Dash(__name__)
+    register_layout_callbacks(app)
+    assert True
+
+def test_register_filters_callbacks_no_error():
+    app = Dash(__name__)
+    register_filters_callbacks(app)
+    assert True
+
+def test_register_charts_callbacks_no_error():
+    app = Dash(__name__)
+    register_charts_callbacks(app)
+    assert True
+
+def test_register_export_callbacks_no_error():
+    app = Dash(__name__)
+    register_export_callbacks(app)
+    assert True
+
+def test_register_upload_callbacks_no_error():
+    app = Dash(__name__)
+    register_upload_callbacks(app)
     assert True
 
 
@@ -158,17 +190,15 @@ def test_components_functions_return_elements():
     assert dd.id == "test-dropdown"
     assert slider.id == "test-slider"
     assert datepicker.id == "test-date-picker"
+    assert line_chart.id == "line-chart-test"
+    assert bar_chart.id == "bar-chart-test"
+    assert pie_chart.id == "pie-chart-test"
     assert data_table.id == "table-test"
     assert indicator.id == "indicator-test"
 
-    # تحقق أن الرسوم البيانية ترجع كائن Figure
-    assert isinstance(line_chart, Figure)
-    assert isinstance(bar_chart, Figure)
-    assert isinstance(pie_chart, Figure)
-
 
 def test_init_py_files_exist():
-    base_path = pathlib.Path(__file__).parents[1] / "data_intelligence_system" / "dashboard"
+    base_path = pathlib.Path(__file__).parent.parent / "data_intelligence_system" / "dashboard"
     dirs_to_check = [
         base_path / "callbacks",
         base_path / "components",
