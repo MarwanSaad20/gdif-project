@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from dash import Dash, html
+from dash import Dash
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.dashboard.callbacks import register_callbacks
@@ -27,6 +27,8 @@ from data_intelligence_system.dashboard.components.tables import create_data_tab
 from data_intelligence_system.dashboard.components.indicators import create_kpi_card
 
 from data_intelligence_system.dashboard.app import app
+
+import pathlib
 
 
 @pytest.fixture
@@ -71,6 +73,38 @@ def test_register_all_callbacks_no_error():
     test_app = Dash(__name__)
     test_app.layout = get_layout()
     register_callbacks(test_app)
+    assert True
+
+
+# اختبارات تسجيل callbacks بشكل مستقل لكل ملف callback
+def test_register_kpi_callbacks_no_error():
+    app = Dash(__name__)
+    register_kpi_callbacks(app)
+    assert True
+
+def test_register_layout_callbacks_no_error():
+    app = Dash(__name__)
+    register_layout_callbacks(app)
+    assert True
+
+def test_register_filters_callbacks_no_error():
+    app = Dash(__name__)
+    register_filters_callbacks(app)
+    assert True
+
+def test_register_charts_callbacks_no_error():
+    app = Dash(__name__)
+    register_charts_callbacks(app)
+    assert True
+
+def test_register_export_callbacks_no_error():
+    app = Dash(__name__)
+    register_export_callbacks(app)
+    assert True
+
+def test_register_upload_callbacks_no_error():
+    app = Dash(__name__)
+    register_upload_callbacks(app)
     assert True
 
 
@@ -163,11 +197,8 @@ def test_components_functions_return_elements():
     assert indicator.id == "indicator-test"
 
 
-from pathlib import Path
-
-
 def test_init_py_files_exist():
-    base_path = Path(__file__).parent.parent / "data_intelligence_system" / "dashboard"
+    base_path = pathlib.Path(__file__).parent.parent / "data_intelligence_system" / "dashboard"
     dirs_to_check = [
         base_path / "callbacks",
         base_path / "components",
