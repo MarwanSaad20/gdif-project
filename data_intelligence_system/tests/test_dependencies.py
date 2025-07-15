@@ -1,5 +1,3 @@
-# data_intelligence_system/tests/test_dependencies.py
-
 import pytest
 from unittest.mock import patch, MagicMock
 from fastapi import HTTPException
@@ -143,8 +141,8 @@ def etl_service():
     return ETLService()
 
 
-@patch("data_intelligence_system.etl.service.load_data")
-@patch("data_intelligence_system.etl.service.extract_file")
+@patch("data_intelligence_system.etl.extract.load_data")
+@patch("data_intelligence_system.etl.extract.extract_file")
 def test_etl_extract_use_load_data(mock_extract_file, mock_load_data, etl_service):
     extract_params = MagicMock(filters={"use_load_data": True})
     mock_load_data.return_value = pd.DataFrame({"a": [1, 2]})
@@ -154,7 +152,7 @@ def test_etl_extract_use_load_data(mock_extract_file, mock_load_data, etl_servic
     mock_extract_file.assert_not_called()
 
 
-@patch("data_intelligence_system.etl.service.extract_file")
+@patch("data_intelligence_system.etl.extract.extract_file")
 def test_etl_extract_no_params(mock_extract, etl_service):
     mock_extract.return_value = pd.DataFrame({"a": [1, 2]})
     df = etl_service._extract("dummy_source.csv", None)
@@ -162,7 +160,7 @@ def test_etl_extract_no_params(mock_extract, etl_service):
     mock_extract.assert_called_once()
 
 
-@patch("data_intelligence_system.etl.service.transform_datasets")
+@patch("data_intelligence_system.etl.transform.transform_datasets")
 def test_etl_transform_success(mock_transform, etl_service):
     mock_transform.return_value = [("name", pd.DataFrame({"a": [1]}))]
     result = etl_service._transform([("name", pd.DataFrame({"a": [1]}))], None)
@@ -170,7 +168,7 @@ def test_etl_transform_success(mock_transform, etl_service):
     mock_transform.assert_called_once()
 
 
-@patch("data_intelligence_system.etl.service.save_multiple_datasets")
+@patch("data_intelligence_system.etl.load.save_multiple_datasets")
 def test_etl_load_success(mock_save, etl_service):
     mock_save.return_value = True
     load_params = MagicMock(target_table="test_table", batch_size=100)
