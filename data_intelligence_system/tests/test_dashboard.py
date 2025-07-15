@@ -1,18 +1,12 @@
 import pytest
 import pandas as pd
-from dash import Dash, html
+from dash import Dash
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.dashboard.callbacks import register_callbacks
-from data_intelligence_system.dashboard.callbacks.kpi_callbacks import update_kpi_cards, parse_data
-from data_intelligence_system.dashboard.callbacks.layout_callbacks import register_layout_callbacks
-from data_intelligence_system.dashboard.callbacks.filters_callbacks import register_filters_callbacks
-from data_intelligence_system.dashboard.callbacks.charts_callbacks import register_charts_callbacks
-from data_intelligence_system.dashboard.callbacks.export_callbacks import register_export_callbacks
-from data_intelligence_system.dashboard.callbacks.upload_callbacks import register_upload_callbacks
+from data_intelligence_system.dashboard.callbacks.kpi_callbacks import parse_data, update_kpi_cards
 
 from data_intelligence_system.dashboard.layouts.main_layout import get_layout, build_upload_section
-from data_intelligence_system.dashboard.layouts.kpi_cards import build_kpi_cards
 from data_intelligence_system.dashboard.layouts.charts_placeholders import forecast_chart
 from data_intelligence_system.dashboard.layouts.stats_summary import stats_summary_card
 from data_intelligence_system.dashboard.layouts.theme import Theme
@@ -131,8 +125,6 @@ def test_components_functions_return_elements():
     assert data_table.id == "table-test"
     assert indicator.id == "indicator-test"
 
-import importlib.util
-import sys
 from pathlib import Path
 
 def test_init_py_files_exist():
