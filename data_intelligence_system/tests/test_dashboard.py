@@ -197,8 +197,7 @@ def test_components_functions_return_elements():
     assert data_table.id == "table-test"
     assert indicator.id == "indicator-test"
 
-    # تحقق أن الرسوم البيانية ترجع كائن Figure وليس لها id
-    from plotly.graph_objs import Figure
+    # تأكد أن الرسوم البيانية من نوع Figure (وليس لها خاصية id)
     assert isinstance(line_chart, Figure)
     assert isinstance(bar_chart, Figure)
     assert isinstance(pie_chart, Figure)
@@ -213,6 +212,7 @@ def test_init_py_files_exist():
     ]
     for d in dirs_to_check:
         init_file = d / "__init__.py"
+        print(f"Checking __init__.py in: {init_file}")  # طباعة مسار للتحقق
         assert init_file.exists(), f"مفقود __init__.py في {d}"
 
 
