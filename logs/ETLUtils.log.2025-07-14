@@ -1,0 +1,108 @@
+2025-07-14 11:27:40 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-14 11:27:40 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\raw
+2025-07-14 11:27:40 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-14 11:27:42 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-14 11:27:42 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 11:27:44 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ✅ انتهى: extract_file
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: clean_data
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ✅ انتهى: clean_data
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: clean_data
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ✅ انتهى: clean_data
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 15:12:40 — [ERROR] — ETLUtils — ❌ خطأ في extract_file: ❌ الملف غير موجود أو غير مدعوم: non_existent_file.csv
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 15:12:40 — [ERROR] — ETLUtils — ❌ خطأ في extract_file: ❌ الملف غير موجود أو غير مدعوم: \path\to\nowhere\data.csv
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: clean_data
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 15:12:40 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 15:12:40 — [ERROR] — ETLUtils — ❌ خطأ في clean_data: list index out of range
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ✅ انتهى: extract_file
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ↪️ تشغيل: clean_data
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ✅ انتهى: clean_data
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ↪️ تشغيل: clean_data
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ✅ انتهى: clean_data
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 15:15:49 — [ERROR] — ETLUtils — ❌ خطأ في extract_file: ❌ الملف غير موجود أو غير مدعوم: non_existent_file.csv
+2025-07-14 15:15:49 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 15:15:49 — [ERROR] — ETLUtils — ❌ خطأ في extract_file: ❌ الملف غير موجود أو غير مدعوم: \path\to\nowhere\data.csv
+2025-07-14 15:15:50 — [INFO] — ETLUtils — ↪️ تشغيل: clean_data
+2025-07-14 15:15:50 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 15:15:50 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 15:15:50 — [INFO] — ETLUtils — ✅ انتهى: clean_data
+2025-07-14 19:43:19 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 19:43:19 — [INFO] — ETLUtils — ✅ انتهى: extract_file
+2025-07-14 19:43:19 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-14 19:43:19 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\raw
+2025-07-14 19:43:19 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-14 19:43:19 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-14 19:43:19 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 19:43:19 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 19:43:19 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 19:43:19 — [ERROR] — ETLUtils — ❌ خطأ في extract_file: ❌ الملف غير موجود أو غير مدعوم: fake\path\file.csv
+2025-07-14 19:43:19 — [INFO] — ETLUtils — 📂 تم العثور على 1 ملفات في C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-19\test_get_all_files0
+2025-07-14 19:43:19 — [INFO] — ETLUtils — 📁 تم إنشاء المجلد: C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-19\test_ensure_directory_exists0\newfolder
+2025-07-14 19:45:55 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 19:45:55 — [INFO] — ETLUtils — ✅ انتهى: extract_file
+2025-07-14 19:45:55 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-14 19:45:55 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\raw
+2025-07-14 19:45:55 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-14 19:45:55 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-14 19:45:55 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 19:45:55 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 19:45:56 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 19:45:56 — [ERROR] — ETLUtils — ❌ خطأ في extract_file: ⚠️ Failed to read file 'fake\path\file.csv': [Errno 2] No such file or directory: 'fake\\path\\file.csv'
+2025-07-14 19:45:56 — [INFO] — ETLUtils — 📂 تم العثور على 1 ملفات في C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-20\test_get_all_files0
+2025-07-14 19:45:56 — [INFO] — ETLUtils — 📁 تم إنشاء المجلد: C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-20\test_ensure_directory_exists0\newfolder
+2025-07-14 19:48:07 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 19:48:07 — [INFO] — ETLUtils — ✅ انتهى: extract_file
+2025-07-14 19:48:07 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-14 19:48:07 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\raw
+2025-07-14 19:48:07 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-14 19:48:07 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-14 19:48:07 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 19:48:07 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 19:48:07 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 19:48:07 — [ERROR] — ETLUtils — ❌ خطأ في extract_file: ⚠️ Failed to read file 'fake\path\file.csv': [Errno 2] No such file or directory: 'fake\\path\\file.csv'
+2025-07-14 19:48:08 — [INFO] — ETLUtils — 📂 تم العثور على 1 ملفات في C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-21\test_get_all_files0
+2025-07-14 19:48:08 — [INFO] — ETLUtils — 📁 تم إنشاء المجلد: C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-21\test_ensure_directory_exists0\newfolder
+2025-07-14 19:50:31 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 19:50:31 — [INFO] — ETLUtils — ✅ انتهى: extract_file
+2025-07-14 19:50:31 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-14 19:50:31 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\raw
+2025-07-14 19:50:31 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-14 19:50:31 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-14 19:50:31 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 19:50:31 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 19:50:32 — [INFO] — ETLUtils — 📂 تم العثور على 1 ملفات في C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-22\test_get_all_files0
+2025-07-14 19:50:32 — [INFO] — ETLUtils — 📁 تم إنشاء المجلد: C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-22\test_ensure_directory_exists0\newfolder
+2025-07-14 20:54:18 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 20:54:18 — [INFO] — ETLUtils — ✅ انتهى: extract_file
+2025-07-14 20:54:18 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-14 20:54:18 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\raw
+2025-07-14 20:54:18 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-14 20:54:18 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-14 20:54:18 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 20:54:18 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 20:54:19 — [INFO] — ETLUtils — 📂 تم العثور على 1 ملفات في C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-23\test_get_all_files0
+2025-07-14 20:54:19 — [INFO] — ETLUtils — 📁 تم إنشاء المجلد: C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-23\test_ensure_directory_exists0\newfolder
+2025-07-14 21:03:38 — [INFO] — ETLUtils — ↪️ تشغيل: extract_file
+2025-07-14 21:03:38 — [INFO] — ETLUtils — ✅ انتهى: extract_file
+2025-07-14 21:03:38 — [INFO] — ETLUtils — ↪️ تشغيل: extract_all_data
+2025-07-14 21:03:38 — [INFO] — ETLUtils — 📂 تم العثور على 5 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\raw
+2025-07-14 21:03:38 — [INFO] — ETLUtils — 📂 تم العثور على 18 ملفات في C:\Users\PC\PycharmProjects\PythonProject10\data_intelligence_system\data\external\downloaded
+2025-07-14 21:03:38 — [INFO] — ETLUtils — ✅ انتهى: extract_all_data
+2025-07-14 21:03:38 — [INFO] — ETLUtils — ↪️ تشغيل: transform_datasets
+2025-07-14 21:03:38 — [INFO] — ETLUtils — ✅ انتهى: transform_datasets
+2025-07-14 21:03:39 — [INFO] — ETLUtils — 📂 تم العثور على 1 ملفات في C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-24\test_get_all_files0
+2025-07-14 21:03:39 — [INFO] — ETLUtils — 📁 تم إنشاء المجلد: C:\Users\PC\AppData\Local\Temp\pytest-of-PC\pytest-24\test_ensure_directory_exists0\newfolder
