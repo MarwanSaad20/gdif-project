@@ -18,7 +18,7 @@ PROFILES_DIR = BASE_DIR / 'data_profiles'
 def df_to_dash_json(df: Optional[pd.DataFrame], orient: str = "split") -> str:
     if df is None or df.empty:
         logger.warning("⚠️ DataFrame فارغ أو None عند التحويل إلى JSON.")
-        return json.dumps({}, default=str)
+        return json.dumps({"message": "لا توجد بيانات لعرضها."}, default=str)
 
     try:
         df_copy = df.copy()
@@ -31,7 +31,7 @@ def df_to_dash_json(df: Optional[pd.DataFrame], orient: str = "split") -> str:
         return json_str
     except Exception as e:
         logger.error(f"❌ فشل تحويل DataFrame إلى JSON: {e}", exc_info=True)
-        return json.dumps({}, default=str)
+        return json.dumps({"message": "حدث خطأ أثناء التحويل إلى JSON."}, default=str)
 
 
 def json_to_df(data_json: Optional[str], parse_dates: bool = True) -> Optional[pd.DataFrame]:
@@ -87,6 +87,8 @@ def filter_data_by_date(
         except Exception as e:
             logger.warning(f"⚠️ تاريخ نهاية غير صالح '{end_date}': {e}")
 
+    if df_filtered.empty:
+        logger.warning("⚠️ البيانات بعد الفلترة حسب التاريخ فارغة.")
     return df_filtered
 
 
