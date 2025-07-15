@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')  # استخدام واجهة غير تفاعلية لـ Matplotlib
+
 import logging
 import pandas as pd
 import matplotlib.pyplot as plt
