@@ -1,6 +1,7 @@
 import pandas as pd
 from dash import Input, Output
 from dash.exceptions import PreventUpdate
+from io import StringIO  # إضافة هذه السطر
 
 from data_intelligence_system.utils.logger import get_logger
 from data_intelligence_system.utils.preprocessing import fill_missing_values
@@ -17,7 +18,8 @@ def parse_data(data_json):
         logger.warning("📭 لا توجد بيانات مخزنة")
         raise PreventUpdate
     try:
-        df = pd.read_json(data_json, orient="split")
+        # تعديل هنا لاستخدام StringIO لتجنب التحذير
+        df = pd.read_json(StringIO(data_json), orient="split")
         if df.empty:
             logger.info("⚠️ DataFrame الناتج فارغ بعد فك التشفير.")
             raise PreventUpdate
