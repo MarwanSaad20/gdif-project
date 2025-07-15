@@ -4,7 +4,7 @@ from dash import Dash, html
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.dashboard.callbacks import register_callbacks
-from data_intelligence_system.dashboard.callbacks.kpi_callbacks import register_kpi_callbacks, parse_data, update_kpi_cards
+from data_intelligence_system.dashboard.callbacks.kpi_callbacks import register_kpi_callbacks, parse_data, update_kpi_cards_func
 from data_intelligence_system.dashboard.callbacks.layout_callbacks import register_layout_callbacks
 from data_intelligence_system.dashboard.callbacks.filters_callbacks import register_filters_callbacks
 from data_intelligence_system.dashboard.callbacks.charts_callbacks import register_charts_callbacks
@@ -51,10 +51,10 @@ def test_parse_data_invalid():
     with pytest.raises(PreventUpdate):
         parse_data("this is not json")
 
-def test_update_kpi_cards(sample_json):
-    cards = update_kpi_cards(sample_json)
-    assert isinstance(cards, tuple)
-    assert len(cards) == 5
+def test_update_kpi_cards_func(sample_df):
+    result = update_kpi_cards_func(sample_df)
+    assert isinstance(result, tuple)
+    assert len(result) == 5
 
 def test_register_all_callbacks_no_error():
     test_app = Dash(__name__)
@@ -62,7 +62,7 @@ def test_register_all_callbacks_no_error():
 
     register_callbacks(test_app)
 
-    assert True
+    assert True  # تمرير إذا لم تحدث أخطاء
 
 def test_layout_structure():
     layout = get_layout()
