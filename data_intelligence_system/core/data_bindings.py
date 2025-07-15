@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from typing import Optional
 import pandas as pd
+from io import StringIO  # استيراد StringIO لتحويل النص إلى كائن يشبه الملف
 from data_intelligence_system.utils.preprocessing import fill_missing_values
 from data_intelligence_system.utils.logger import get_logger  # ✅ توحيد نظام اللوجر
 
@@ -39,7 +40,11 @@ def json_to_df(data_json: Optional[str], parse_dates: bool = True, date_format: 
         return None
 
     try:
-        df = pd.read_json(data_json, orient='split')
+        # استخدام StringIO لتحويل نص JSON إلى كائن يشبه الملف
+        json_file = StringIO(data_json)
+
+        # قراءة البيانات من json_file باستخدام pandas
+        df = pd.read_json(json_file, orient='split')
         if df.empty:
             logger.warning("⚠️ DataFrame الناتج فارغ بعد التحويل من JSON.")
             return None
