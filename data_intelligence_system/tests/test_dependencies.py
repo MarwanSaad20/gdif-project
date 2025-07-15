@@ -12,14 +12,12 @@ from data_intelligence_system.api.services import dashboard_service
 from data_intelligence_system.api.services.etl_service import ETLService
 
 
-
 # ================== اختبارات api/utils/dependencies.py ==================
 
 def test_get_db_yields_and_closes():
     class DummySession:
         closed = False
-        def close(self):
-            self.closed = True
+        def close(self): self.closed = True
 
     with patch("data_intelligence_system.api.utils.dependencies.get_db_session", return_value=DummySession()):
         gen = dependencies.get_db()
@@ -42,21 +40,16 @@ def test_get_current_user_invalid_authorization_format():
 
 
 @patch("data_intelligence_system.api.utils.dependencies.verify_jwt_token")
-def test_get_current_user_valid_token(mock_verify_jwt):
-    mock_verify_jwt.return_value = {"user_id": 42}
+def test_get_current_user_valid_token(mock_verify):
+    mock_verify.return_value = {"user_id": 42}
     result = dependencies.get_current_user("Bearer validtoken123")
-    mock_verify_jwt.assert_called_once_with("validtoken123")
+    mock_verify.assert_called_once_with("validtoken123")
     assert result == {"user_id": 42}
 
 
 def test_rate_limiter_blocks_after_limit():
-    class DummyClient:
-        def __init__(self, host):
-            self.host = host
-
     class DummyRequest:
-        def __init__(self, client_host):
-            self.client = DummyClient(client_host)
+        def __init__(self, host): self.client = MagicMock(host=host)
 
     dependencies.rate_limit_store.clear()
     client_ip = "127.0.0.1"
@@ -88,11 +81,8 @@ def test_api_key_header_missing_raises():
 
 @pytest.fixture
 def dummy_df():
-    return pd.DataFrame({
-        "A": [1, 2, 3],
-        "B": [4, 5, 6],
-        "target": [0, 1, 0]
-    })
+    return pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6], "target": [0, 1, 0]})
+
 
 @pytest.fixture
 def analysis_service(tmp_path, dummy_df):
@@ -114,12 +104,11 @@ def test_load_data_file_not_found(tmp_path):
 
 
 @patch("data_intelligence_system.analysis.descriptive_stats.generate_descriptive_stats")
-def test_descriptive_statistics(mock_generate_desc, analysis_service, dummy_df):
+def test_descriptive_statistics(mock_generate, analysis_service, dummy_df):
     analysis_service.data = dummy_df
-    mock_generate_desc.return_value = {"mean": {"A": 2}}
-
+    mock_generate.return_value = {"mean": {"A": 2}}
     result = analysis_service.descriptive_statistics()
-    mock_generate_desc.assert_called_once_with(dummy_df)
+    mock_generate.assert_called_once_with(dummy_df)
     assert "mean" in result
 
 
@@ -129,14 +118,13 @@ def test_descriptive_statistics_empty(analysis_service):
     assert result == {}
 
 
-# ================== اختبارات dashboard.service ==================
+# ================== اختبارات dashboard_service ==================
 
 @patch("pandas.read_csv")
 @patch("data_intelligence_system.config.paths_config.PROCESSED_DATA_DIR", new=Path("/tmp"))
 def test_load_processed_data_success(mock_read_csv):
     mock_df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
     mock_read_csv.return_value = mock_df
-
     df = dashboard_service.load_processed_data("test.csv")
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
@@ -154,11 +142,11 @@ def test_load_processed_data_file_not_found():
 def etl_service():
     return ETLService()
 
-@patch("data_intelligence_system.etl.service.extract_file")
+
 @patch("data_intelligence_system.etl.service.load_data")
-def test_etl_extract_use_load_data(mock_load_data, mock_extract_file, etl_service):
-    extract_params = MagicMock()
-    extract_params.filters = {"use_load_data": True}
+@patch("data_intelligence_system.etl.service.extract_file")
+def test_etl_extract_use_load_data(mock_extract_file, mock_load_data, etl_service):
+    extract_params = MagicMock(filters={"use_load_data": True})
     mock_load_data.return_value = pd.DataFrame({"a": [1, 2]})
     df = etl_service._extract("dummy_source.csv", extract_params)
     assert isinstance(df, pd.DataFrame)
@@ -167,11 +155,11 @@ def test_etl_extract_use_load_data(mock_load_data, mock_extract_file, etl_servic
 
 
 @patch("data_intelligence_system.etl.service.extract_file")
-def test_etl_extract_no_params(mock_extract_file, etl_service):
-    mock_extract_file.return_value = pd.DataFrame({"a": [1, 2]})
+def test_etl_extract_no_params(mock_extract, etl_service):
+    mock_extract.return_value = pd.DataFrame({"a": [1, 2]})
     df = etl_service._extract("dummy_source.csv", None)
     assert isinstance(df, pd.DataFrame)
-    mock_extract_file.assert_called_once()
+    mock_extract.assert_called_once()
 
 
 @patch("data_intelligence_system.etl.service.transform_datasets")
@@ -185,9 +173,7 @@ def test_etl_transform_success(mock_transform, etl_service):
 @patch("data_intelligence_system.etl.service.save_multiple_datasets")
 def test_etl_load_success(mock_save, etl_service):
     mock_save.return_value = True
-    load_params = MagicMock()
-    load_params.target_table = "test_table"
-    load_params.batch_size = 100
+    load_params = MagicMock(target_table="test_table", batch_size=100)
     result = etl_service._load([("name", pd.DataFrame({"a": [1]}))], load_params)
     assert result is True
     mock_save.assert_called_once()
@@ -199,16 +185,8 @@ def test_etl_run_etl_success(etl_service):
          patch.object(etl_service, "_load", return_value=True) as mock_load, \
          patch("data_intelligence_system.data.raw.register_sources.main") as mock_register:
 
-        load_params = MagicMock()
-        load_params.target_table = "test_table"
-        load_params.batch_size = 100
-
-        result = etl_service.run_etl(
-            source="dummy_source.csv",
-            extract_params=None,
-            transform_params=None,
-            load_params=load_params,
-        )
+        load_params = MagicMock(target_table="test_table", batch_size=100)
+        result = etl_service.run_etl("dummy_source.csv", None, None, load_params)
         assert result is True
         mock_extract.assert_called_once()
         mock_transform.assert_called_once()
@@ -220,15 +198,7 @@ def test_etl_run_etl_failure(etl_service):
     with patch.object(etl_service, "_extract", return_value=None), \
          patch("data_intelligence_system.data.raw.register_sources.main") as mock_register:
 
-        load_params = MagicMock()
-        load_params.target_table = "test_table"
-        load_params.batch_size = 100
-
-        result = etl_service.run_etl(
-            source="dummy_source.csv",
-            extract_params=None,
-            transform_params=None,
-            load_params=load_params,
-        )
+        load_params = MagicMock(target_table="test_table", batch_size=100)
+        result = etl_service.run_etl("dummy_source.csv", None, None, load_params)
         assert result is False
         mock_register.assert_not_called()
