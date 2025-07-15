@@ -28,6 +28,28 @@ def parse_data(data_json):
         raise PreventUpdate
 
 
+def update_kpi_cards_func(df: pd.DataFrame):
+    """
+    دالة مستقلة لمعالجة DataFrame وإرجاع قيم بطاقات KPI.
+    """
+    total = len(df)
+    nulls = df.isnull().sum().sum()
+
+    numeric_df = df.select_dtypes(include="number")
+    avg_val = numeric_df.mean().mean() if not numeric_df.empty else None
+
+    growth_rate = ((total - 1) / total) * 100 if total > 1 else 0
+    forecast_status = "🔮 سيتم التنبؤ لاحقًا"
+
+    return (
+        f"{total:,}",
+        f"{nulls:,}",
+        f"{avg_val:,.2f}" if avg_val is not None else "N/A",
+        f"{growth_rate:.2f}%" if growth_rate else "N/A",
+        forecast_status
+    )
+
+
 def register_kpi_callbacks(app):
     """
     تسجيل كولباكات تحديث بطاقات KPI في لوحة المعلومات.
@@ -42,19 +64,4 @@ def register_kpi_callbacks(app):
     )
     def update_kpi_cards(data_json):
         df = parse_data(data_json)
-        total = len(df)
-        nulls = df.isnull().sum().sum()
-
-        numeric_df = df.select_dtypes(include="number")
-        avg_val = numeric_df.mean().mean() if not numeric_df.empty else None
-
-        growth_rate = ((total - 1) / total) * 100 if total > 1 else 0
-        forecast_status = "🔮 سيتم التنبؤ لاحقًا"
-
-        return (
-            f"{total:,}",
-            f"{nulls:,}",
-            f"{avg_val:,.2f}" if avg_val is not None else "N/A",
-            f"{growth_rate:.2f}%" if growth_rate else "N/A",
-            forecast_status
-        )
+        return update_kpi_cards_func(df)
