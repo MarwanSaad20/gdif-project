@@ -99,7 +99,11 @@ def test_load_data_file_not_found(mock_load_data, tmp_path):
     # نجعل load_data يرفع FileNotFoundError
     mock_load_data.side_effect = FileNotFoundError("File not found")
     file_path = tmp_path / "nonexistent.csv"
-    service = AnalysisService(data_path=file_path)
+
+    # تعطيل __post_init__ مؤقتًا لتجنب رفع الخطأ عند البناء
+    with patch.object(AnalysisService, "__post_init__", lambda self: None):
+        service = AnalysisService(data_path=file_path)
+
     with pytest.raises(FileNotFoundError):
         service.load_data(force_reload=True)
 
@@ -185,7 +189,7 @@ def test_etl_run_etl_success(etl_service):
     with patch.object(etl_service, "_extract", return_value=pd.DataFrame({"a": [1]})) as mock_extract, \
          patch.object(etl_service, "_transform", return_value=[("name", pd.DataFrame({"a": [1]}))]) as mock_transform, \
          patch.object(etl_service, "_load", return_value=True) as mock_load, \
-         patch("data_intelligence_system.data.raw.register_sources.main") as mock_register:
+         patch("data_intelligence_system.api.services.etl_service.register_sources_main") as mock_register:
 
         load_params = MagicMock(target_table="test_table", batch_size=100)
         result = etl_service.run_etl("dummy_source.csv", None, None, load_params)
@@ -198,7 +202,7 @@ def test_etl_run_etl_success(etl_service):
 
 def test_etl_run_etl_failure(etl_service):
     with patch.object(etl_service, "_extract", return_value=None), \
-         patch("data_intelligence_system.data.raw.register_sources.main") as mock_register:
+         patch("data_intelligence_system.api.services.etl_service.register_sources_main") as mock_register:
 
         load_params = MagicMock(target_table="test_table", batch_size=100)
         result = etl_service.run_etl("dummy_source.csv", None, None, load_params)
