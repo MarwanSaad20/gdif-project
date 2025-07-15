@@ -24,7 +24,10 @@ from data_intelligence_system.dashboard.components.upload_component import uploa
 from data_intelligence_system.dashboard.components.filters import create_dropdown, create_slider, create_date_picker
 from data_intelligence_system.dashboard.components.charts import create_line_chart, create_bar_chart, create_pie_chart
 from data_intelligence_system.dashboard.components.tables import create_data_table
-from data_intelligence_system.dashboard.components.indicators import create_indicator
+
+# تصحيح الاستيراد: في كودك الحالي لديك create_indicator قد لا يكون موجودًا في components.indicators
+# لو استخدمت create_kpi_card بدلًا منه (حسب الكود الذي شاركته سابقًا)
+from data_intelligence_system.dashboard.components.indicators import create_kpi_card
 
 from data_intelligence_system.dashboard.app import app
 
@@ -141,7 +144,7 @@ def test_components_functions_return_elements():
     bar_chart = create_bar_chart("bar-chart-test")
     pie_chart = create_pie_chart("pie-chart-test")
     data_table = create_data_table("table-test")
-    indicator = create_indicator("indicator-test", "Label", 123)
+    indicator = create_kpi_card("indicator-test", "Label", 123)
 
     assert dd.id == "test-dropdown"
     assert slider.id == "test-slider"
