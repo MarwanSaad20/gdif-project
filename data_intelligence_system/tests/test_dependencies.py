@@ -8,7 +8,7 @@ import pandas as pd
 
 from data_intelligence_system.api.utils import dependencies
 from data_intelligence_system.api.services.analysis_service import AnalysisService
-from data_intelligence_system.api.services.dashboard_service import dashboard_service
+from data_intelligence_system.api.services import dashboard_service
 from data_intelligence_system.api.services.etl_service import ETLService
 
 
