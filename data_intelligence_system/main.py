@@ -4,19 +4,10 @@ import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+PROJECT_PARENT = PROJECT_ROOT.parent
 
 # إضافة المسار الجذري للمشروع (حيث يوجد data_intelligence_system) لضمان التكامل مع الاستيرادات المطلقة
-PROJECT_PARENT = PROJECT_ROOT.parent
-if str(PROJECT_PARENT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_PARENT))
-
-# إدخال مسارات الوحدات الفرعية إلى sys.path
-for sub in ["data", "etl", "analysis", "dashboard", "core", "reports", "utils"]:
-    path = PROJECT_ROOT / "data_intelligence_system" / sub
-    if str(path) not in sys.path:
-        sys.path.insert(0, str(path))
+sys.path[:0] = [str(PROJECT_ROOT), str(PROJECT_PARENT)]
 
 # ===== تحميل متغيرات البيئة =====
 from dotenv import load_dotenv
@@ -37,25 +28,9 @@ setup_logging()
 logger = logging.getLogger("GDIF")
 
 # ===== استيراد الوحدات الحيوية مع التعامل مع أخطاء الاستيراد =====
-try:
-    from data_intelligence_system.etl.pipeline import run_full_pipeline
-except ImportError as err:
-    logger.critical(f"❌ تعذر استيراد run_full_pipeline من etl.pipeline: {err}", exc_info=True)
-    def run_full_pipeline(*args, **kwargs):
-        raise ImportError(f"run_full_pipeline غير متوفر: {err}")
-
-try:
-    from data_intelligence_system.utils.file_manager import get_latest_processed_file
-except ImportError as err:
-    logger.critical(f"❌ تعذر استيراد get_latest_processed_file من utils.file_manager: {err}", exc_info=True)
-    def get_latest_processed_file(*args, **kwargs):
-        raise ImportError(f"get_latest_processed_file غير متوفر: {err}")
-
-try:
-    from data_intelligence_system.dashboard.app import app
-except ImportError as err:
-    logger.critical(f"❌ تعذر استيراد app من dashboard.app: {err}", exc_info=True)
-    app = None
+from data_intelligence_system.etl.pipeline import run_full_pipeline
+from data_intelligence_system.utils.file_manager import get_latest_processed_file
+from data_intelligence_system.dashboard.app import app
 
 # ===== تشغيل لوحة التحكم =====
 def run_dashboard(debug=True, port=8050, reload=False, open_browser=True):
@@ -83,12 +58,7 @@ def run_dashboard(debug=True, port=8050, reload=False, open_browser=True):
         logger.error("❌ تطبيق Dash غير معرف. لا يمكن تشغيل لوحة التحكم.")
         sys.exit(1)
 
-    app.run(
-        debug=debug,
-        port=port,
-        use_reloader=reload,
-        host="127.0.0.1"
-    )
+    app.run(debug=debug, port=port, use_reloader=reload, host="127.0.0.1")
 
 # ===== نقطة الدخول =====
 if __name__ == "__main__":
