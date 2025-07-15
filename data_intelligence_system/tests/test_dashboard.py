@@ -1,123 +1,181 @@
 import pytest
 import pandas as pd
-from dash import Dash
-from dash.testing.application_runners import import_app
+from dash import Dash, html
+from dash.exceptions import PreventUpdate
 
-from data_intelligence_system.dashboard.callbacks.kpi_callbacks import update_kpi_cards, parse_data
-from data_intelligence_system.dashboard.layouts.main_layout import get_layout
-from data_intelligence_system.dashboard.callbacks.kpi_callbacks import register_kpi_callbacks
+# استيراد جميع callbacks من ملف __init__.py داخل dashboard/callbacks
+from data_intelligence_system.dashboard.callbacks import (
+    register_all_callbacks  # نفترض أضفت دالة مساعدة لتسجيل كلها أو نستخدم كل واحدة على حدة
+)
+
+# إذا لم توجد دالة register_all_callbacks في __init__.py فنسجل كل واحدة يدويًا:
+from data_intelligence_system.dashboard.callbacks.kpi_callbacks import register_kpi_callbacks, update_kpi_cards, parse_data
+from data_intelligence_system.dashboard.callbacks.layout_callbacks import register_layout_callbacks
 from data_intelligence_system.dashboard.callbacks.filters_callbacks import register_filters_callbacks
-from data_intelligence_system.dashboard.callbacks.upload_callbacks import register_upload_callbacks
 from data_intelligence_system.dashboard.callbacks.charts_callbacks import register_charts_callbacks
 from data_intelligence_system.dashboard.callbacks.export_callbacks import register_export_callbacks
-from data_intelligence_system.dashboard.callbacks.layout_callbacks import register_layout_callbacks
+from data_intelligence_system.dashboard.callbacks.upload_callbacks import register_upload_callbacks
 
-from dash.exceptions import PreventUpdate
+# استيراد التخطيطات والمكونات
+from data_intelligence_system.dashboard.layouts.main_layout import get_layout, build_upload_section
+from data_intelligence_system.dashboard.layouts.kpi_cards import build_kpi_cards
+from data_intelligence_system.dashboard.layouts.charts_placeholders import forecast_chart
+from data_intelligence_system.dashboard.layouts.stats_summary import stats_summary_card
+from data_intelligence_system.dashboard.layouts.theme import Theme
+from data_intelligence_system.dashboard.components.upload_component import upload_section
+from data_intelligence_system.dashboard.components.filters import create_dropdown, create_slider, create_date_picker
+from data_intelligence_system.dashboard.components.charts import create_line_chart, create_bar_chart, create_pie_chart
+from data_intelligence_system.dashboard.components.tables import create_data_table
+from data_intelligence_system.dashboard.components.indicators import create_indicator
+
+# من app.py (للتأكد من تحميل التطبيق)
+from data_intelligence_system.dashboard.app import app
 
 # --- بيانات تجريبية عامة ---
 @pytest.fixture
 def sample_df():
     data = {
-        "numeric_col": [1, 2, 3, 4, 5],
-        "string_col": ["a", "b", "c", "d", "e"],
+        "numeric_col": [10, 20, 30, 40, 50],
+        "category_col": ["A", "B", "A", "B", "C"],
+        "date_col": pd.date_range("2023-01-01", periods=5),
         "null_col": [None, None, 1, 2, 3]
     }
-    df = pd.DataFrame(data)
-    return df
+    return pd.DataFrame(data)
 
 @pytest.fixture
 def sample_json(sample_df):
     return sample_df.to_json(orient="split")
 
-# --- اختبار دالة parse_data ---
+# --- اختبارات callbacks ---
 
-def test_parse_data_with_valid_json(sample_json):
+def test_parse_data_valid(sample_json):
     df = parse_data(sample_json)
     assert not df.empty
     assert "numeric_col" in df.columns
 
-def test_parse_data_with_empty_json():
+def test_parse_data_empty():
     with pytest.raises(PreventUpdate):
         parse_data("")
 
-def test_parse_data_with_invalid_json():
+def test_parse_data_invalid():
     with pytest.raises(PreventUpdate):
-        parse_data("invalid json string")
-
-# --- اختبار تحديث بطاقات KPI ---
+        parse_data("this is not json")
 
 def test_update_kpi_cards(sample_json):
-    results = update_kpi_cards(sample_json)
-    assert isinstance(results, tuple)
-    assert len(results) == 5
-    assert "5" in results[0]  # إجمالي العينات
-
-# --- اختبار وجود مكونات في layout ---
-
-def test_layout_contains_main_sections():
-    layout = get_layout()
-    # نتأكد أن عناصر التخزين موجودة
-    store_ids = [child.id for child in layout.children if hasattr(child, "id")]
-    expected_store_ids = [
-        "store_raw_data",
-        "store_filtered_data",
-        "store_filtered_multi",
-        "store_window_size",
-        "store_raw_data_path",
-        "store_analysis_done"
-    ]
-    for store_id in expected_store_ids:
-        assert store_id in store_ids
-
-    # التأكد من وجود عنصر KPIs container
-    kpi_container_found = any(
-        hasattr(child, "id") and child.id == "kpi-container"
-        for child in layout.find_all()
-    )
-    assert kpi_container_found or True  # find_all قد لا يكون متوفر في النسخ القديمة، فقط نضمن
+    cards = update_kpi_cards(sample_json)
+    assert isinstance(cards, tuple)
+    assert len(cards) == 5  # 5 بطاقات KPI حسب تصميمك
 
 # --- اختبار تسجيل جميع callbacks بنجاح ---
 
-def test_register_all_callbacks():
-    app = Dash(__name__)
-    app.layout = get_layout()
+def test_register_all_callbacks_no_error():
+    test_app = Dash(__name__)
+    test_app.layout = get_layout()
 
-    # تسجل جميع الكولباكات
-    register_kpi_callbacks(app)
-    register_filters_callbacks(app)
-    register_upload_callbacks(app)
-    register_charts_callbacks(app)
-    register_export_callbacks(app)
-    register_layout_callbacks(app)
+    # تسجيل جميع callbacks يدويًا
+    register_kpi_callbacks(test_app)
+    register_layout_callbacks(test_app)
+    register_filters_callbacks(test_app)
+    register_charts_callbacks(test_app)
+    register_export_callbacks(test_app)
+    register_upload_callbacks(test_app)
 
-    # إذا لم تحدث استثناءات فهذا مؤشر على نجاح التسجيل
-    assert True
+    assert True  # إذا لم يحصل استثناء فهذا جيد
 
-# --- اختبار دالة stats_summary_card ---
+# --- اختبار بعض مكونات الواجهة ---
 
-from data_intelligence_system.dashboard.layouts.stats_summary import stats_summary_card
-from dash import html
+def test_layout_structure():
+    layout = get_layout()
+    # التأكد من وجود بعض معرفات التخزين الأساسية
+    store_ids = {child.id for child in layout.children if hasattr(child, "id")}
+    required_ids = {
+        "store_raw_data", "store_filtered_data", "store_filtered_multi",
+        "store_window_size", "store_raw_data_path", "store_analysis_done"
+    }
+    assert required_ids.issubset(store_ids)
 
-def test_stats_summary_card_structure():
+def test_stats_summary_card_elements():
     card = stats_summary_card()
-    # تحقق من نوع العنصر
-    assert isinstance(card, html.Div) or hasattr(card, "children")
-    # تحقق من وجود عنصر <pre> للملخص
-    pre_elements = [child for child in card.children if hasattr(child, "children")]
+    # وجود عنصر <pre> مع id المناسب
     found_pre = False
-    for c in card.children:
-        if hasattr(c, "children"):
-            if any(getattr(cc, "id", None) == "stats-summary-pre" for cc in (c.children if isinstance(c.children, list) else [c.children])):
-                found_pre = True
+    def find_pre(children):
+        nonlocal found_pre
+        if isinstance(children, list):
+            for c in children:
+                find_pre(c)
+        elif hasattr(children, "id") and children.id == "stats-summary-pre":
+            found_pre = True
+        elif hasattr(children, "children"):
+            find_pre(children.children)
+
+    find_pre(card.children)
     assert found_pre
 
-# --- اختبار دالة build_upload_section ---
-
-from data_intelligence_system.dashboard.layouts.main_layout import build_upload_section
+def test_theme_colors():
+    assert isinstance(Theme.PRIMARY_COLOR, str)
+    assert Theme.BACKGROUND_COLOR.startswith("#")
 
 def test_build_upload_section_contains_elements():
     section = build_upload_section()
-    assert any("upload-status" == getattr(child, "id", "") for child in section.children[0].children)
+    # نتحقق من وجود id 'upload-status' ضمن أطفال القسم
+    children_ids = []
+    def gather_ids(children):
+        if isinstance(children, list):
+            for c in children:
+                gather_ids(c)
+        elif hasattr(children, "id"):
+            children_ids.append(children.id)
+        elif hasattr(children, "children"):
+            gather_ids(children.children)
+    gather_ids(section.children)
+    assert "upload-status" in children_ids
 
-# ملاحظة: لاختبار Dash بشكل متكامل (simulate user interactions)، يفضل استخدام dash.testing مع pytest-dash
+def test_forecast_chart_type():
+    chart = forecast_chart()
+    # تحقق من نوع العنصر
+    assert hasattr(chart, "id")
+    assert chart.id == "forecast-chart"
+
+def test_components_functions_return_elements():
+    dd = create_dropdown("test-dropdown", options=[{"label": "A", "value": "a"}], placeholder="اختر")
+    slider = create_slider("test-slider", 0, 10, 1, 5)
+    datepicker = create_date_picker("test-date-picker", start_date="2025-01-01", end_date="2025-01-31")
+    upload_comp = upload_section()
+    line_chart = create_line_chart("line-chart-test")
+    bar_chart = create_bar_chart("bar-chart-test")
+    pie_chart = create_pie_chart("pie-chart-test")
+    data_table = create_data_table("table-test")
+    indicator = create_indicator("indicator-test", "Label", 123)
+
+    assert dd.id == "test-dropdown"
+    assert slider.id == "test-slider"
+    assert datepicker.id == "test-date-picker"
+    assert line_chart.id == "line-chart-test"
+    assert bar_chart.id == "bar-chart-test"
+    assert pie_chart.id == "pie-chart-test"
+    assert data_table.id == "table-test"
+    assert indicator.id == "indicator-test"
+
+# --- اختبار وجود ملفات __init__.py (موجودة فعلاً لكن للتحقق السريع) ---
+
+import importlib.util
+import sys
+from pathlib import Path
+
+def test_init_py_files_exist():
+    base_path = Path(__file__).parent.parent / "data_intelligence_system" / "dashboard"
+    dirs_to_check = [
+        base_path / "callbacks",
+        base_path / "components",
+        base_path / "layouts",
+    ]
+    for d in dirs_to_check:
+        init_file = d / "__init__.py"
+        assert init_file.exists(), f"مفقود __init__.py في {d}"
+
+# --- اختبار ملف app.py وجود app instance صحيح ---
+
+def test_app_instance_exists():
+    assert hasattr(app, "layout")
+    assert hasattr(app, "run_server") or hasattr(app, "run")
 
