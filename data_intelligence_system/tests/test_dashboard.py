@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from dash import Dash, html
+from dash import Dash
 from dash.exceptions import PreventUpdate
 
 from data_intelligence_system.dashboard.callbacks import register_callbacks
@@ -148,7 +148,7 @@ def test_components_functions_return_elements():
     datepicker = create_date_picker("test-date-picker", start_date="2025-01-01", end_date="2025-01-31")
     upload_comp = upload_section()
     line_chart = create_line_chart("line-chart-test", y_data=[1, 2, 3])
-    bar_chart = create_bar_chart("bar-chart-test", y_data=[1, 2, 3])
+    bar_chart = create_bar_chart("bar-chart-test", y_data=[1, 2, 3], values=[10, 20, 30])
     pie_chart = create_pie_chart("pie-chart-test", values=[1, 2, 3], names=["A", "B", "C"])
     data_table = create_data_table("table-test")
     indicator = create_kpi_card("indicator-test", "Label", 123)
@@ -180,4 +180,4 @@ def test_init_py_files_exist():
 
 def test_app_instance_exists():
     assert hasattr(app, "layout")
-    assert hasattr(app, "run")   # بدل run_server
+    assert hasattr(app, "run")  # بدل run_server
