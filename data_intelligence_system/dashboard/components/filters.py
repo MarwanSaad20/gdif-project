@@ -121,6 +121,11 @@ def create_date_picker(
     min_date = to_str(min_date)
     max_date = to_str(max_date)
 
+    # تحقق من صحة التواريخ
+    if start_date and end_date and start_date > end_date:
+        logger.warning(f"⚠️ تاريخ البداية {start_date} أكبر من تاريخ النهاية {end_date}.")
+        return None
+
     default_style = {
         "backgroundColor": "#1a1a1a",
         "border": "1px solid #444",
