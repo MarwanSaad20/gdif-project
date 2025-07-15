@@ -7,7 +7,7 @@ from data_intelligence_system.dashboard.callbacks import register_callbacks
 from data_intelligence_system.dashboard.callbacks.kpi_callbacks import (
     register_kpi_callbacks,
     parse_data,
-    update_kpi_cards_func  # دالة معالجة منفصلة ليست callback مباشرة
+    update_kpi_cards_func
 )
 from data_intelligence_system.dashboard.callbacks.layout_callbacks import register_layout_callbacks
 from data_intelligence_system.dashboard.callbacks.filters_callbacks import register_filters_callbacks
@@ -16,7 +16,7 @@ from data_intelligence_system.dashboard.callbacks.export_callbacks import regist
 from data_intelligence_system.dashboard.callbacks.upload_callbacks import register_upload_callbacks
 
 from data_intelligence_system.dashboard.layouts.main_layout import get_layout, build_upload_section
-from data_intelligence_system.dashboard.layouts.kpi_cards import generate_kpi_cards_layout  # تصحيح اسم الدالة
+from data_intelligence_system.dashboard.layouts.kpi_cards import generate_kpi_cards_layout
 from data_intelligence_system.dashboard.layouts.charts_placeholders import forecast_chart
 from data_intelligence_system.dashboard.layouts.stats_summary import stats_summary_card
 from data_intelligence_system.dashboard.layouts.theme import Theme
@@ -24,9 +24,6 @@ from data_intelligence_system.dashboard.components.upload_component import uploa
 from data_intelligence_system.dashboard.components.filters import create_dropdown, create_slider, create_date_picker
 from data_intelligence_system.dashboard.components.charts import create_line_chart, create_bar_chart, create_pie_chart
 from data_intelligence_system.dashboard.components.tables import create_data_table
-
-# تصحيح الاستيراد: في كودك الحالي لديك create_indicator قد لا يكون موجودًا في components.indicators
-# لو استخدمت create_kpi_card بدلًا منه (حسب الكود الذي شاركته سابقًا)
 from data_intelligence_system.dashboard.components.indicators import create_kpi_card
 
 from data_intelligence_system.dashboard.app import app
@@ -73,10 +70,8 @@ def test_update_kpi_cards_func(sample_df):
 def test_register_all_callbacks_no_error():
     test_app = Dash(__name__)
     test_app.layout = get_layout()
-
     register_callbacks(test_app)
-
-    assert True  # تمرير إذا لم تحدث أخطاء
+    assert True
 
 
 def test_layout_structure():
@@ -131,8 +126,20 @@ def test_build_upload_section_contains_elements():
 
 def test_forecast_chart_type():
     chart = forecast_chart()
-    assert hasattr(chart, "id")
-    assert chart.id == "forecast-chart"
+    found_graph = False
+
+    def find_graph(children):
+        nonlocal found_graph
+        if isinstance(children, list):
+            for c in children:
+                find_graph(c)
+        elif hasattr(children, "id") and children.id == "forecast-chart":
+            found_graph = True
+        elif hasattr(children, "children"):
+            find_graph(children.children)
+
+    find_graph(chart.children)
+    assert found_graph
 
 
 def test_components_functions_return_elements():
@@ -140,9 +147,9 @@ def test_components_functions_return_elements():
     slider = create_slider("test-slider", 0, 10, 1, 5)
     datepicker = create_date_picker("test-date-picker", start_date="2025-01-01", end_date="2025-01-31")
     upload_comp = upload_section()
-    line_chart = create_line_chart("line-chart-test")
-    bar_chart = create_bar_chart("bar-chart-test")
-    pie_chart = create_pie_chart("pie-chart-test")
+    line_chart = create_line_chart("line-chart-test", y_data=[1, 2, 3])
+    bar_chart = create_bar_chart("bar-chart-test", y_data=[1, 2, 3])
+    pie_chart = create_pie_chart("pie-chart-test", values=[1, 2, 3], names=["A", "B", "C"])
     data_table = create_data_table("table-test")
     indicator = create_kpi_card("indicator-test", "Label", 123)
 
@@ -156,8 +163,6 @@ def test_components_functions_return_elements():
     assert indicator.id == "indicator-test"
 
 
-import importlib.util
-import sys
 from pathlib import Path
 
 
@@ -175,4 +180,4 @@ def test_init_py_files_exist():
 
 def test_app_instance_exists():
     assert hasattr(app, "layout")
-    assert hasattr(app, "run_server") or hasattr(app, "run")
+    assert hasattr(app, "run")   # بدل run_server
