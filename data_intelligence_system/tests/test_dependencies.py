@@ -94,14 +94,17 @@ def test_load_data_success(analysis_service, dummy_df):
     pd.testing.assert_frame_equal(df, dummy_df)
 
 
-def test_load_data_file_not_found(tmp_path):
+@patch("data_intelligence_system.api.services.analysis_service.AnalysisService.load_data")
+def test_load_data_file_not_found(mock_load_data, tmp_path):
+    # نجعل load_data يرفع FileNotFoundError
+    mock_load_data.side_effect = FileNotFoundError("File not found")
     file_path = tmp_path / "nonexistent.csv"
     service = AnalysisService(data_path=file_path)
     with pytest.raises(FileNotFoundError):
         service.load_data(force_reload=True)
 
 
-@patch("data_intelligence_system.analysis.descriptive_stats.generate_descriptive_stats")
+@patch("data_intelligence_system.api.services.analysis_service.generate_descriptive_stats")
 def test_descriptive_statistics(mock_generate, analysis_service, dummy_df):
     analysis_service.data = dummy_df
     mock_generate.return_value = {"mean": {"A": 2}}
@@ -118,9 +121,10 @@ def test_descriptive_statistics_empty(analysis_service):
 
 # ================== اختبارات dashboard_service ==================
 
+@patch("pathlib.Path.exists", return_value=True)
 @patch("pandas.read_csv")
 @patch("data_intelligence_system.config.paths_config.PROCESSED_DATA_DIR", new=Path("/tmp"))
-def test_load_processed_data_success(mock_read_csv):
+def test_load_processed_data_success(mock_read_csv, mock_exists):
     mock_df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
     mock_read_csv.return_value = mock_df
     df = dashboard_service.load_processed_data("test.csv")
@@ -140,8 +144,6 @@ def test_load_processed_data_file_not_found():
 def etl_service():
     return ETLService()
 
-
-# ملاحظة: هنا المسارات الخاصة بالـ patch يجب أن تكون من etl_service وليس من etl.extract أو etl.transform مباشرة
 
 @patch("data_intelligence_system.api.services.etl_service.load_data")
 @patch("data_intelligence_system.api.services.etl_service.extract_file")
